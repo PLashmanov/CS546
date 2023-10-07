@@ -1,1 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="styles.css"> 
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="nav-links">
+                <li class="nav-item"><a href="#">About</a></li>
+                <li class="nav-item"><a href="#">Home</a></li>
+                <li class="nav-item"><a href="#">Contact Us</a></li>
+                <li><a href="/register">Register</a></li>
+            </ul>
+        </nav>
+    </header>
 
+    <section id="reportFraud">
+        <h1>Report Fraud</h1>
+        <form action="/report" method="post">
+            <div class="input-group">
+            <div class ="person reporting">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" required>
+            <div class="input-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+                  <div class="input-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" required>
+            </div>
+          </div>
+              <div>
+                <div class = "Type Fraud">
+                <label for="fraud">Fraud Type:</label>
+                <input type="text" id="fraudType" name="fraudType" required>
+                   <div id="fraudTypeDropdown" class="dropdown-content">
+                        <a href="Phone Number">Phone Number</a>
+                        <a href="Email Address">Email Address</a>
+                        <a href="Website">Website</a>
+                </div> 
+              </div>
+            <button type="submit">Report Fraud</button>
+        </form>
+    </section>
+    <footer>
+        <p>&copy; 2023 FRAP App</p>
+    </footer>
+</body>
+</html>
