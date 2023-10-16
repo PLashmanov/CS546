@@ -13,41 +13,59 @@
                 <li class="nav-item"><a href="#">About</a></li>
                 <li class="nav-item"><a href="#">Home</a></li>
                 <li class="nav-item"><a href="#">Contact Us</a></li>
-                <li><a href="/register">Register</a></li>
+                <li><a href="/Register.html">Register</a></li>
             </ul>
         </nav>
     </header>
 
     <section id="reportFraud">
         <h1>Report Fraud</h1>
+        <br>
         <form action="/report" method="post">
             <div class="input-group">
+            <p>Please enter any fraud information encountered and click Report Fraud when finished.</p>
             <div class ="person reporting">
+                <br>
                 <label for="firstName">First Name:</label>
                 <input type="text" id="firstName" name="firstName" required>
+            </div>
+                <br>
             <div class="input-group">
                 <label for="lastName">Last Name:</label>
                 <input type="text" id="lastName" name="lastName" required>
             </div>
-                  <div class="input-group">
+            <br>
+            <div class="input-group">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
             </div>
+                <br>
+            <div class="input-group">
+                <label for="email">Website:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <br>
             <div class="input-group">
                 <label for="phoneNumber">Phone Number:</label>
                 <input type="tel" id="phoneNumber" name="phoneNumber" required>
             </div>
+            <br>
+            <div class="input-group">
+                <label for="phoneNumber">Date of Fraud Encounter:</label>
+                <input type="tel" id="FraudDate" name="FraudDate" required>
+            </div>
+            <br>
           </div>
               <div>
-                <div class = "Type Fraud">
+                <div class = "input-group">
                 <label for="fraud">Fraud Type:</label>
-                <input type="text" id="fraudType" name="fraudType" required>
-                   <div id="fraudTypeDropdown" class="dropdown-content">
-                        <a href="Phone Number">Phone Number</a>
-                        <a href="Email Address">Email Address</a>
-                        <a href="Website">Website</a>
-                </div> 
+                <select name="fraudType" id="fraudType">
+                        <option value="Phone Number">Phone Number</option>
+                        <option value ="Email Address">Email Address</option>
+                        <option value ="Website">Website</option>
+                <select> 
               </div>
+              <br>
             <button type="submit">Report Fraud</button>
         </form>
     </section>
