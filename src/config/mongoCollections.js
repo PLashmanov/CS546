@@ -14,4 +14,5 @@ const getCollectionFn = (collection) => {
 };
 const users = getCollectionFn('users');
 const fraudsters = getCollectionFn('fraudsters');
-export {users, fraudsters}; 
+const FraudReports = getCollectionFn('FraudReports');
+export {users, fraudsters, FraudReports}; 
