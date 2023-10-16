@@ -12,6 +12,6 @@ const getCollectionFn = (collection) => {
     return _col;
   };
 };
-
-// NOTE: YOU WILL NEED TO CHANGE THE CODE BELOW TO HAVE THE COLLECTION(S) REQUIRED BY THE ASSIGNMENT
-export const events = getCollectionFn("events");
+const users = getCollectionFn('users');
+const fraudsters = getCollectionFn('fraudsters');
+export {users, fraudsters}; 
