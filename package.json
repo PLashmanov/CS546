@@ -1,5 +1,5 @@
 {
-  "name": "lab4",
+  "name": "FRAP",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node ./src/app.js"
   },
-  "author": "Stephen Miller",
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "deep-email-validator": "^0.1.21",
