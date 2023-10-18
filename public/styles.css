@@ -110,6 +110,10 @@ footer {
 }
 
 /*Registration Form */
+.required::after {
+    content: '*';
+    color:red;
+}
 .register {
     text-decoration: none;
 
