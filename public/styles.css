@@ -104,7 +104,7 @@ footer {
     padding: 1rem 0;
 }
 
-/*Registration Form */
+/*Registration Form | Report form */
 .register {
     text-decoration: none;
     
@@ -189,7 +189,6 @@ footer {
     font-size: 18px;
     cursor: pointer;
 }
-
 
 #reportFraud button[type="submit"]:hover {
     background-color: #f70c0c;
