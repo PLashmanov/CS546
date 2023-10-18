@@ -1,35 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FRAP App</title>
     <link rel="stylesheet" href="styles.css">
+    <title>FRAP App</title>
+    
 </head>
 <body>
-    <header>
-        <nav>
-            <ul class="nav-links">
-                <li class="nav-item"><a href="#">About</a></li>
-                <li class="nav-item"><a href="#">Home</a></li>
-                <li class="nav-item"><a href="#">Contact Us</a></li>
-                <li><a href="register.html" class="register">Register</a></li>
-            </ul>
-        </nav>
-        <div class="login-form">
-            <form action="/login" method="post">
-                <div class="input-group">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-                <div class="input-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit">Log In</button>
-            </form>
-        </div>
-    </header>
+    <div id="nav-placeholder"></div>
+    <script>
+    $(function(){
+      $("#nav-placeholder").load("nav.html");
+    });
+    </script>
 
     <section id="home">
         <h1>Welcome to FRAP</h1>
