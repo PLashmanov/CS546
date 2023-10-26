@@ -12,6 +12,7 @@ const getCollectionFn = (collection) => {
     return _col;
   };
 };
-const users = getCollectionFn('users');
-const fraudsters = getCollectionFn('fraudsters');
-export {users, fraudsters}; 
+export const sessionsCollection = getCollectionFn('sessions');
+export const usersCollection = getCollectionFn('users');
+export const fraudstersCollection = getCollectionFn('fraudsters');
+

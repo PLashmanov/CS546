@@ -1,21 +1,30 @@
 
-
-import { AlertService  } from "./services/AlertService.js";
+import { AlertService } from './services/AlertService.js';
 import dotenv from 'dotenv';
+import configRoutesFunction from './routes/index.js';
+import express from 'express';
+import session  from "express-session";
+import MongoStore from 'connect-mongo';
 
-async function main() {   
+async function main() {  
 
     dotenv.config();
-    const alertUsers = new AlertService();
-    let fraudsterID = "507f1f77bcf86cd799439011";
-    /* alert users based on fraudstreID */
-    try{
-        await alertUsers.alertUsers(fraudsterID);
-    }
-    catch(e){
-        console.error("error sending email for modification of fraduster: " , fraudsterID , "with error " , e)
-    }
-    
+    const app = express();
+
+    app.use(session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        store: MongoStore.create({
+            mongoUrl: process.env.MONGO_SESSION_URL
+          })    
+        }));
+    app.use(express.json());
+    configRoutesFunction(app);
+    app.listen(3000, () => {
+    console.log("We've now got a server!");
+    console.log('Your routes will be running on http://localhost:3000');
+    });
 }
 main();
 
