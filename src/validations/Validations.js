@@ -1,7 +1,7 @@
 import * as deepEmailValidator from 'deep-email-validator';
+import { ObjectId } from 'mongodb';
 
-
-async function isValidEmailAddress(userEmail) {
+export  const  isValidEmailAddress = async (userEmail) => {
   const result = await deepEmailValidator.validate({
     email: userEmail,
     validateRegex: true,          
@@ -12,4 +12,19 @@ async function isValidEmailAddress(userEmail) {
   return result.valid;
 }
 
-export { isValidEmailAddress };
+
+export const  getMongoID = (id)=> {
+  if (!id || typeof id !== 'string' || id.trim() === '') {
+    throw new Error("must be a valid id");
+  }
+  try {
+    return new ObjectId(id.trim());
+  } catch (error) {
+    throw new Error("invalid mongo id");
+  }
+}
+
+export const isArray = (arr)=> {
+  return arr !== undefined && arr !== null && Array.isArray(arr);
+}
+

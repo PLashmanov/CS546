@@ -3,23 +3,23 @@ import nodemailer from 'nodemailer';
 
 class MailSender {
   constructor() {
-    this.smtpConfig = {
+    this.config = {
       service: 'gmail',
       auth: {
         user: process.env.FRAP_EMAIL,   
         pass: process.env.EMAIL_PASS,  
       },
     };
-    this.transporter = nodemailer.createTransport(this.smtpConfig);
+    this.transporter = nodemailer.createTransport(this.config);
   }
 
   async sendMail({from,  to, subject, body }) {
-          let info = await this.transporter.sendMail({
+          let status = await this.transporter.sendMail({
               from,
               to,
               subject,
               text: body, });
-          return info;
+          return status;
   }
 }
 
