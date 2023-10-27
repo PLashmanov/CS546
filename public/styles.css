@@ -21,6 +21,11 @@ header {
     line-height: 10px;
     
 }
+
+h1 {
+    margin:0 auto 20px auto;
+    text-align: center;
+}
 .logo {
     position: relative;
     top: 0px;
@@ -79,8 +84,8 @@ nav {
 .login-form {
     display: flex;
     align-items: center;
-    margin-left:auto;
-    margin-right:20px;
+    margin:auto;
+    justify-content: center;
 }
 
 .login-form form {
