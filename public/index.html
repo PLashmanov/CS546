@@ -20,8 +20,8 @@
                     success: function(response) {
                         window.location.href = '/login.html'; 
                     },
-                    error: function(error) {
-                        alert('Logout failed: ' + error.responseText);
+                    error: function(ex) {
+                        alert('Logout failed: ' + ex.responseText);
                     }
                 });
             });
@@ -29,7 +29,6 @@
         });
     });
         </script>
-
     <section id="home">
         <h1>Welcome to FRAP</h1>
         <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolor neque provident repellat? A quos distinctio, exercitationem voluptatem voluptas dolore minima, blanditiis deserunt perspiciatis id aliquam? Natus voluptatum dolorum quae. Consectetur?</p>
