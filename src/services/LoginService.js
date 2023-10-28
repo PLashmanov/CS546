@@ -23,20 +23,6 @@ class LoginService {
     static createSession(req, user) {
         req.session.userEmail = user.email;
     }
-
-    static async destroyAllUserSessions(reqEmail) {
-        const user = await this.#getUser(reqEmail)
-        try{
-            const sessionCollection = await sessionsCollection();
-            let deleteResult =  await sessionCollection.deleteMany({ "session": { $regex: `"userEmail":"${String(reqEmail)}"` } });
-            if(deleteResult.deletedCount !== 0){
-                console.log("previous sessions were deleted " , deleteResult.deletedCount  )
-            }
-        }
-        catch(err){
-            throw new Error("error deleting sessions " , err)
-        } 
-    }
    static async #verifyPassword(reqPassword, storedPass){
         return await bcrypt.compare(reqPassword, storedPass);
     }

@@ -42,8 +42,11 @@ class AlertService {
     }
   }
   async #fetchEmailsWithAlertEnabled(fraudsterID) {
-      const fraduster = await fetchFraudsterByID(fraudsterID); 
-      const users = await fetchUsersFromEmails(fraduster.email);
+      const fraudster = await fetchFraudsterByID(fraudsterID); 
+      if (!fraudster || !fraudster.emails) {
+        throw new Error('Fraudster not found or email is missing');
+    }
+      const users = await fetchUsersFromEmails(fraudster.emails);
       return users.filter(user => user.notifications).map(user => user.email);
   }
 

@@ -1,4 +1,4 @@
-
+import { AlertService } from './services/AlertService.js';
 import dotenv from 'dotenv';
 import configRoutesFunction from './routes/index.js';
 import express from 'express';

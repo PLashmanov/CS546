@@ -1,28 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="styles.css">
-        <title>Register</title>
-        
-    </head>
-    <body>
-        <div id="nav-placeholder"></div>
-        <script>
-        $(function(){
-          $("#nav-placeholder").load("nav.html");
-        });
-        </script>
+<head>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Login</title>
+</head>
+<body>
 
     <section id="login">
         <h1>Log In</h1>
         <div class="login-form">
-            <form action="/login" method="post">
+            <form id="loginForm">
                 <div class="input-group">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
+                    <label for="email">Email:</label>
+                    <input type="text" id="email" name="email" required>
                 </div>
                 <div class="input-group">
                     <label for="password">Password:</label>
@@ -31,11 +24,33 @@
                 <button type="submit">Log In</button>
             </form>
         </div>
-        
-        </form>
     </section>
     <footer>
         <p>&copy; 2023 FRAP App</p>
     </footer>
+
+    <script>
+        $(document).ready(function() {
+            $('#loginForm').submit(function(e) {
+                e.preventDefault(); 
+                const formData = {
+                    email: $('#email').val(),
+                    password: $('#password').val()
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: '/auth/login',
+                    data: JSON.stringify(formData), 
+                    contentType: 'application/json', 
+                    success: function(response) {
+                        window.location.href = '/';
+                    },
+                    error: function(error) {
+                        alert('Login failed: ' + error.responseText);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
