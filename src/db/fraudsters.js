@@ -44,11 +44,11 @@ const newFraudster = {
   eins: [],
   itins: [], 
   ssns: [],
-  emails: ['anna@delvey.com', 'inventing@anna.com', 'itwilltake.time@torecover.com'],
-  phones: ['+11234567890', '+19876543210'],
-  names: ['Anna Delvey'],
-  users: ['653c512cd60772d9108c8c7d', '653c650f1834d619121f49c5', '653bf9b5a61dac49aa219d61'],
-  numReports: 3,
+  emails: [],
+  phones: [],
+  names: [],
+  users: [],
+  numReports: 0,
   trending: false
 }
 const fraudstersCollection = await fraudsters();
