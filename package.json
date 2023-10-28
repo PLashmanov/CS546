@@ -12,6 +12,8 @@
   "dependencies": {
     "deep-email-validator": "^0.1.21",
     "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "libphonenumber-js": "^1.10.48",
     "moment": "^2.29.4",
     "mongodb": "^6.1.0",
     "nodemailer": "^6.9.6",

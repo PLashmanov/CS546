@@ -1,5 +1,3 @@
-
-
 import { AlertService  } from "./services/AlertService.js";
 import dotenv from 'dotenv';
 
@@ -20,4 +18,3 @@ async function main() {
     
 }
 main();
-
