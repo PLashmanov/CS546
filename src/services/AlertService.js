@@ -49,7 +49,6 @@ class AlertService {
       const users = await fetchUsersFromEmails(fraudster.emails);
       return users.filter(user => user.notifications).map(user => user.email);
   }
-
   async #sendAlertEmail(userEmail , fraudsterID) { 
       const status = await this.mailSender.sendMail({
         from: process.env.FRAP_EMAIL,

@@ -1,6 +1,5 @@
-import { usersCollection , sessionsCollection } from "../config/mongoCollections.js";
+import { usersCollection  } from "../config/mongoCollections.js";
 import  bcrypt from 'bcrypt'; 
-
 
 /** 
 @example
@@ -19,7 +18,6 @@ class LoginService {
         delete user.password;
         return user;
     }
-
     static createSession(req, user) {
         req.session.userEmail = user.email;
     }
@@ -29,13 +27,11 @@ class LoginService {
     static async #getUser(reqEmail){
         const userCollection = await usersCollection();
         const user = await userCollection.findOne({ email: reqEmail });
-
         if (!user) {
             throw new Error('User not found');
         }
         return user; 
     }
-
 }
 
 export default LoginService;

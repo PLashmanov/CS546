@@ -28,7 +28,6 @@
     <footer>
         <p>&copy; 2023 FRAP App</p>
     </footer>
-
     <script>
         $(document).ready(function() {
             $('#loginForm').submit(function(e) {
@@ -45,8 +44,8 @@
                     success: function(response) {
                         window.location.href = '/';
                     },
-                    error: function(error) {
-                        alert('Login failed: ' + error.responseText);
+                    error: function(ex) {
+                        alert('Login failed: ' + ex.responseText);
                     }
                 });
             });
