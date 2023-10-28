@@ -41,9 +41,9 @@ export async function fraudsterExists(ein, itin, ssn, email, phone, address) {
 export async function createFraudster() {
 
 const newFraudster = {
-  eins: ['12-3456789'],
-  itins: ['912-34-5678'], 
-  ssns: ['123-45-6789'],
+  eins: [],
+  itins: [], 
+  ssns: [],
   emails: ['anna@delvey.com', 'inventing@anna.com', 'itwilltake.time@torecover.com'],
   phones: ['+11234567890', '+19876543210'],
   names: ['Anna Delvey'],
