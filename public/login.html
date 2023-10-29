@@ -42,6 +42,8 @@
                     data: JSON.stringify(formData), 
                     contentType: 'application/json', 
                     success: function(response) {
+                        const user = response.message;
+                        localStorage.setItem('user', JSON.stringify(user));
                         window.location.href = '/';
                     },
                     error: function(ex) {

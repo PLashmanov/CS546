@@ -11,7 +11,7 @@ router
             req.session.user = {
                 email: user.email
             };
-            return res.status(200).json({ message: 'User authenticated successfully ' , user});
+            return res.status(200).json({ message: user});
         } catch (ex) {
             return res.status(400).json({ error: ex.message });
         }

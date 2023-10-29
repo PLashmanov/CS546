@@ -9,6 +9,7 @@
     
 </head>
 <body>
+    <h2 id="welcomeMessage">Welcome, <span id="userName"></span></h2>
     <div id="nav-placeholder"></div>
     <script>
     $(function(){
@@ -18,6 +19,7 @@
                     type: 'POST',
                     url: '/auth/logout',
                     success: function(response) {
+                        localStorage.removeItem('user');
                         window.location.href = '/login.html'; 
                     },
                     error: function(ex) {
@@ -27,6 +29,12 @@
             });
 
         });
+    });
+    $(document).ready(function() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user && user.firstName) {
+            $('#userName').text(user.firstName);
+        }
     });
         </script>
     <section id="home">

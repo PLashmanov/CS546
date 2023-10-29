@@ -11,12 +11,15 @@ class LoginService {
     
     static async authenticate(reqEmail, reqPassword) {
         const user = await this.#getUser(reqEmail)
-        const isPasswordValid = await this.#verifyPassword(reqPassword, user.password); 
+        const isPasswordValid = await this.#verifyPassword(reqPassword, user.hashedPassword); 
         if (!isPasswordValid) {
             throw new Error('Invalid password');
         }
-        delete user.password;
-        return user;
+        const userDetails = {
+            firstName: user.firstName,
+            email: user.email
+        };
+        return userDetails;
     }
     static createSession(req, user) {
         req.session.userEmail = user.email;
