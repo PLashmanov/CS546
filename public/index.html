@@ -11,24 +11,6 @@
     <div id="nav-placeholder"></div>
     
     <script>
-    $(function(){
-        $("#nav-placeholder").load("nav.html", function() {
-            $('#logout').click(function() {
-                $.ajax({
-                    type: 'POST',
-                    url: '/auth/logout',
-                    success: function(response) {
-                        localStorage.removeItem('user');
-                        window.location.href = '/login.html'; 
-                    },
-                    error: function(ex) {
-                        alert('Logout failed: ' + ex.responseText);
-                    }
-                });
-            });
-
-        });
-    });
     $(document).ready(function() {
         const user = JSON.parse(localStorage.getItem('user'));
         if (user && user.firstName) {
@@ -43,5 +25,6 @@
     <footer>
         <p>&copy; 2023 FRAP App</p>
     </footer>
+    <script src="/js/common.js"></script>
 </body>
 </html>
