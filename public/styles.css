@@ -108,7 +108,9 @@ nav {
 .login-form button:hover {
     background-color: #3b3b3b;
 }
-
+#logout:hover {
+    cursor: pointer;
+}
 /* Input Fields*/
 .input-group label {
     display: block;
