@@ -6,11 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <title>FRAP APP</title>
-    
 </head>
 <body>
-    <h2 id="welcomeMessage">Welcome, <span id="userName"></span></h2>
     <div id="nav-placeholder"></div>
+    
     <script>
     $(function(){
         $("#nav-placeholder").load("nav.html", function() {
@@ -38,7 +37,7 @@
     });
         </script>
     <section id="home">
-        <h1>Welcome to FRAP</h1>
+        <h1 id="welcome"> Welcome to FRAP  <span id="userName"></span> </h1> 
         <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolor neque provident repellat? A quos distinctio, exercitationem voluptatem voluptas dolore minima, blanditiis deserunt perspiciatis id aliquam? Natus voluptatum dolorum quae. Consectetur?</p>
     </section>
     <footer>
