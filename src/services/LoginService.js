@@ -1,4 +1,4 @@
-import { usersCollection  } from "../config/mongoCollections.js";
+import { users  } from "../config/mongoCollections.js";
 import  bcrypt from 'bcrypt'; 
 
 /** 
@@ -28,7 +28,7 @@ class LoginService {
         return await bcrypt.compare(reqPassword, storedPass);
     }
     static async #getUser(reqEmail){
-        const userCollection = await usersCollection();
+        const userCollection = await users();
         const user = await userCollection.findOne({ email: reqEmail });
         if (!user) {
             throw new Error('User not found');
