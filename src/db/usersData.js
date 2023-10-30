@@ -3,7 +3,7 @@ import {reports} from '../config/mongoCollections.js';
 import {fraudsters} from '../config/mongoCollections.js';
 import {users} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
-
+import  bcrypt from 'bcrypt'; 
 export const createUser = async (
     email,
     firstName,
@@ -23,8 +23,9 @@ export const createUser = async (
     lastName= validations.validateName(lastName);
     companyName = validations.validateCompanyName(companyName);
     email = validations.validateEmail(email);
+     
     phoneNumber = validations.validatePhoneNumber(phoneNumber); // FIXME: check the input // get rid of it?
-    let hashedPassword = validations.validatePassword(password);    // FIXME: implementation needed in validations.js Proffessor will talk about it
+    let hashedPassword = await hashPassword(password);  
     notifications = validations.validateNotifications(notifications);
     let reportIds = [];
     let numOfReports = 0;
@@ -102,6 +103,16 @@ export const updateUserAfterReport = async (userId, reportId) => {
         updatedUserBadge = false;
     } else {
         updatedUserBadge = true;
+    }
+}
+async function hashPassword(password) {
+    try {
+        const salt = await bcrypt.genSalt(5);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        return hashedPassword;
+    } catch (error) {
+        console.error("Error hashing password:", error);
+        throw error;
     }
 }
 
