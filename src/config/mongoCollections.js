@@ -13,6 +13,6 @@ const getCollectionFn = (collection) => {
   };
 };
 export const sessionsCollection = getCollectionFn('sessions');
-export const usersCollection = getCollectionFn('users');
-export const fraudstersCollection = getCollectionFn('fraudsters');
+export const users = getCollectionFn('users');
+export const fraudsters = getCollectionFn('fraudsters');
 
