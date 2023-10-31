@@ -91,7 +91,7 @@ export const removeUser = async(id) => {
 };
 
 //FIXME: update with patch // usage: reports ->to add reportId to user, incr num reports and check badge
-export const updateUserAfterReport = async (userId, reportId) => {
+export const updateUserAfterInsertReport = async (userId, reportId) => {
     reportId = validations.validateId(reportId);
 
     const userCollection = await users();
@@ -118,4 +118,23 @@ async function hashPassword(password) {
 
 //FIXME: update with put? ASK PAVEL
 export const updateUserPut = async () => {
+}
+
+export async function updateUserAfterRemoveReport(reportId) {
+    reportId = validations.validateId(reportId);
+    const userCollection = await users();
+    const userWithReport = await userCollection.findOne({reportIds: new ObjectId(reportId)});
+    if (!userWithReport) return;
+
+    let badgeStatus;
+    if (userWithReport.numOfReports >= 11) badgeStatus = true;
+    else badgeStatus = false;
+    const updatedUser = await userCollection.findOneAndUpdate(
+        {reportIds: new ObjectId(reportId)},
+        {$pull: {reportIds: reportId}, $inc: {numOfReports: -1}, $set: {badge: badgeStatus}},
+        {returnOriginal: false});
+
+    if (!updatedUser || !updatedUser.value) throw `error: failed to remove reportId from reportIds array in users`;
+
+    return `Report ${reportId} was deleted from user collection`;
 }

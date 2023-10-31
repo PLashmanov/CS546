@@ -3,8 +3,9 @@ import {reports} from '../config/mongoCollections.js';
 import {users} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 import {fraudsterExists, createFraudster} from './fraudstersData.js';
-import {updateUserAfterReport} from './usersData.js';
-import {updateFraudsterAfterReport} from './fraudstersData.js';
+import * as usersData from './usersData.js';
+import * as fraudstersData from './fraudstersData.js';
+
 
 export const createReport = async (
     userId,
@@ -43,8 +44,8 @@ export const createReport = async (
     if (fraudsterExistsId) {
         fraudsterId = fraudsterExistsId;
     } else {
-        const newFraudster = createFraudster(ein, itin, ssn, email, phone, nameFraudster, userId);
-        fraudsterId = newFraudster._id.toString();
+        const newFraudster = createFraudster();
+        fraudsterId = newFraudster._id.toString(); 
     }
     let newReport = {
         userId: userId,
@@ -62,7 +63,8 @@ export const createReport = async (
     const newReportId = insertReport.insertedId.toString();
     const report = await getReportById(newReportId);
 
-    const updatedUsers = updateUserAfterReport(userId, newReportId);
+    const updatedUsers = usersData.updateUserAfterInsertReport(userId, newReportId);
+    let updatedFraudsters = fraudstersData.updateFraudsterAfterInsertReport(fraudsterId, ein, itin, ssn, email, phone, nameFraudster, userId, newReportId, type); // FIXME: create in fraudsterData
 
      //FIXME: add reprtId to fraudsters once fraudsters implemented
      //const updatedFraudsters = updateFraudsterAfterReport();
@@ -93,47 +95,10 @@ export const removeReport = async(reportId) => {
 
     if(!removed) throw `error: report ${reportId} cound not be deleted`;
 
-    updateUserAfterRemoveReport(reportId);
+    await updateFraudsterAfterRemoveReport(reportId);
+    await updateUserAfterRemoveReport(reportId);
     return "Report ${id} deleted";
 };
-
-
-async function updateUserAfterRemoveReport(reportId) {
-    id = validations.validateId(id);
-    const userCollection = await users();
-    const userWithReport = await userCollection.findOne({reportIds: id});
-    if (!userWithReport) return;
-
-    const updatedUser = await userCollection.findOneAndUpdate(
-        {reportIds: id},
-        {$pull: {reportIds: id}, $inc: {numOfReports: -1}},
-        {returnOriginal: false});
-
-    if (!updatedUser || !updatedUser.value) throw `error: failed to remove reportId from reportIds array in users`;
-
-    return `Report ${reportId} was deleted from user collection`;
-}
-
-
-//FIXME finisih updating fraudster: users, reports and numReports
-export async function updateFraudsterAfterRemoveReport(reportId) {
-    const fraudsterCollection = await fraudsterExists();
-    const fraudsterWithReport = await fraudsterCollection.findOne({reportIds: id});
-    if(!fraudsterWithReport) return;
-
-    const updatedFrUsers = await fraudsterCollection.findOneAndUpdate(
-        {reportIds: id},
-        {$pull: {users: }}
-    )
-}
-
-
-
-
-
-
-
-
 
 //FIXME: we can delete if this is too much
 // export const getAllReports = async () => {
@@ -156,3 +121,9 @@ export const getAllReportsForFraudster = async(fraudsterId) => {
 
 }
 
+// export async function getUserFromReports (reportId) {
+//     const reportCollection = await reports();
+//     const reportToRemove = await userCollection.findOne({_id: new reportId(reportId)});
+//     const userIdWhoReported = await reportToRemove.userId;
+//     return userIdWhoReported;
+//   }
