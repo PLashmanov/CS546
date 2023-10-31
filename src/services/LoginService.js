@@ -1,6 +1,6 @@
 import { users  } from "../config/mongoCollections.js";
 import  bcrypt from 'bcrypt'; 
-
+import { BusinessError } from '../error/customErrors.js';
 /** 
 @example
 const user = await LoginService.authenticate(email}, pass);
@@ -13,7 +13,7 @@ class LoginService {
         const user = await this.#getUser(reqEmail)
         const isPasswordValid = await this.#verifyPassword(reqPassword, user.hashedPassword); 
         if (!isPasswordValid) {
-            throw new Error('Invalid password');
+            throw new BusinessError('Invalid password');
         }
         const userDetails = {
             firstName: user.firstName,
