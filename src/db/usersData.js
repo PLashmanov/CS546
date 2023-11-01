@@ -3,7 +3,9 @@ import {reports} from '../config/mongoCollections.js';
 import {fraudsters} from '../config/mongoCollections.js';
 import {users} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
-import  bcrypt from 'bcrypt'; 
+import  bcrypt from 'bcrypt';
+import * as reportsData from './reportsData.js';
+
 export const createUser = async (
     email,
     firstName,
@@ -14,17 +16,26 @@ export const createUser = async (
     notifications
 ) => {
 
-    email = validations.validateEmail(email);
+    if (email === undefined || email === null ||
+        firstName === undefined || firstName === null ||
+        lastName === undefined || lastName === null ||
+        companyName === undefined ||
+        phoneNumber === undefined ||
+        password === undefined || password === null ||
+        notifications === undefined || notifications === null) {
+        throw new Error('one or more arguments are missing in createUser');
+    }
+    
     const userCollection = await users();
     const existingUser = await userCollection.findOne({email: email});
-    if (existingUser) throw `error: user with email ${email} already exists`;
+    if (existingUser) throw new Error(`error: user with email ${email} already exists`);
 
-    firstName = validations.validateName(firstName);
-    lastName= validations.validateName(lastName);
+    firstName = validations.validateName(firstName, "firstName");
+    lastName= validations.validateName(lastName, "lastName");
     companyName = validations.validateCompanyName(companyName);
-    email = validations.validateEmail(email);
-     
-    phoneNumber = validations.validatePhoneNumber(phoneNumber); // FIXME: check the input // get rid of it?
+    email = validations.validateEmail(email); 
+    phoneNumber = validations.validatePhoneNumber(phoneNumber);
+    //password = validations.validatePassword(password); // 
     let hashedPassword = await hashPassword(password);  
     notifications = validations.validateNotifications(notifications);
     let reportIds = [];
@@ -44,7 +55,7 @@ export const createUser = async (
         notifications: notifications
     }
     const insertedUser = await userCollection.insertOne(newUser);
-    if(!insertedUser.acknowledged || !insertedUser.insertedId) throw `error: could not add user`;
+    if(!insertedUser.acknowledged || !insertedUser.insertedId) throw new Error (`error: could not add user`);
     const newId = insertedUser.insertedId.toString();
     const user = await getUserById(newId);
     return user;
@@ -54,7 +65,7 @@ export const getUserById = async (id) => {
     id = validations.validateId(id);
     const userCollection = await users();
     const user = await userCollection.findOne({_id: new ObjectId(id)});
-    if(!user) throw `Error: user ${id} not found`;
+    if(!user) throw new Error(`Error: user ${id} not found`);
     return user;
 };
 
@@ -69,9 +80,9 @@ export const removeUser = async(id) => {
     //update userId in reports colelction to the id of the master. Save as string
     let usersCollection = await users();
     let master = await usersCollection.findOne({firstName: "MASTER"});
-    if(!master) throw `error: users collection must have Master`;
+    if(!master) throw new Error(`error: users collection must have Master`);
     let idToChangeTo = master._id.toString();
-    if (idToChangeTo === id) throw `error: master cannot be deleted`;
+    if (idToChangeTo === id) throw new Error(`error: master cannot be deleted`);
 
     let reportCollection = await reports();
     let changedUserId = reportCollection.updateMany(
@@ -85,26 +96,37 @@ export const removeUser = async(id) => {
 
     //remove user
     const removed = await usersCollection.findOneAndDelete({_id: existingObjId}); 
-    if (!removed) throw `User could not be deleted`;
+    if (!removed) throw new Error(`User could not be deleted`);
 
     return `User ${id} deleted`;
 };
 
 //FIXME: update with patch // usage: reports ->to add reportId to user, incr num reports and check badge
-export const updateUserAfterInsertReport = async (userId, reportId) => {
-    reportId = validations.validateId(reportId);
+export const updateUserAfterCreateReport = async (userId, reportId) => {
 
-    const userCollection = await users();
-    const updatedUser = await userCollection.findOneAndUpdate(
-        {_id: new ObjectId(userId)},
-        {$push: {reportIds: reportId}, $inc: {numOfReports: 1}});
-    let updatedUserBadge = await userCollection.find({_id: new ObjectId(userId)});
-    if (updatedUserBadge.numOfReports < 10) {
-        updatedUserBadge = false;
-    } else {
-        updatedUserBadge = true;
+    try {
+        userId = validations.validateId(userId);
+        reportId = validations.validateId(reportId);
+
+        const userCollection = await users();
+
+        let user = await userCollection.findOne({_id: new ObjectId(userId)});
+        
+        let badge = false;
+        if (user.numOfReports >= 9) badge = true;
+
+        const updatedUser = await userCollection.findOneAndUpdate(
+            {_id: new ObjectId(userId)},
+            {$push: {reportIds: reportId},
+             $inc: {numOfReports: 1},
+            $set: {badge: badge}},
+            {returnOriginal: false}
+        );
+    } catch (error) {
+        console.error('Error updating user after creating report:', error);
     }
 }
+
 async function hashPassword(password) {
     try {
         const salt = await bcrypt.genSalt(5);
@@ -116,16 +138,16 @@ async function hashPassword(password) {
     }
 }
 
-//FIXME: update with put? ASK PAVEL
-export const updateUserPut = async () => {
+export async function getUserByReportId (reportId) {
+    let report = await reportsData.getReportById(reportId);
+    let userWithReportId = report.userId.toString();
+    let userWithReport = await getUserById(userWithReportId);
+    return userWithReport;
 }
 
 export async function updateUserAfterRemoveReport(reportId) {
-    reportId = validations.validateId(reportId);
-    const userCollection = await users();
-    const userWithReport = await userCollection.findOne({reportIds: new ObjectId(reportId)});
-    if (!userWithReport) return;
-
+   let  userWithReport = await getUserByReportId(reportId);
+    
     let badgeStatus;
     if (userWithReport.numOfReports >= 11) badgeStatus = true;
     else badgeStatus = false;
@@ -134,7 +156,7 @@ export async function updateUserAfterRemoveReport(reportId) {
         {$pull: {reportIds: reportId}, $inc: {numOfReports: -1}, $set: {badge: badgeStatus}},
         {returnOriginal: false});
 
-    if (!updatedUser || !updatedUser.value) throw `error: failed to remove reportId from reportIds array in users`;
+    if (!updatedUser || !updatedUser.value) throw new Error(`error: failed to remove reportId from reportIds array in users`);
 
     return `Report ${reportId} was deleted from user collection`;
 }

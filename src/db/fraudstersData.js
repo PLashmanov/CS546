@@ -10,7 +10,7 @@ export const getFraudsterById = async (fraudsterId) => {
     fraudsterId = validations.validateId(fraudsterId);
     const fraudsterCollection = await fraudsters();
     const fraudster = await fraudsterCollection.findOne({_id: newObject(fraudsterId)});
-    if(!fraudster) throw `error: fraudster not found`;
+    if(!fraudster) throw new Error (`fraudster not found`);
     return fraudster;
 }
 
@@ -24,22 +24,20 @@ export async function fraudsterExists(ein, itin, ssn, email, phone) {
 
    let fraudstersCollection = await fraudsters();
     let fraudster;
-    if (fraudster = await fraudstersCollection.findOne({einArr: ein})) {
+    if (fraudster = await fraudstersCollection.findOne({eins: ein})) {
       return fraudster._id.toString();
-    } else if (fraudster = await fraudstersCollection.findOne({itinArr: itin})) {
+    } else if (fraudster = await fraudstersCollection.findOne({itins: itin})) {
       return fraudster._id.toString();
-    } else if (fraudster = await fraudstersCollection.findOne({ssnArr: ssn})) {
+    } else if (fraudster = await fraudstersCollection.findOne({ssns: ssn})) {
       return fraudster._id.toString();
-    } else if (fraudster = await fraudstersCollection.findOne({emailArr: email})) {
+    } else if (fraudster = await fraudstersCollection.findOne({emails: email})) {
       return fraudster._id.toString();
-      //FIXME: check if we are still using phone
-    } else if (fraudster = await fraudstersCollection.findOne({phoneArr: phone})) {
+    } else if (fraudster = await fraudstersCollection.findOne({phones: phone})) {
       return fraudster._id.toString();
     }
     return false;
 }
 
-//FIXME:
 export async function createFraudster() {
   
   let eins = [];
@@ -77,7 +75,7 @@ return fraudsterInserted;
 }
 
  //FIXME: checks mandatory fields, also updates trending status // usage: reports.txt -> createReport()
- export async function updateFraudsterAfterInsertReport(fraudsterId, ein, itin, ssn, email, phone, nameFraudster, userId, reportId, type) {
+ export async function updateFraudsterAfterCreateReport(fraudsterId, ein, itin, ssn, email, phone, nameFraudster, userId, reportId, type) {
   fraudsterId = validateId(fraudsterId);
   ein = validations.validateEIN(ein);
   itin = validations.validateITIN(itin);
@@ -98,7 +96,7 @@ return fraudsterInserted;
 
   let fraudsterToUpdate = await fraudstersCollection.findOneAndUpdate(
     {_id: new ObjectId(fraudsterId)},
-    {$push:
+    {$addToSet:
       {eins: ein,
       itins: itin,
       ssns: ssn,
@@ -128,17 +126,16 @@ export async function isFraudsterTrending(fraudsterId) {
   const fraudster = await fraudstersCollection.findOne({_id: new ObjectId(fraudsterId)});
   
   if (!fraudster) {
-    throw `error: fraudster not found`;
+    throw new Error (`fraudster not found`);
     return;
   }
 
   const recentReports = fraudster.reports.filter(report => report.date >= oneWeekAgo);
   const count = recentReports.length;
-  if (count <= 3) return false;
+  if (count < 3) return false;
 
 return true;
 }
-
 
 //FIXME finisih updating fraudster: updateDate, trending
 export async function updateFraudsterAfterRemoveReport(reportId) {
