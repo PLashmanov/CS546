@@ -32,8 +32,8 @@ $(document).ready(function() {
  //report functions date mandatory and 1 other mandatory field,needs more validations for email and other stuff.
 
 function validateReport(){
-    const dateField = document.getElementById('FraudDate');
-    const restFields = ['firstName', 'lastName', 'email', 'website', 'phoneNumber'];
+    const dateField = document.getElementById('rep-fraudDate');
+    const restFields = ['rep-firstName', 'rep-lastName', 'rep-email', 'rep-website', 'rep-phoneNumber'];
 
     if(dateField.value.trim() === ''){
         alert('Date is required.');
