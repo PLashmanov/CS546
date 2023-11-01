@@ -170,4 +170,3 @@ export async function updateFraudsterAfterRemoveReport(reportId) {
     $inc: {numReports: -1}
   })
 }
-

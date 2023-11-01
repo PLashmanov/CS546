@@ -14,7 +14,6 @@ export  const  isValidEmailAddress = async (userEmail) => {
   return result.valid;
 }
 
-
 export const getMongoID = (id)=> {
   if (!id || typeof id !== 'string' || id.trim() === '') {
     throw new Error("must be a valid id");
@@ -229,7 +228,7 @@ export function validateText50Char(text) {
   if (text.length < 10 || text.length > 50) throw new Error(`text length must be between 10 and 50 characters`);
   return text;
 }
-//validating an array
+
 export function validateReportIds(reportIds) {
   if (!reportIds) throw `reportIds missing`;
   if (!Array.isArray(reportIds)) throw new Error(`reportIds must be an array`);
