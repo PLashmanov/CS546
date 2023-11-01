@@ -10,14 +10,6 @@
 <body>
     <div id="nav-placeholder"></div>
     
-    <script>
-    $(document).ready(function() {
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user && user.firstName) {
-            $('#userName').text(user.firstName);
-        }
-    });
-        </script>
     <section id="home">
         <h1 id="welcome"> Welcome to FRAP  <span id="userName"></span> </h1> 
         <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolor neque provident repellat? A quos distinctio, exercitationem voluptatem voluptas dolore minima, blanditiis deserunt perspiciatis id aliquam? Natus voluptatum dolorum quae. Consectetur?</p>
@@ -25,6 +17,6 @@
     <footer>
         <p>&copy; 2023 FRAP App</p>
     </footer>
-    <script src="/js/common.js"></script>
+    <script src="../public/js/common.js"></script>
 </body>
 </html>
