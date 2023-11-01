@@ -19,38 +19,38 @@
     <section id="reportFraud">
         <h1>Report Fraud</h1>
         <br>
-        <form action="/report" method="post">
+        <form action="/report" method="post" onsubmit="return validateReport();">
             <div class="input-group">
             <p>Please enter any fraud information encountered and click Report Fraud when finished.</p>
             <div class ="person reporting">
                 <br>
                 <label for="firstName">First Name:</label>
-                <input type="text" id="firstName" name="firstName" required>
+                <input type="text" id="firstName" name="firstName">
             </div>
                 <br>
             <div class="input-group">
                 <label for="lastName">Last Name:</label>
-                <input type="text" id="lastName" name="lastName" required>
+                <input type="text" id="lastName" name="lastName">
             </div>
             <br>
             <div class="input-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email">
             </div>
                 <br>
             <div class="input-group">
-                <label for="email">Website:</label>
-                <input type="email" id="email" name="email" required>
+                <label for="website">Website:</label>
+                <input type="url" id="website" name="website">
             </div>
             <br>
             <div class="input-group">
                 <label for="phoneNumber">Phone Number:</label>
-                <input type="tel" id="phoneNumber" name="phoneNumber" required>
+                <input type="tel" id="phoneNumber" name="phoneNumber">
             </div>
             <br>
             <div class="input-group">
-                <label for="phoneNumber">Date of Fraud Encounter:</label>
-                <input type="tel" id="FraudDate" name="FraudDate" required>
+                <label for="date">Date of Fraud Encounter:</label>
+                <input type="date" id="FraudDate" name="FraudDate" required>
             </div>
             <br>
           </div>
@@ -61,7 +61,7 @@
                         <option value="Phone Number">Phone Number</option>
                         <option value ="Email Address">Email Address</option>
                         <option value ="Website">Website</option>
-                <select> 
+                </select>
               </div>
               <br>
             <button type="submit">Report Fraud</button>
@@ -70,6 +70,6 @@
     <footer>
         <p>&copy; 2023 FRAP App</p>
     </footer>
-    <script src="/js/common.js"></script>
+    <script src="../public/js/common.js"></script>
 </body>
 </html>
