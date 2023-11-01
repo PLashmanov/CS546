@@ -1,4 +1,5 @@
 /* we will need to add the server side and the ajax requests also routes and validations*/
+
 document.addEventListener('DOMContentLoaded', function () {
     const searchBar = document.getElementById('search-bar');
     const searchCriteria = document.getElementById('search-criteria');
@@ -15,3 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
         
     });
 });
+
+//validation for the input here
+

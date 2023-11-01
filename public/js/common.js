@@ -51,8 +51,8 @@ function validateReport(){
     return true;
 }
 
-//Log out navbar
-
+//Log out navbar test with server , not live server, throwing error.
+/*
 document.addEventListener('DOMContentLoaded', function () {
     const logout = document.getElementById('logout');
     if (logout) { 
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         console.error('Element with id "logout" not found in the DOM.');
     }
-});
+});*/
 
 
 
