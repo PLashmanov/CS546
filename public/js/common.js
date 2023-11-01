@@ -51,14 +51,11 @@ function validateReport(){
     return true;
 }
 
-//Log out button
+//Log out navbar
 
 document.addEventListener('DOMContentLoaded', function () {
-    // The following code will execute once the DOM is fully loaded
-
     const logout = document.getElementById('logout');
-
-    if (logout) { // Check if the element is found
+    if (logout) { 
         logout.addEventListener('click', function (event) {
             event.preventDefault();
             window.location.href = 'index.html';
