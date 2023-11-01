@@ -4,6 +4,7 @@ import {fraudsters} from '../config/mongoCollections.js';
 import {users} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 import  bcrypt from 'bcrypt';
+import { BusinessError } from '../error/customErrors.js';
 import * as reportsData from './reportsData.js';
 
 export const createUser = async (
@@ -28,7 +29,7 @@ export const createUser = async (
     
     const userCollection = await users();
     const existingUser = await userCollection.findOne({email: email});
-    if (existingUser) throw new Error(`error: user with email ${email} already exists`);
+    if (existingUser) throw new Error(new BusinessError(`user with email ${email} already exists`));
 
     firstName = validations.validateName(firstName, "firstName");
     lastName= validations.validateName(lastName, "lastName");
@@ -55,7 +56,7 @@ export const createUser = async (
         notifications: notifications
     }
     const insertedUser = await userCollection.insertOne(newUser);
-    if(!insertedUser.acknowledged || !insertedUser.insertedId) throw new Error (`error: could not add user`);
+    if(!insertedUser.acknowledged || !insertedUser.insertedId) throw new Error(`error: could not add user`);
     const newId = insertedUser.insertedId.toString();
     const user = await getUserById(newId);
     return user;
@@ -80,7 +81,7 @@ export const removeUser = async(id) => {
     //update userId in reports colelction to the id of the master. Save as string
     let usersCollection = await users();
     let master = await usersCollection.findOne({firstName: "MASTER"});
-    if(!master) throw new Error(`error: users collection must have Master`);
+    if(!master) throw new BusinessError(`error: users collection must have Master`);
     let idToChangeTo = master._id.toString();
     if (idToChangeTo === id) throw new Error(`error: master cannot be deleted`);
 

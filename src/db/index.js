@@ -1,5 +1,5 @@
-import { ObjectId } from 'mongodb';
-import { usersCollection, fraudstersCollection } from "../config/mongoCollections.js";
+
+import { users, fraudsters } from "../config/mongoCollections.js";
 import {getMongoID, isArray} from '../validations/Validations.js'
 
 
@@ -8,7 +8,7 @@ async function fetchUsersFromEmails(emails) {
       if(!isArray(emails)){
         throw new Error("emails need to be of type array")
       }
-      const userCollection = await usersCollection(); 
+      const userCollection = await users(); 
       const usersToEmail = await userCollection.find({ email: { $in: emails } }).toArray();
       return usersToEmail;
     } catch (err) {
@@ -21,7 +21,7 @@ async function fetchUsersFromEmails(emails) {
 async function fetchFraudsterByID(fraudsterID) {
   try {
       const mongoID = getMongoID(fraudsterID)
-      const fraudCollection = await fraudstersCollection();
+      const fraudCollection = await fraudsters();
       const fraudster = await fraudCollection.findOne({ _id: mongoID});
       return fraudster;
   } catch (err) {
