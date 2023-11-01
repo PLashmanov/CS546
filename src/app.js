@@ -15,9 +15,10 @@ async function main() {
         store: MongoStore.create({
             mongoUrl: process.env.MONGO_SESSION_URL
           })    
-        }));
+    }));
     app.use(express.json());
     configRoutesFunction(app);
+
     app.listen(3000, () => {
     console.log('app running on http://localhost:3000');
     });
