@@ -36,7 +36,7 @@ export const createUser = async (
     companyName = validations.validateCompanyName(companyName);
     email = validations.validateEmail(email); 
     phoneNumber = validations.validatePhoneNumber(phoneNumber);
-    //password = validations.validatePassword(password); // 
+    password = validations.validatePassword(password);
     let hashedPassword = await hashPassword(password);  
     notifications = validations.validateNotifications(notifications);
     let reportIds = [];
@@ -74,17 +74,18 @@ export const getUserById = async (id) => {
 //fraudsters collection (array: users), reports collection(userId)
 export const removeUser = async(id) => {
     id = validations.validateId(id);
-
     let existingObjId = new ObjectId(id);
 
     //make changes in reports collection:
     //update userId in reports colelction to the id of the master. Save as string
     let usersCollection = await users();
+    if (! await usersCollection.findOne(existingObjId)) throw new Error (`user ${id} not found`);
     let master = await usersCollection.findOne({firstName: "MASTER"});
     if(!master) throw new BusinessError(`error: users collection must have Master`);
     let idToChangeTo = master._id.toString();
     if (idToChangeTo === id) throw new Error(`error: master cannot be deleted`);
 
+    //FIXME: 
     let reportCollection = await reports();
     let changedUserId = reportCollection.updateMany(
         {userId: existingObjId},

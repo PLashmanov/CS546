@@ -89,13 +89,16 @@ export const removeReport = async(reportId) => {
     reportId = validations.validateId(reportId);
 
     const reportsColleciton = await reports();
+    const reportToRemove = await reportsColleciton.findOne({_id: new ObjectId(reportId)});
+    if (!reportToRemove) throw new Error (`report not found`);
     const removed = await reportsColleciton.findOneAndDelete({_id: new ObjectId(reportId)});
 
-    if(!removed) throw new Error (`report ${reportId} cound not be deleted`);
+    if(await reportsColleciton.findOne({_id: new ObjectId(reportId)})) throw new Error (`report ${reportId} cound not be deleted`);
 
-    await updateFraudsterAfterRemoveReport(reportId);
-    await updateUserAfterRemoveReport(reportId);
-    return "Report ${id} deleted";
+    //FIXME: finish the functions bellow
+   // await updateFraudsterAfterRemoveReport(reportId);
+   // await updateUserAfterRemoveReport(reportId);
+    return `Report ${reportId} deleted`;
 };
 
 export const getAllReportsOfUser = async(userId) => {

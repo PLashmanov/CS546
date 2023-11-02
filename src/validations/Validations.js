@@ -204,7 +204,7 @@ export function validateNameFr(name) {
 }
 
 export function validateCompanyName(companyName) {
-  if (!companyName) throw new ValidationError("error: companyName is missing");
+  if (companyName === undefined) throw new ValidationError("error: companyName is missing");
   if(typeof companyName !== 'string') throw new ValidationError("error: companyName must be a string");
   companyName = companyName.trim();
   if(companyName.length === 0) {
@@ -215,6 +215,7 @@ export function validateCompanyName(companyName) {
 }
 
 export function validateCity(city) {
+  if(city === undefined) throw new Error('provide city');
   city = validateString(city, "city").toUpperCase();
   if(city.length < 3 || city.length > 50) throw new ValidationError("City must be between 3 and 50 characters long");
   return city;
@@ -251,7 +252,8 @@ export function validateType(type) {
   return type;
 }
 
-export async function validatePassword(password) {
+export function validatePassword(password) {
+  if (password === undefined) throw new Error('please provide password');
   password = validateString(password, "password");
   if (password.length < 8 || password.length > 15) {
     throw new Error('Password length should be between 8 and 15 characters');
