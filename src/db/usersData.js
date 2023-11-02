@@ -3,9 +3,9 @@ import {reports} from '../config/mongoCollections.js';
 import {fraudsters} from '../config/mongoCollections.js';
 import {users} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
-import  bcrypt from 'bcrypt'; 
+import  bcrypt from 'bcrypt';
 import { BusinessError } from '../error/customErrors.js';
-
+import * as reportsData from './reportsData.js';
 
 export const createUser = async (
     email,
@@ -16,17 +16,27 @@ export const createUser = async (
     password,
     notifications
 ) => {
-    email = validations.validateEmail(email);
+
+    if (email === undefined || email === null ||
+        firstName === undefined || firstName === null ||
+        lastName === undefined || lastName === null ||
+        companyName === undefined ||
+        phoneNumber === undefined ||
+        password === undefined || password === null ||
+        notifications === undefined || notifications === null) {
+        throw new Error('one or more arguments are missing in createUser');
+    }
+    
     const userCollection = await users();
     const existingUser = await userCollection.findOne({email: email});
-    if (existingUser) throw new BusinessError(`user with email ${email} already exists`);
+    if (existingUser) throw new Error(new BusinessError(`user with email ${email} already exists`));
 
-    firstName = validations.validateName(firstName);
-    lastName= validations.validateName(lastName);
+    firstName = validations.validateName(firstName, "firstName");
+    lastName= validations.validateName(lastName, "lastName");
     companyName = validations.validateCompanyName(companyName);
-    email = validations.validateEmail(email);
-     
-    phoneNumber = validations.validatePhoneNumber(phoneNumber); // FIXME: check the input // get rid of it?
+    email = validations.validateEmail(email); 
+    phoneNumber = validations.validatePhoneNumber(phoneNumber);
+    password = validations.validatePassword(password);
     let hashedPassword = await hashPassword(password);  
     notifications = validations.validateNotifications(notifications);
     let reportIds = [];
@@ -64,17 +74,18 @@ export const getUserById = async (id) => {
 //fraudsters collection (array: users), reports collection(userId)
 export const removeUser = async(id) => {
     id = validations.validateId(id);
-
     let existingObjId = new ObjectId(id);
 
     //make changes in reports collection:
     //update userId in reports colelction to the id of the master. Save as string
     let usersCollection = await users();
+    if (! await usersCollection.findOne(existingObjId)) throw new Error (`user ${id} not found`);
     let master = await usersCollection.findOne({firstName: "MASTER"});
     if(!master) throw new BusinessError(`error: users collection must have Master`);
     let idToChangeTo = master._id.toString();
     if (idToChangeTo === id) throw new Error(`error: master cannot be deleted`);
 
+    //FIXME: 
     let reportCollection = await reports();
     let changedUserId = reportCollection.updateMany(
         {userId: existingObjId},
@@ -93,20 +104,31 @@ export const removeUser = async(id) => {
 };
 
 //FIXME: update with patch // usage: reports ->to add reportId to user, incr num reports and check badge
-export const updateUserAfterReport = async (userId, reportId) => {
-    reportId = validations.validateId(reportId);
+export const updateUserAfterCreateReport = async (userId, reportId) => {
 
-    const userCollection = await users();
-    const updatedUser = await userCollection.findOneAndUpdate(
-        {_id: new ObjectId(userId)},
-        {$push: {reportIds: reportId}, $inc: {numOfReports: 1}});
-    let updatedUserBadge = await userCollection.find({_id: new ObjectId(userId)});
-    if (updatedUserBadge.numOfReports < 10) {
-        updatedUserBadge = false;
-    } else {
-        updatedUserBadge = true;
+    try {
+        userId = validations.validateId(userId);
+        reportId = validations.validateId(reportId);
+
+        const userCollection = await users();
+
+        let user = await userCollection.findOne({_id: new ObjectId(userId)});
+        
+        let badge = false;
+        if (user.numOfReports >= 9) badge = true;
+
+        const updatedUser = await userCollection.findOneAndUpdate(
+            {_id: new ObjectId(userId)},
+            {$push: {reportIds: reportId},
+             $inc: {numOfReports: 1},
+            $set: {badge: badge}},
+            {returnOriginal: false}
+        );
+    } catch (error) {
+        console.error('Error updating user after creating report:', error);
     }
 }
+
 async function hashPassword(password) {
     try {
         const salt = await bcrypt.genSalt(5);
@@ -118,6 +140,25 @@ async function hashPassword(password) {
     }
 }
 
-//FIXME: update with put? ASK PAVEL
-export const updateUserPut = async () => {
+export async function getUserByReportId (reportId) {
+    let report = await reportsData.getReportById(reportId);
+    let userWithReportId = report.userId.toString();
+    let userWithReport = await getUserById(userWithReportId);
+    return userWithReport;
+}
+
+export async function updateUserAfterRemoveReport(reportId) {
+   let  userWithReport = await getUserByReportId(reportId);
+    
+    let badgeStatus;
+    if (userWithReport.numOfReports >= 11) badgeStatus = true;
+    else badgeStatus = false;
+    const updatedUser = await userCollection.findOneAndUpdate(
+        {reportIds: new ObjectId(reportId)},
+        {$pull: {reportIds: reportId}, $inc: {numOfReports: -1}, $set: {badge: badgeStatus}},
+        {returnOriginal: false});
+
+    if (!updatedUser || !updatedUser.value) throw new Error(`error: failed to remove reportId from reportIds array in users`);
+
+    return `Report ${reportId} was deleted from user collection`;
 }

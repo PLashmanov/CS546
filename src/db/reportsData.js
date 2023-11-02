@@ -1,10 +1,11 @@
 import * as validations from '../validations/Validations.js';
 import {reports} from '../config/mongoCollections.js';
+import {fraudsters} from '../config/mongoCollections.js';
 import {users} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 import {fraudsterExists, createFraudster} from './fraudstersData.js';
-import {updateUserAfterReport} from './usersData.js';
-import {updateFraudsterAfterReport} from './fraudstersData.js';
+import * as usersData from './usersData.js';
+import * as fraudstersData from './fraudstersData.js';
 
 export const createReport = async (
     userId,
@@ -14,37 +15,35 @@ export const createReport = async (
     email = null,
     phone = null,
     nameFraudster = null,
-    type = null   //FIXME: create validation for type
+    type = null
     ) => {
 
     userId = validations.validateId(userId);
     const userCollection = await users();
-    let user = await userCollection.findOne({_id: new ObjectId(userId)});
-    if (!user) throw `error: user ${userId} does not exist`;
+    let user = await userCollection.findOne({_id: new ObjectId (userId)});
+    if (!user) throw new Error(`user ${userId} does not exist`);
 
     ein = validations.validateEIN(ein);
     itin = validations.validateITIN(itin);
     ssn = validations.validateSSN(ssn);
     email = validations.validateEmailFr(email); 
-    phone = validations.validatePhoneNumberFr(phone); // FIXME: check the input 
+    phone = validations.validatePhoneNumberFr(phone); 
 
     if (ein === "N/A" && itin === "N/A" && ssn === "N/A"
-    && email === "N/A" && phone === 'N/A') throw `error: one of the following must be provided: ein, itin, ssn, email, phone or address`;
+    && email === "N/A" && phone === 'N/A') throw new Error (`one of the following must be provided: ein, itin, ssn, email, phone or address`);
 
     nameFraudster = validations.validateNameFr(nameFraudster);
     type = validations.validateType(type); //FIXME: create validateType
-    
-    const reportCollection = await reports();
-    if (await reportCollection.findOne({ein: ein})) ;
+
+    let date = new Date();
     
     let fraudsterId;
-    //check if fraudster exists
-    let fraudsterExistsId = fraudsterExists(ein, itin, ssn, email, phone);
+    let fraudsterExistsId = await fraudsterExists(ein, itin, ssn, email, phone);
     if (fraudsterExistsId) {
         fraudsterId = fraudsterExistsId;
     } else {
-        const newFraudster = createFraudster(ein, itin, ssn, email, phone, nameFraudster, userId);
-        fraudsterId = newFraudster._id.toString();
+        const newFraudster = await createFraudster();
+        fraudsterId = newFraudster._id.toString(); 
     }
     let newReport = {
         userId: userId,
@@ -55,17 +54,18 @@ export const createReport = async (
         phone: phone,
         nameFraudster: nameFraudster, 
         fraudsterId: fraudsterId,
-        type: type
+        type: type,
+        createDate: date
     }
+
+    const reportCollection = await reports();
     const insertReport = await reportCollection.insertOne(newReport);
-    if(!insertReport.acknowledged || !insertReport.insertedId) throw `error: could not add report`;
+    if(!insertReport.acknowledged || !insertReport.insertedId) throw new Error (`could not add report`);
     const newReportId = insertReport.insertedId.toString();
     const report = await getReportById(newReportId);
 
-    const updatedUsers = updateUserAfterReport(userId, newReportId);
-
-     //FIXME: add reprtId to fraudsters once fraudsters implemented
-     //const updatedFraudsters = updateFraudsterAfterReport();
+    const updatedUsers = await usersData.updateUserAfterCreateReport(userId, newReportId);
+    let updatedFraudsters = await fraudstersData.updateFraudsterAfterCreateReport(fraudsterId, ein, itin, ssn, email, phone, nameFraudster, userId, newReportId, type); // FIXME: create in fraudsterData
 
     return report;
 };
@@ -74,14 +74,14 @@ export const getReportById = async (id) => {
     id = validations.validateId(id);
     const reportCollection = await reports();
     const report = await reportCollection.findOne({_id: new ObjectId(id)});
-    if(!report) throw `Error: report not found`;
+    if(!report) throw new Error (`report not found`);
     return report;
 };
 
 export async function getNumOfReports() {
     const reportsCollection = await reports();
     const count = await reportsCollection.countDocuments();
-    if(count === undefined) throw `error: could not get the count of reports`;
+    if(count === undefined) throw new Error (`could not get the count of reports`);
     return count;
 }
 
@@ -89,70 +89,42 @@ export const removeReport = async(reportId) => {
     reportId = validations.validateId(reportId);
 
     const reportsColleciton = await reports();
+    const reportToRemove = await reportsColleciton.findOne({_id: new ObjectId(reportId)});
+    if (!reportToRemove) throw new Error (`report not found`);
     const removed = await reportsColleciton.findOneAndDelete({_id: new ObjectId(reportId)});
 
-    if(!removed) throw `error: report ${reportId} cound not be deleted`;
+    if(await reportsColleciton.findOne({_id: new ObjectId(reportId)})) throw new Error (`report ${reportId} cound not be deleted`);
 
-    updateUserAfterRemoveReport(reportId);
-    return "Report ${id} deleted";
+    //FIXME: finish the functions bellow
+   // await updateFraudsterAfterRemoveReport(reportId);
+   // await updateUserAfterRemoveReport(reportId);
+    return `Report ${reportId} deleted`;
 };
 
-
-async function updateUserAfterRemoveReport(reportId) {
-    id = validations.validateId(id);
+export const getAllReportsOfUser = async(userId) => {
+    userId = validations.validateId(userId);
     const userCollection = await users();
-    const userWithReport = await userCollection.findOne({reportIds: id});
-    if (!userWithReport) return;
-
-    const updatedUser = await userCollection.findOneAndUpdate(
-        {reportIds: id},
-        {$pull: {reportIds: id}, $inc: {numOfReports: -1}},
-        {returnOriginal: false});
-
-    if (!updatedUser || !updatedUser.value) throw `error: failed to remove reportId from reportIds array in users`;
-
-    return `Report ${reportId} was deleted from user collection`;
+    const user = await userCollection.findOne({_id: new ObjectId(userId)});
+    if(!user) throw new Error(`User ${userId} not found`);
+    return user.reportIds;
 }
 
-
-//FIXME finisih updating fraudster: users, reports and numReports
-export async function updateFraudsterAfterRemoveReport(reportId) {
-    const fraudsterCollection = await fraudsterExists();
-    const fraudsterWithReport = await fraudsterCollection.findOne({reportIds: id});
-    if(!fraudsterWithReport) return;
-
-    const updatedFrUsers = await fraudsterCollection.findOneAndUpdate(
-        {reportIds: id},
-        {$pull: {users: }}
-    )
+export const getAllReportsForFraudster = async(fraudsterId) => {
+    fraudsterId = validations.validateId(fraudsterId);
+    const fraudsterCollection = await fraudsters();
+    const fraudster = await fraudsterCollection.findOne({_id: new ObjectId(fraudsterId)});
+    if(!fraudster) throw new Error('fraudster ${fraudsterId} not found');
+    const fraudsterReports = fraudster.reports.map(report=>report.reportId);
+    return fraudsterReports;
 }
-
-
-
-
-
-
-
-
 
 //FIXME: we can delete if this is too much
 // export const getAllReports = async () => {
 //     const reportCollection = await reports();
 //     let reports = await reportCollection.find({}).toArray();
-//     if(!reports) throw `Could not get all reports`;
+//     if(!reports) throw new Error (`Could not get all reports`);
 //     reports = reports.map((x) => {
 //         x._id = x._id.toString();
 //         return x;
 //     });
 // };
-
-//FIXME:
-export const getAllReportsOfUser = async(userId) => {
-
-}
-
-//FIXME:
-export const getAllReportsForFraudster = async(fraudsterId) => {
-
-}
-

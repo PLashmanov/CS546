@@ -14,7 +14,6 @@ export  const  isValidEmailAddress = async (userEmail) => {
   return result.valid;
 }
 
-
 export const getMongoID = (id)=> {
   if (!id || typeof id !== 'string' || id.trim() === '') {
     throw new ValidationError("must be a valid id");
@@ -205,7 +204,7 @@ export function validateNameFr(name) {
 }
 
 export function validateCompanyName(companyName) {
-  if (!companyName) throw new ValidationError("error: companyName is missing");
+  if (companyName === undefined) throw new ValidationError("error: companyName is missing");
   if(typeof companyName !== 'string') throw new ValidationError("error: companyName must be a string");
   companyName = companyName.trim();
   if(companyName.length === 0) {
@@ -216,6 +215,7 @@ export function validateCompanyName(companyName) {
 }
 
 export function validateCity(city) {
+  if(city === undefined) throw new Error('provide city');
   city = validateString(city, "city").toUpperCase();
   if(city.length < 3 || city.length > 50) throw new ValidationError("City must be between 3 and 50 characters long");
   return city;
@@ -229,7 +229,7 @@ export function validateText50Char(text) {
   if (text.length < 10 || text.length > 50) throw new ValidationError("text length must be between 10 and 50 characters");
   return text;
 }
-//validating an array
+
 export function validateReportIds(reportIds) {
   if (!reportIds) throw new ValidationError("reportIds missing");
   if (!Array.isArray(reportIds)) throw new ValidationError("reportIds must be an array");
@@ -250,4 +250,30 @@ export function validateNotifications (notifications) {
 export function validateType(type) {
 
   return type;
+}
+
+export function validatePassword(password) {
+  if (password === undefined) throw new Error('please provide password');
+  password = validateString(password, "password");
+  if (password.length < 8 || password.length > 15) {
+    throw new Error('Password length should be between 8 and 15 characters');
+}
+
+const letters = /[A-Za-z]/;
+const numbers = /\d/g;
+const specialCharacters = /[!@#$%^&*(),?]/;
+
+if (!password.match(letters)) {
+    throw new Error('Password must contain at least one letter');
+}
+
+if (!password.match(numbers) || (password.match(numbers) && password.match(numbers).length < 2)) {
+    throw new Error('Password must contain at least two digits');
+}
+
+if (!password.match(specialCharacters)) {
+  throw new Error('Password must contain at least one of the following special characters: ! @ # $ % ^ & * , ?');
+
+}
+return password;
 }
