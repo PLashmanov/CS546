@@ -9,6 +9,10 @@
   },
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "@faker-js/faker": "^8.2.0",
+    "random": "^4.1.0"
+  },
   "dependencies": {
     "bcrypt": "^5.1.1",
     "connect-mongo": "^5.1.0",
