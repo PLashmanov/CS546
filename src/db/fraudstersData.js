@@ -5,7 +5,7 @@ import{reports} from '../config/mongoCollections.js';
 import{users} from '../config/mongoCollections.js';
 import * as validations from '../validations/Validations.js';
 import * as reportsData from './reportsData.js';
-
+import {AlertService} from '../services/AlertService.js'
 export const getFraudsterById = async (fraudsterId) => {
     fraudsterId = validations.validateId(fraudsterId);
     const fraudsterCollection = await fraudsters();
@@ -94,27 +94,32 @@ return fraudsterInserted;
 
   const fraudstersCollection = await fraudsters();
 
-  let fraudsterToUpdate = await fraudstersCollection.findOneAndUpdate(
+  let updatedFraudster = await fraudstersCollection.findOneAndUpdate(
     {_id: new ObjectId(fraudsterId)},
-    {$addToSet:
-      {eins: ein,
-      itins: itin,
-      ssns: ssn,
-      emails: email,
-      phones: phone,
-      names: nameFraudster,
-      users: userId,
-      reports: report,
-      updateDates: todaysDate},
-      $inc: {numReports: 1},
-    }
+    {
+      $addToSet: {
+        eins: ein,
+        itins: itin,
+        ssns: ssn,
+        emails: email,
+        phones: phone,
+        names: nameFraudster,
+        users: userId,
+        reports: report,
+        updateDates: todaysDate
+      },
+      $inc: {numReports: 1}
+    },
+    { returnDocument: 'after' } 
   );
-  let insert;
   if (await isFraudsterTrending(fraudsterId)) {
-    insert = await fraudstersCollection.findOneAndUpdate({_id: new ObjectId(fraudsterId)},{$set: {trending: true}});
+    updatedFraudster = await fraudstersCollection.findOneAndUpdate({_id: new ObjectId(fraudsterId)}
+                      ,{$set: {trending: true}},{ returnDocument: 'after'});
   }
-
-  const updatedFraudster = await fraudstersCollection.findOne({_id: new ObjectId(fraudsterId)});
+  if (!updatedFraudster || !updatedFraudster._id) {
+    throw new Error('Fraudster not found or couldnt be updated');
+  }
+  await new AlertService().alertUsers(updatedFraudster._id.toString());   
   return updatedFraudster;
  }
 
