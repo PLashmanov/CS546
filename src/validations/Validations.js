@@ -277,3 +277,18 @@ if (!password.match(specialCharacters)) {
 }
 return password;
 }
+
+export function validateRequestHas1Field (params,arr) {
+
+  let hasField = false
+  arr.forEach( (fieldName) => {
+    if (Object.values(params).includes(fieldName)){
+      hasField = true
+    }
+  });
+  if (!hasField) throw new Error("Must have at least 1 valid key in the request");
+}
+
+export function validateFraudsterAttrRequest (params) {
+  return validateRequestHas1Field(params,['ein','itin','ssn','email','phone']);
+}
