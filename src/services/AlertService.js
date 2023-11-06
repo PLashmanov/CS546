@@ -1,7 +1,9 @@
 import { MailSender } from "../util/MailSender.js";
-import { fetchUsersFromEmails, fetchFraudsterByID } from "../db/index.js";
+import { fetchUsersFromIds } from "../db/usersData.js";
 import { ObjectId } from 'mongodb';
 import { isValidEmailAddress, isArray } from "../validations/Validations.js"
+import { getFraudsterById } from "../db/fraudstersData.js"
+
 /**
  * Alert Users About Fraudster Activity
    @example
@@ -42,11 +44,11 @@ class AlertService {
     }
   }
   async #fetchEmailsWithAlertEnabled(fraudsterID) {
-    const fraudster = await fetchFraudsterByID(fraudsterID);
-    if (!fraudster || !fraudster.emails) {
-      throw new Error('Fraudster not found or email is missing');
+    const fraudster = await getFraudsterById(fraudsterID);
+    if (!fraudster || !fraudster.users) {
+      throw new Error('Fraudster not found or userIds missing in fraudster collection');
     }
-    const users = await fetchUsersFromEmails(fraudster.emails);
+    const users = await fetchUsersFromIds(fraudster.users);
     return users.filter(user => user.notifications).map(user => user.email);
   }
   async #sendAlertEmail(userEmail, fraudsterID) {

@@ -70,7 +70,7 @@ export const getUserById = async (id) => {
     return user;
 };
 
-// remove function affects fraudsters and reports collections:
+// removUser function affects fraudsters and reports collections:
 //fraudsters collection (array: users), reports collection(userId)
 export const removeUser = async (id) => {
     id = validations.validateId(id);
@@ -103,7 +103,6 @@ export const removeUser = async (id) => {
     return `User ${id} deleted`;
 };
 
-//FIXME: update with patch // usage: reports ->to add reportId to user, incr num reports and check badge
 export const updateUserAfterCreateReport = async (userId, reportId) => {
 
     try {
@@ -149,18 +148,17 @@ export async function getUserByReportId(reportId) {
     return userWithReport;
 }
 
-export async function updateUserAfterRemoveReport(reportId) {
-    let userWithReport = await getUserByReportId(reportId);
-
-    let badgeStatus;
-    if (userWithReport.numOfReports >= 11) badgeStatus = true;
-    else badgeStatus = false;
-    const updatedUser = await userCollection.findOneAndUpdate(
-        { reportIds: new ObjectId(reportId) },
-        { $pull: { reportIds: reportId }, $inc: { numOfReports: -1 }, $set: { badge: badgeStatus } },
-        { returnOriginal: false });
-
-    if (!updatedUser || !updatedUser.value) throw new Error(`error: failed to remove reportId from reportIds array in users`);
-
-    return `Report ${reportId} was deleted from user collection`;
-}
+export async function fetchUsersFromIds(userIds) {
+    try {
+        if (!validations.isArray(userIds)) {
+            throw new Error("list of ids need to be of type array")
+        }
+        const userCollection = await users();
+        const mongoIds = userIds.map(id => validations.getMongoID(id));
+        const usersToEmail = await userCollection.find({ _id: { $in: mongoIds } }).toArray();
+        return usersToEmail;
+    } catch (ex) {
+        console.error("error while fetching user ids ", ex);
+        throw ex;
+    }
+} 

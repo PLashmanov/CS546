@@ -6,7 +6,6 @@ import { ObjectId } from 'mongodb';
 import { fraudsterExists, createFraudster } from './fraudstersData.js';
 import * as usersData from './usersData.js';
 import * as fraudstersData from './fraudstersData.js';
-import { AlertService } from '../services/AlertService.js';
 
 export const createReport = async (
     userId,
@@ -68,9 +67,6 @@ export const createReport = async (
     const updatedUsers = await usersData.updateUserAfterCreateReport(userId, newReportId);
     let updatedFraudsters = await fraudstersData.updateFraudsterAfterCreateReport(fraudsterId, ein, itin, ssn, email, phone, nameFraudster, userId, newReportId, type); // FIXME: create in fraudsterData
 
-    const alertService = new AlertService();
-    await alertService.alertUsers(fraudsterId);
-
     return report;
 };
 
@@ -89,22 +85,6 @@ export async function getNumOfReports() {
     return count;
 }
 
-export const removeReport = async (reportId) => {
-    reportId = validations.validateId(reportId);
-
-    const reportsColleciton = await reports();
-    const reportToRemove = await reportsColleciton.findOne({ _id: new ObjectId(reportId) });
-    if (!reportToRemove) throw new Error(`report not found`);
-    const removed = await reportsColleciton.findOneAndDelete({ _id: new ObjectId(reportId) });
-
-    if (await reportsColleciton.findOne({ _id: new ObjectId(reportId) })) throw new Error(`report ${reportId} cound not be deleted`);
-
-    //FIXME: finish the functions bellow
-    // await updateFraudsterAfterRemoveReport(reportId);
-    // await updateUserAfterRemoveReport(reportId);
-    return `Report ${reportId} deleted`;
-};
-
 export const getAllReportsOfUser = async (userId) => {
     userId = validations.validateId(userId);
     const userCollection = await users();
@@ -121,14 +101,3 @@ export const getAllReportsForFraudster = async (fraudsterId) => {
     const fraudsterReports = fraudster.reports.map(report => report.reportId);
     return fraudsterReports;
 }
-
-//FIXME: we can delete if this is too much
-// export const getAllReports = async () => {
-//     const reportCollection = await reports();
-//     let reports = await reportCollection.find({}).toArray();
-//     if(!reports) throw new Error (`Could not get all reports`);
-//     reports = reports.map((x) => {
-//         x._id = x._id.toString();
-//         return x;
-//     });
-// };

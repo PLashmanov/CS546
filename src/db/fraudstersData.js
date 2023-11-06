@@ -5,12 +5,18 @@ import { reports } from '../config/mongoCollections.js';
 import { users } from '../config/mongoCollections.js';
 import * as validations from '../validations/Validations.js';
 import * as reportsData from './reportsData.js';
-import { AlertService } from '../services/AlertService.js'
+import { AlertService } from '../services/AlertService.js';
+
 export const getFraudsterById = async (fraudsterId) => {
   fraudsterId = validations.validateId(fraudsterId);
   const fraudsterCollection = await fraudsters();
   const fraudster = await fraudsterCollection.findOne({ _id: new ObjectId(fraudsterId) });
   if (!fraudster) throw new Error(`fraudster not found`);
+
+  if (await isFraudsterTrending(fraudsterId)) {
+    updatedFraudster = await fraudsterCollection.findOneAndUpdate({ _id: new ObjectId(fraudsterId) }
+      , { $set: { trending: true } }, { returnDocument: 'after' });
+  }
   return fraudster;
 }
 
@@ -25,26 +31,30 @@ export async function fraudsterExists(ein, itin, ssn, email, phone) {
   let fraudstersCollection = await fraudsters();
   let fraudster;
   if (ein !== 'N/A') {
-    fraudster = await fraudstersCollection.findOne({ eins: ein })
-    return fraudster._id.toString();
+    if (fraudster = await fraudstersCollection.findOne({ eins: ein })) {
+      return fraudster._id.toString();
+    }
 
   } else if (itin !== 'N/A') {
-    fraudster = await fraudstersCollection.findOne({ itins: itin });
-    return fraudster._id.toString();
+    if (fraudster = await fraudstersCollection.findOne({ itins: itin })) {
+      return fraudster._id.toString();
+    }
 
   } else if (ssn !== 'N/A') {
-    fraudster = await fraudstersCollection.findOne({ ssns: ssn })
-    return fraudster._id.toString();
+    if (fraudster = await fraudstersCollection.findOne({ ssns: ssn })) {
+      return fraudster._id.toString();
+    }
 
   } else if (email !== 'N/A') {
-    fraudster = await fraudstersCollection.findOne({ emails: email })
-    return fraudster._id.toString();
+    if (fraudster = await fraudstersCollection.findOne({ emails: email })) {
+      return fraudster._id.toString();
+    }
 
   } else if (phone !== 'N/A') {
-    fraudster = await fraudstersCollection.findOne({ phones: phone })
-    return fraudster._id.toString();
+    if (fraudster = await fraudstersCollection.findOne({ phones: phone })) {
+      return fraudster._id.toString();
+    }
   }
-
   return false;
 }
 
@@ -84,7 +94,6 @@ export async function createFraudster() {
   return fraudsterInserted;
 }
 
-//FIXME: checks mandatory fields, also updates trending status // usage: reports.txt -> createReport()
 export async function updateFraudsterAfterCreateReport(fraudsterId, ein, itin, ssn, email, phone, nameFraudster, userId, reportId, type) {
   fraudsterId = validateId(fraudsterId);
   ein = validations.validateEIN(ein);
@@ -127,9 +136,9 @@ export async function updateFraudsterAfterCreateReport(fraudsterId, ein, itin, s
       , { $set: { trending: true } }, { returnDocument: 'after' });
   }
   if (!updatedFraudster || !updatedFraudster._id) {
-    throw new Error('Fraudster not found or couldnt be updated');
+    throw new Error('Fraudster not found or could not be updated');
   }
-  await new AlertService().alertUsers(updatedFraudster._id.toString());
+  //await new AlertService().alertUsers(updatedFraudster._id.toString());
   return updatedFraudster;
 }
 
@@ -150,41 +159,6 @@ export async function isFraudsterTrending(fraudsterId) {
   if (count < 3) return false;
 
   return true;
-}
-
-//FIXME finisih updating fraudster: updateDate, trending
-export async function updateFraudsterAfterRemoveReport(reportId) {
-  reportId = validations.validateId(reportId);
-  const fraudsterCollection = await fraudsters();
-  const fraudsterWithReport = await fraudsterCollection.findOne({ reports: new ObjectId(reportId) });
-  if (!fraudsterWithReport) return;
-
-  const reportsCollection = await reports();
-  const report = await reportsCollection.findOne({ _id: new ObjectId(reportId) });
-
-  let ein = report.ein;
-  let itin = report.itin;
-  let ssn = report.ssn;
-  let email = report.email;
-  let phone = report.phone;
-  let nameFr = report.nameFr;
-  let userId = report.userId;
-
-  let updatedFraudster = await fraudsterCollection.findOneAndUpdate(
-    { reports: new ObjectId(reportId) },
-    {
-      $pull: {
-        eins: ein,
-        itins: itin,
-        ssns: ssn,
-        emails: email,
-        phones: phone,
-        names: nameFr,
-        reports: reportId,
-        users: userId
-      },
-      $inc: { numReports: -1 }
-    })
 }
 
 export function formatDate(date) {
