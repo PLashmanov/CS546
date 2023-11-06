@@ -9,7 +9,7 @@ import {AlertService} from '../services/AlertService.js'
 export const getFraudsterById = async (fraudsterId) => {
     fraudsterId = validations.validateId(fraudsterId);
     const fraudsterCollection = await fraudsters();
-    const fraudster = await fraudsterCollection.findOne({_id: newObject(fraudsterId)});
+    const fraudster = await fraudsterCollection.findOne({_id: new ObjectId(fraudsterId)});
     if(!fraudster) throw new Error (`fraudster not found`);
     return fraudster;
 }
