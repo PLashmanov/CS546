@@ -7,6 +7,7 @@ import bcrypt from 'bcrypt';
 import { BusinessError } from '../error/customErrors.js';
 import * as reportsData from './reportsData.js';
 
+
 export const createUser = async (
     email,
     firstName,
