@@ -6,6 +6,8 @@ import {ObjectId} from 'mongodb';
 import  bcrypt from 'bcrypt';
 import { BusinessError } from '../error/customErrors.js';
 import * as reportsData from './reportsData.js';
+import {getMongoID, isArray} from '../validations/Validations.js'
+
 
 export const createUser = async (
     email,
@@ -162,3 +164,18 @@ export async function updateUserAfterRemoveReport(reportId) {
 
     return `Report ${reportId} was deleted from user collection`;
 }
+
+export async function fetchUsersFromIds(userIds) {
+    try {
+      if(!isArray(userIds)){
+        throw new Error("list of ids need to be of type array")
+      } 
+      const userCollection = await users(); 
+      const mongoIds = userIds.map(id => getMongoID(id));
+      const usersToEmail = await userCollection.find({ _id: { $in: mongoIds } }).toArray();
+      return usersToEmail;
+    } catch (ex) {
+        console.error("error while fetching user ids ", ex);
+        throw ex;
+    }
+  } 
