@@ -6,6 +6,7 @@ import{users} from '../config/mongoCollections.js';
 import * as validations from '../validations/Validations.js';
 import * as reportsData from './reportsData.js';
 import {AlertService} from '../services/AlertService.js'
+
 export const getFraudsterById = async (fraudsterId) => {
     fraudsterId = validations.validateId(fraudsterId);
     const fraudsterCollection = await fraudsters();
