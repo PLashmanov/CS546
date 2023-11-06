@@ -238,5 +238,3 @@ export async function getNumOfFraudsters() {
   if (count === undefined) throw new Error('Fraudster not found based on provided attributes.');
   return count;
 }
-
-console.log(await getNumOfFraudsters());
