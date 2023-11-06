@@ -3,20 +3,22 @@ import { users, fraudsters } from "../config/mongoCollections.js";
 import {getMongoID, isArray} from '../validations/Validations.js'
 
 
-async function fetchUsersFromEmails(emails) {
-    try {
-      if(!isArray(emails)){
-        throw new Error("emails need to be of type array")
-      }
-      const userCollection = await users(); 
-      const usersToEmail = await userCollection.find({ email: { $in: emails } }).toArray();
-      return usersToEmail;
-    } catch (err) {
-      console.error(err);
-      throw err;
+async function fetchUsersFromIds(userIds) {
+  try {
+    if(!isArray(userIds)){
+      throw new Error("list of ids need to be of type array")
+    } 
+    const userCollection = await users(); 
+    const objectIds = userIds.map(id => getMongoID(id));
+    const usersToEmail = await userCollection.find({ _id: { $in: objectIds } }).toArray();
+    return usersToEmail;
+  } catch (err) {
+    console.error(err);
+    throw err;
 
   }
-}
+} 
+
 
 async function fetchFraudsterByID(fraudsterID) {
   try {
@@ -30,4 +32,4 @@ async function fetchFraudsterByID(fraudsterID) {
   }
 }
 
-export { fetchUsersFromEmails ,fetchFraudsterByID };
+export { fetchFraudsterByID, fetchUsersFromIds };
