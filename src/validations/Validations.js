@@ -1,20 +1,21 @@
 import * as deepEmailValidator from 'deep-email-validator';
-import {ObjectId} from 'mongodb';
+import { ObjectId } from 'mongodb';
 import validator from 'validator';
-import {parsePhoneNumberFromString } from 'libphonenumber-js'; 
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { ValidationError } from '../error/customErrors.js';
-export  const  isValidEmailAddress = async (userEmail) => {
+export const isValidEmailAddress = async (userEmail) => {
   const result = await deepEmailValidator.validate({
     email: userEmail,
-    validateRegex: true,          
-    validateMx: false,            
-    validateTypo: true,          
-    validateDisposable: false,    
-    validateSMTP: true, });  
+    validateRegex: true,
+    validateMx: false,
+    validateTypo: true,
+    validateDisposable: false,
+    validateSMTP: true,
+  });
   return result.valid;
 }
 
-export const getMongoID = (id)=> {
+export const getMongoID = (id) => {
   if (!id || typeof id !== 'string' || id.trim() === '') {
     throw new ValidationError("must be a valid id");
   }
@@ -25,63 +26,63 @@ export const getMongoID = (id)=> {
   }
 }
 
-export const isArray = (arr)=> {
+export const isArray = (arr) => {
   return arr !== undefined && arr !== null && Array.isArray(arr);
 }
 
 function validateString(str, name) {
-  if(!str) throw new ValidationError( `error: Please provide ${name}`);
-  if(typeof str !== 'string') throw new ValidationError( `${name} must be string`);
+  if (!str) throw new ValidationError(`error: Please provide ${name}`);
+  if (typeof str !== 'string') throw new ValidationError(`${name} must be string`);
   str = str.trim();
-  if(str.length === 0) throw new ValidationError( `${name} cannot be an empty string`);
+  if (str.length === 0) throw new ValidationError(`${name} cannot be an empty string`);
   return str;
 }
 export function validateId(id) {
   id = validateString(id, "id");
-  if(!ObjectId.isValid(id)) throw new ValidationError("invalid object id");
+  if (!ObjectId.isValid(id)) throw new ValidationError("invalid object id");
   return id;
 };
 
 export function validateEIN(ein) {
-  if(ein === null) return 'N/A';
-  if(typeof ein === 'string' && ein.trim() === 'N/A') return ein;
-  if(typeof ein !== 'string') throw new ValidationError( "ein must be string");
+  if (ein === null) return 'N/A';
+  if (typeof ein === 'string' && ein.trim() === 'N/A') return ein;
+  if (typeof ein !== 'string') throw new ValidationError("ein must be string");
   ein = ein.trim();
   if (ein.length === 0) {
-      ein = "N/A";
-      return ein;
+    ein = "N/A";
+    return ein;
   }
- if (!validator.matches(ein, /^\d{2}-\d{7}$/)) {
-       throw new ValidationError("Invalid EIN");
-}
- return ein;
+  if (!validator.matches(ein, /^\d{2}-\d{7}$/)) {
+    throw new ValidationError("Invalid EIN");
+  }
+  return ein;
 }
 
 export function validateSSN(ssn) {
-  if(ssn === null) return 'N/A';
-  if(typeof ssn === 'string' && ssn.trim() === 'N/A') return ssn;
-  if(typeof ssn !== 'string') new ValidationError(" ssn must be string");
+  if (ssn === null) return 'N/A';
+  if (typeof ssn === 'string' && ssn.trim() === 'N/A') return ssn;
+  if (typeof ssn !== 'string') new ValidationError(" ssn must be string");
   ssn = ssn.trim();
   if (ssn.length === 0) {
-      ssn = "N/A";
-      return ssn;
+    ssn = "N/A";
+    return ssn;
   }
   if (!validator.matches(ssn, /^(?!666|000|9\d\d)\d{3}-(?!00)\d{2}-(?!0000)\d{4}$/)) {
-   throw new ValidationError("Invalid SSN");
-}
+    throw new ValidationError("Invalid SSN");
+  }
   return ssn;
 }
 
 export function validateITIN(itin) {
-  if(itin === null) return 'N/A';
-  if(typeof itin === 'string' && itin.trim() === 'N/A') return itin;
-  if(typeof itin !== 'string') throw new ValidationError("itin must be string");
+  if (itin === null) return 'N/A';
+  if (typeof itin === 'string' && itin.trim() === 'N/A') return itin;
+  if (typeof itin !== 'string') throw new ValidationError("itin must be string");
   itin = itin.trim();
   if (itin.length === 0) {
-      itin = "N/A";
-      return itin;
+    itin = "N/A";
+    return itin;
   }
-  if(!validator.matches(itin, /^9\d{2}-\d{2}-\d{4}$/)) throw new ValidationError( "error: Invalid ITIN");
+  if (!validator.matches(itin, /^9\d{2}-\d{2}-\d{4}$/)) throw new ValidationError("error: Invalid ITIN");
   return itin;
 }
 
@@ -95,13 +96,13 @@ export function validateEmail(email) {
 }
 
 export function validateEmailFr(email) {
-  if(email === null) return 'N/A';
-  if(typeof email === 'string' && email.trim() === 'N/A') return email;
-  if(typeof email !== 'string') throw new ValidationError("error: email must be string");
+  if (email === null) return 'N/A';
+  if (typeof email === 'string' && email.trim() === 'N/A') return email;
+  if (typeof email !== 'string') throw new ValidationError("error: email must be string");
   email = email.trim();
   if (email.length === 0) {
-      email = "N/A";
-      return email;
+    email = "N/A";
+    return email;
   }
   var validFormat = /^(?=.{1,64}@.{4,64}$)(?=.{6,100}$)([a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*)@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})$/;
   if (!email.match(validFormat)) throw new ValidationError("Error: invalid email address");
@@ -111,34 +112,34 @@ export function validateEmailFr(email) {
 export function validatePhoneNumber(phone) {
   phone = validateString(phone, "Phone number");
   const phoneNumber = parsePhoneNumberFromString(phone);
-  if(!phoneNumber|| !phoneNumber.isValid()) throw new ValidationError("Error: Invalid phone number");
+  if (!phoneNumber || !phoneNumber.isValid()) throw new ValidationError("Error: Invalid phone number");
   return phone;
 }
 //FIXME: update if format changes
 export function validatePhoneNumberFr(phone) {
-  if(phone === null) return 'N/A';
-  if(typeof phone === 'string' && phone.trim() === 'N/A') return phone;
-  if(typeof phone !== 'string') throw new ValidationError("error: phone must be string");
+  if (phone === null) return 'N/A';
+  if (typeof phone === 'string' && phone.trim() === 'N/A') return phone;
+  if (typeof phone !== 'string') throw new ValidationError("error: phone must be string");
   phone = phone.trim();
   if (phone.length === 0) {
-      phone = "N/A";
-      return phone;
+    phone = "N/A";
+    return phone;
   }
   const phoneNumber = parsePhoneNumberFromString(phone);
-  if(!phoneNumber|| !phoneNumber.isValid()) throw new ValidationError("Error: Invalid phone number");
+  if (!phoneNumber || !phoneNumber.isValid()) throw new ValidationError("Error: Invalid phone number");
   return phone;
 }
 
 export function validateState(state) {
   state = state.trim().toUpperCase();
-  if (state.length !== 2) throw new ValidationError( "error: wrong state");
-  const states = 
-  ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
-  'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
-  'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
-  'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
-  'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
-];
+  if (state.length !== 2) throw new ValidationError("error: wrong state");
+  const states =
+    ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
+      'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
+      'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
+      'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
+      'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
+    ];
   if (!states.includes(state)) throw new ValidationError("error: not a valid state");
   return state;
 }
@@ -147,40 +148,40 @@ function validateZip(zip) {
   zip = zip.trim();
 
   if (zip.length !== 5) throw new ValidationError("Error: wrong zip");
-  let numbers = ['0','1','2','3','4','5','6','7','8','9'];
-  for(let x of zip) {
-      if(!numbers.includes(x)) throw new ValidationError("Error: wrong zip");
+  let numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  for (let x of zip) {
+    if (!numbers.includes(x)) throw new ValidationError("Error: wrong zip");
   }
   return zip;
 }
-  //FIXME: check at the end if we use this function, if not, delete
-  export function validateAddress(address) { //attributes:streetAddress, city, state, zip
-  if(!address) throw new ValidationError("Error: enter address");
-  if(typeof address !== 'object') throw new ValidationError("eventLocation must be an object");
-  if(!address.streetAddress || !address.city || !address.state || !address.zip) throw new ValidationError("address does not have all the attrributes needed");
-  if(typeof address.streetAddress !== 'string' || typeof address.city !== 'string' || typeof address.state !== 'string'
-  || typeof address.zip !== 'string') throw new ValidationError("All address inputs must be strings");
-  if(address.streetAddress.trim().length === 0 || address.city.trim().length === 0 || address.state.trim() === 0
-  || address.zip.trim().length === 0) throw new ValidationError("All address inputs must be non-empty strings");
-  if(address.streetAddress.trim().length < 3) throw new ValidationError("Street address must be at least 3 characters long");
-  if(address.city.trim().length < 3) throw new ValidationError("City must be at least 3 characters long");
+//FIXME: check at the end if we use this function, if not, delete
+export function validateAddress(address) { //attributes:streetAddress, city, state, zip
+  if (!address) throw new ValidationError("Error: enter address");
+  if (typeof address !== 'object') throw new ValidationError("eventLocation must be an object");
+  if (!address.streetAddress || !address.city || !address.state || !address.zip) throw new ValidationError("address does not have all the attrributes needed");
+  if (typeof address.streetAddress !== 'string' || typeof address.city !== 'string' || typeof address.state !== 'string'
+    || typeof address.zip !== 'string') throw new ValidationError("All address inputs must be strings");
+  if (address.streetAddress.trim().length === 0 || address.city.trim().length === 0 || address.state.trim() === 0
+    || address.zip.trim().length === 0) throw new ValidationError("All address inputs must be non-empty strings");
+  if (address.streetAddress.trim().length < 3) throw new ValidationError("Street address must be at least 3 characters long");
+  if (address.city.trim().length < 3) throw new ValidationError("City must be at least 3 characters long");
   address.state = validateState(address.state);
   address.zip = validateZip(address.zip);
   return address;
 }
 
 export function validateAddressFr(address) {
-  if(address === null) return 'N/A';
-  if(typeof address === 'string' && address.trim() === 'N/A') return `N/A`;
-  if(typeof address === 'string' && address.trim().length === 0) return `N/A`;
-  if(typeof address !== 'object') throw new ValidationError(" address must be an object");
-  if(!address.streetAddress || !address.city || !address.state || !address.zip) throw new ValidationError("address does not have all the attrributes needed");
-  if(typeof address.streetAddress !== 'string' || typeof address.city !== 'string' || typeof address.state !== 'string'
-  || typeof address.zip !== 'string') throw new ValidationError("All address inputs must be strings");
-  if(address.streetAddress.trim().length === 0 || address.city.trim().length === 0 || address.state.trim() === 0
-  || address.zip.trim().length === 0) throw new ValidationError("All address inputs must be non-empty strings");
-  if(address.streetAddress.trim().length < 3) throw new ValidationError("Street address must be at least 3 characters long");
-  if(address.city.trim().length < 3) throw new ValidationError("City must be at least 3 characters long");
+  if (address === null) return 'N/A';
+  if (typeof address === 'string' && address.trim() === 'N/A') return `N/A`;
+  if (typeof address === 'string' && address.trim().length === 0) return `N/A`;
+  if (typeof address !== 'object') throw new ValidationError(" address must be an object");
+  if (!address.streetAddress || !address.city || !address.state || !address.zip) throw new ValidationError("address does not have all the attrributes needed");
+  if (typeof address.streetAddress !== 'string' || typeof address.city !== 'string' || typeof address.state !== 'string'
+    || typeof address.zip !== 'string') throw new ValidationError("All address inputs must be strings");
+  if (address.streetAddress.trim().length === 0 || address.city.trim().length === 0 || address.state.trim() === 0
+    || address.zip.trim().length === 0) throw new ValidationError("All address inputs must be non-empty strings");
+  if (address.streetAddress.trim().length < 3) throw new ValidationError("Street address must be at least 3 characters long");
+  if (address.city.trim().length < 3) throw new ValidationError("City must be at least 3 characters long");
   address.state = validateState(address.state);
   address.zip = validateZip(address.zip);
 
@@ -194,9 +195,9 @@ export function validateName(name) {
 }
 
 export function validateNameFr(name) {
-  if(name === null) return 'N/A';
-  if(typeof name === 'string' && name.trim() === 'N/A') return name;
-  if(typeof name !== 'string') throw new ValidationError("error: name must be string");
+  if (name === null) return 'N/A';
+  if (typeof name === 'string' && name.trim() === 'N/A') return name;
+  if (typeof name !== 'string') throw new ValidationError("error: name must be string");
   name = name.trim();
   if (name.length === 0) return 'N/A';
   if (name.length < 2 || name.length > 20) throw new ValidationError("error: name length must be between 2 and 30");
@@ -205,26 +206,26 @@ export function validateNameFr(name) {
 
 export function validateCompanyName(companyName) {
   if (companyName === undefined) throw new ValidationError("error: companyName is missing");
-  if(typeof companyName !== 'string') throw new ValidationError("error: companyName must be a string");
+  if (typeof companyName !== 'string') throw new ValidationError("error: companyName must be a string");
   companyName = companyName.trim();
-  if(companyName.length === 0) {
-      return 'N/A';
+  if (companyName.length === 0) {
+    return 'N/A';
   }
   if (companyName.length < 3 || companyName.length > 50) throw new ValidationError("error: company name must be between 3 and 50 characters");
   return companyName.toUpperCase();
 }
 
 export function validateCity(city) {
-  if(city === undefined) throw new Error('provide city');
+  if (city === undefined) throw new Error('provide city');
   city = validateString(city, "city").toUpperCase();
-  if(city.length < 3 || city.length > 50) throw new ValidationError("City must be between 3 and 50 characters long");
+  if (city.length < 3 || city.length > 50) throw new ValidationError("City must be between 3 and 50 characters long");
   return city;
 }
 
 export function validateText50Char(text) {
-  if(text === null) return 'N/A';
-  if(typeof text === 'string' && text.trim().length === 0) return 'N/A';
-  if(typeof text !== 'string') throw new ValidationError("error: text must be string");
+  if (text === null) return 'N/A';
+  if (typeof text === 'string' && text.trim().length === 0) return 'N/A';
+  if (typeof text !== 'string') throw new ValidationError("error: text must be string");
   text = text.trim();
   if (text.length < 10 || text.length > 50) throw new ValidationError("text length must be between 10 and 50 characters");
   return text;
@@ -234,13 +235,13 @@ export function validateReportIds(reportIds) {
   if (!reportIds) throw new ValidationError("reportIds missing");
   if (!Array.isArray(reportIds)) throw new ValidationError("reportIds must be an array");
   if (reportIds.length > 0) {
-      for(let i in reportIds) {
-          if (!validateId(reportIds[i])) throw new ValidationError( "error: one ore more report IDs are invalid IDs");
-     }
+    for (let i in reportIds) {
+      if (!validateId(reportIds[i])) throw new ValidationError("error: one ore more report IDs are invalid IDs");
+    }
   }
-}    
+}
 
-export function validateNotifications (notifications) {
+export function validateNotifications(notifications) {
   if (notifications === undefined) throw new ValidationError("notifications must be provided");
   if (typeof notifications !== 'boolean') throw new ValidationError("notifications must be boolean type");
   return notifications;
@@ -257,38 +258,38 @@ export function validatePassword(password) {
   password = validateString(password, "password");
   if (password.length < 8 || password.length > 15) {
     throw new Error('Password length should be between 8 and 15 characters');
-}
+  }
 
-const letters = /[A-Za-z]/;
-const numbers = /\d/g;
-const specialCharacters = /[!@#$%^&*(),?]/;
+  const letters = /[A-Za-z]/;
+  const numbers = /\d/g;
+  const specialCharacters = /[!@#$%^&*(),?]/;
 
-if (!password.match(letters)) {
+  if (!password.match(letters)) {
     throw new Error('Password must contain at least one letter');
-}
+  }
 
-if (!password.match(numbers) || (password.match(numbers) && password.match(numbers).length < 2)) {
+  if (!password.match(numbers) || (password.match(numbers) && password.match(numbers).length < 2)) {
     throw new Error('Password must contain at least two digits');
+  }
+
+  if (!password.match(specialCharacters)) {
+    throw new Error('Password must contain at least one of the following special characters: ! @ # $ % ^ & * , ?');
+
+  }
+  return password;
 }
 
-if (!password.match(specialCharacters)) {
-  throw new Error('Password must contain at least one of the following special characters: ! @ # $ % ^ & * , ?');
-
-}
-return password;
-}
-
-export function validateRequestHas1Field (params,arr) {
+export function validateRequestHas1Field(params, arr) {
 
   let hasField = false
-  arr.forEach( (fieldName) => {
-    if (Object.values(params).includes(fieldName)){
+  arr.forEach((fieldName) => {
+    if (Object.values(params).includes(fieldName)) {
       hasField = true
     }
   });
   if (!hasField) throw new Error("Must have at least 1 valid key in the request");
 }
 
-export function validateFraudsterAttrRequest (params) {
-  return validateRequestHas1Field(params,['ein','itin','ssn','email','phone']);
+export function validateFraudsterAttrRequest(params) {
+  return validateRequestHas1Field(params, ['ein', 'itin', 'ssn', 'email', 'phone']);
 }

@@ -1,7 +1,7 @@
 import { MailSender } from "../util/MailSender.js";
 import { fetchUsersFromEmails, fetchFraudsterByID } from "../db/index.js";
 import { ObjectId } from 'mongodb';
-import {isValidEmailAddress, isArray} from "../validations/Validations.js"
+import { isValidEmailAddress, isArray } from "../validations/Validations.js"
 /**
  * Alert Users About Fraudster Activity
    @example
@@ -27,36 +27,37 @@ class AlertService {
     if (!ObjectId.isValid(fraudsterID)) {
       throw new Error('Invalid ObjectId passed to alert service:', fraudsterID);
     }
-    const emailAddresses = await this.#fetchEmailsWithAlertEnabled(fraudsterID) 
+    const emailAddresses = await this.#fetchEmailsWithAlertEnabled(fraudsterID)
     if (!isArray(emailAddresses) || emailAddresses.length === 0) {
       console.error('No valid email addresses retrieved for fraudsterID:', fraudsterID);
       throw new Error('No valid email addresses retrieved for fraudsterID:', fraudsterID);
     }
-    for (let userEmail of emailAddresses) {  
+    for (let userEmail of emailAddresses) {
       if (await isValidEmailAddress(userEmail)) {
-         await this.#sendAlertEmail(userEmail, fraudsterID);
+        await this.#sendAlertEmail(userEmail, fraudsterID);
       }
-      else{
-        console.error("invalid email format:  " ,  userEmail)
+      else {
+        console.error("invalid email format:  ", userEmail)
       }
     }
   }
   async #fetchEmailsWithAlertEnabled(fraudsterID) {
-      const fraudster = await fetchFraudsterByID(fraudsterID); 
-      if (!fraudster || !fraudster.emails) {
-        throw new Error('Fraudster not found or email is missing');
+    const fraudster = await fetchFraudsterByID(fraudsterID);
+    if (!fraudster || !fraudster.emails) {
+      throw new Error('Fraudster not found or email is missing');
     }
-      const users = await fetchUsersFromEmails(fraudster.emails);
-      return users.filter(user => user.notifications).map(user => user.email);
+    const users = await fetchUsersFromEmails(fraudster.emails);
+    return users.filter(user => user.notifications).map(user => user.email);
   }
-  async #sendAlertEmail(userEmail , fraudsterID) { 
-      const status = await this.mailSender.sendMail({
-        from: process.env.FRAP_EMAIL,
-        to: userEmail,
-        subject: 'Alert from FRAP',
-        body: `A fraudster you reported has been modified. Fraudster ID: ${fraudsterID}`,});
-      console.log(`Email sent: ${status.response}, Accepted: ${status.accepted}`);
+  async #sendAlertEmail(userEmail, fraudsterID) {
+    const status = await this.mailSender.sendMail({
+      from: process.env.FRAP_EMAIL,
+      to: userEmail,
+      subject: 'Alert from FRAP',
+      body: `A fraudster you reported has been modified. Fraudster ID: ${fraudsterID}`,
+    });
+    console.log(`Email sent: ${status.response}, Accepted: ${status.accepted}`);
   }
 }
- 
+
 export { AlertService };
