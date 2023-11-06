@@ -14,7 +14,7 @@ const db = await dbConnection();
 // }
 
 // try {
-//     let vaiva = await users.createUser('m.vitten@vitten.com', 'Matthias', 'Vitten', '', ' + 18312556644', 'tralala12!', true);
+//     let vaiva = await users.createUser('m.vitten@icloud.com', 'Matthias', 'Vitten', '', ' + 18312556644', 'tralala12!', true);
 //     console.log(vaiva);
 // } catch (e) {
 //     console.log(e);
@@ -49,14 +49,14 @@ const db = await dbConnection();
 // }
 
 // try {
-//     let vaiva = await reports.createReport('6549682087a8f667ca76cc4a', '', '', '254-22-8468', 'inventing@anna.com', '+18322456812', 'Anna Delvi', 'insurance_fraud');
+//     let vaiva = await reports.createReport('6549759e4de215a1bc71a756', '', '', '254-22-8468', 'inventing@anna.com', '+18322456812', 'Anna Delvi', 'insurance_fraud');
 //     console.log(vaiva);
 // } catch (e) {
 //     console.log(e);
 // }
 
 try {
-    let matthias = await reports.createReport('654965cbc322e139763de2aa', '', '', '', '', '+18322456812', 'Anna Delvi', '');
+    let matthias = await reports.createReport('6549759f4de215a1bc71a757', '', '', '', '', '+18322456812', 'Anna Delvi', '');
     console.log(matthias);
 } catch (e) {
     console.log(e);
