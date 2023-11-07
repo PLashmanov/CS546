@@ -14,7 +14,7 @@ export const getFraudsterById = async (fraudsterId) => {
   if (!fraudster) throw new Error(`fraudster not found`);
 
   if (await isFraudsterTrending(fraudsterId)) {
-    updatedFraudster = await fraudsterCollection.findOneAndUpdate({ _id: new ObjectId(fraudsterId) }
+    let updatedFraudster = await fraudsterCollection.findOneAndUpdate({ _id: new ObjectId(fraudsterId) }
       , { $set: { trending: true } }, { returnDocument: 'after' });
   }
   return fraudster;
@@ -57,7 +57,6 @@ export async function fraudsterExists(ein, itin, ssn, email, phone) {
   }
   return false;
 }
-
 
 export async function createFraudster() {
 
