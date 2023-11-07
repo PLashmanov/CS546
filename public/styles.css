@@ -95,23 +95,6 @@ nav {
     align-items: center;
 }
 
-.login-form button {
-    background-color: #1b1b1b;
-    color: #fff;
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
-    border: 1px solid #d8d8d8;
-    border-radius:15px;
-    margin-top:15px;
-}
-
-.login-form button:hover {
-    background-color: #3b3b3b;
-}
-#logout:hover {
-    cursor: pointer;
-}
 /* Input Fields*/
 .input-group label {
     display: block;
@@ -120,10 +103,7 @@ nav {
     color: #555;
 }
 
-.input-group input[type="text"],
-.input-group input[type="password"],
-.input-group input[type="email"],
-.input-group input[type="tel"], .input-group input[type="url"] {
+.input-group input{
     padding: 4px;
     border: 1.5px solid #d8d8d8;
     border-radius: 5px;
@@ -171,46 +151,12 @@ footer {
     color: #333;
 }
 
-#registration button[type="submit"] {
-    background-color: #3b3b3b;
-    color: #f5f5f5;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 3px;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-#registration button[type="submit"]:hover {
-    background-color: #555;
-}
-
 .error-message {
     color: red;
     font-size: 14px;
     margin-top: 5px;
 }
    
-/* Report Fraud Form */
-#reportFraud button[type="submit"] {
-    background-color: blue;
-    background-color: #0b61ca;
-    color: #f5f5f5;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 3px;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-#reportFraud button[type="submit"]:hover {
-    background-color: #f70c0c;
-}
-
-#reportFraud button[type="submit"]:active {
-    padding: 10px 20px;
-}
-
 /*lookup styling*/
 
 #search-bar{
@@ -218,8 +164,6 @@ footer {
     justify-content: center;
     align-items: center;
     margin:20px 0;
-
-
 }
 
 #search-criteria {
@@ -228,7 +172,7 @@ footer {
     border-radius:3px;
 
 }
-#search {
+#search-field {
     padding:10px;
     margin: 0 20px 0 20px;
     width:400px;
@@ -237,3 +181,56 @@ footer {
     padding:10px;
 
 }
+/* Buttons CSS */
+.button {
+    outline: none;
+    display: inline-block;
+    border: 1px solid #fff;
+    padding: .8rem 2rem;
+    border-radius: 5px;
+    background: gray;
+    color: #fff;
+    font-size: 1rem;
+    transition: .3s;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .button::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    border-top: 2px solid #fff;
+    border-left: 2px solid #fff;
+    width: 0px;
+    height: 0px;
+    opacity: 0;
+    transition: .3s;
+  }
+  
+  .button::after {
+    content: '';
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    border-bottom: 2px solid #fff;
+    border-right: 2px solid #fff;
+    width: 0px;
+    height: 0px;
+    opacity: 0;
+    transition: .3s;
+  }
+  
+  .button:hover {
+    box-shadow: 4px 4px 10px rgb(184, 184, 184);
+    transform: translateY(-5px);
+  }
+  
+  .button:hover::after, .button:hover::before {
+    height: 20px;
+    width: 20px;
+    opacity: 1;
+  }
+
+  

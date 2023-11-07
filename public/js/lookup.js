@@ -25,7 +25,7 @@ const ssnLook = document.getElementById('look-ssn').value;
 const nameLook = document.getElementById('look-name').value;
 const emailLook = document.getElementById('look-email').value;
 const phoneLook = document.getElementById('look-phone').value;
-const webLook = document.getElementById('look-website').value;
+
 
 /*function searchInputValidation() {
 
