@@ -7,7 +7,7 @@ const db = await dbConnection();
 //await db.dropDatabase();
 
 // try {
-//     let vaiva = await users.createUser('v.vitten@gmail.com', 'Vaiva', 'Vitten', '', ' + 18312556644', 'tralala12!', true);
+//     let vaiva = await users.createUser('v.vittenn@gmail.com', 'Vaiva', 'Vitten', '', ' + 18312556644', 'tralala12!', true);
 //     console.log(vaiva);
 // } catch (e) {
 //     console.log(e);
@@ -35,7 +35,7 @@ const db = await dbConnection();
 // }
 
 // try {
-//     let vaiva = await users.removeUser('654948718f0188921d467409');
+//     let vaiva = await users.removeUser('65498928261866455852c7f1');
 //     console.log(vaiva);
 // } catch (e) {
 //     console.log(e);
@@ -55,9 +55,9 @@ const db = await dbConnection();
 //     console.log(e);
 // }
 
-try {
-    let matthias = await reports.createReport('6549759f4de215a1bc71a757', '', '', '', '', '+18322456812', 'Anna Delvi', '');
-    console.log(matthias);
-} catch (e) {
-    console.log(e);
-}
+// try {
+//     let matthias = await reports.createReport('6549759f4de215a1bc71a757', '', '', '', '', '+18322456812', 'Anna Delvi', '');
+//     console.log(matthias);
+// } catch (e) {
+//     console.log(e);
+// }
