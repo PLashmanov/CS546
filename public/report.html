@@ -18,33 +18,38 @@
             <p>Please enter any fraud information encountered and click Report Fraud when finished.</p>
             <div class ="person reporting">
                 <br>
-                <label for="firstName">First Name:</label>
-                <input type="text" id="rep-firstName" name="firstName">
+                <label for="firstName">Name</label>
+                <input type="text" id="rep-name" name="name" placeholder="John Smith">
             </div>
                 <br>
             <div class="input-group">
-                <label for="lastName">Last Name:</label>
-                <input type="text" id="rep-lastName" name="lastName">
-            </div>
-            <br>
-            <div class="input-group">
-                <label for="email">Email:</label>
-                <input type="email" id="rep-email" name="email">
+                <label for="email">Email</label>
+                <input type="email" id="rep-email" name="email"  placeholder="jsmith@gmail.com">
             </div>
                 <br>
             <div class="input-group">
-                <label for="website">Website:</label>
-                <input type="url" id="rep-website" name="website">
+                <label for="EIN">EIN</label>
+                <input type="text" id="rep-ein" name="ein" placeholder="12-3456789">
             </div>
             <br>
             <div class="input-group">
-                <label for="phoneNumber">Phone Number:</label>
-                <input type="tel" id="rep-phoneNumber" name="phoneNumber">
+                <label for="SSN">SSN</label>
+                <input type="text" id="rep-ssn" name="ssn" placeholder="123-45-678">
             </div>
             <br>
             <div class="input-group">
-                <label for="date">Date of Fraud Encounter:</label>
-                <input type="date" id="rep-fraudDate" name="FraudDate" required>
+                <label for="ITIN">ITIN</label>
+                <input type="text" id="rep-itin" name="itin" placeholder="123-45-678">
+            </div>
+            <br>
+            <div class="input-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="tel" id="rep-phoneNumber" name="phoneNumber" placeholder="808-000-8899">
+            </div>
+            <br>
+            <div class="input-group">
+                <label for="date">Date of Report</label>
+                <input type="date" id="rep-date" name="reportDate" required>
             </div>
             <br>
           </div>
@@ -52,13 +57,20 @@
                 <div class = "input-group">
                 <label for="fraud">Fraud Type:</label>
                 <select name="fraudType" id="rep-fraudType">
-                        <option value="Phone Scam">Phone Scam</option>
-                        <option value ="Email Scam">Email Scam</option>
-                        <option value ="Website Scam">Website Scam</option>
+                        <option value="Phone Scam">Wire Fraud</option>
+                        <option value ="Email Scam">Money Laundering</option>
+                        <option value ="Credit Card Scam Scam">Credit Card Fraud</option>
+                        <option value="Phone Scam">Check Fraud</option>
+                        <option value ="Email Scam">Insurance Fraud</option>
+                        <option value ="Credit Card Scam Scam">Identity Theft</option>
+                        <option value="Phone Scam">Phishing</option>
+                        <option value ="Email Scam">Embezzlement</option>
+                        <option value ="Credit Card Scam Scam">Mortgage Fraud</option>
+                        <option value ="Credit Card Scam Scam">Utility Scam</option>
                 </select>
               </div>
               <br>
-            <button type="submit">Report Fraud</button>
+            <button type="submit" class="button">Report Fraud</button>
         </form>
     </section>
     <footer>
