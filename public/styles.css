@@ -43,6 +43,8 @@ h1 {
     height: 300px; 
     background-size: cover;
     background-image: url('../Images/banner.jpg');
+    background-repeat: no-repeat;
+    
 }
 
 .banner {
