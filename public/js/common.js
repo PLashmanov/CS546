@@ -1,21 +1,19 @@
-$(function(){
-    $("#nav-placeholder").load("nav.html", function() {
-        $('#logout').click(function() {
-            $.ajax({
-                type: 'POST',
-                url: '/auth/logout',
-                success: function(response) {
-                    localStorage.removeItem('user');
-                    window.location.href = '/login.html'; 
-                },
-                error: function(ex) {
-                    alert('Logout failed: ' + ex.responseText);
-                }
-            });
-        });
-
+$(document).on('click', '#logout', function(e) {
+    e.preventDefault(); // Prevent any default action if needed
+    $.ajax({
+        type: 'POST',
+        url: '/auth/logout',
+        success: function(response) {
+            localStorage.removeItem('user');
+            window.location.href = '/login.html';
+        },
+        error: function(ex) {
+            alert('Logout failed: ' + ex.responseText);
+        }
     });
 });
+
+
 
 $(document).ready(function() {
     const user = JSON.parse(localStorage.getItem('user'));

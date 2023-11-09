@@ -235,4 +235,6 @@ footer {
     opacity: 1;
   }
 
-  
+  #logout {
+    cursor: pointer;
+}
