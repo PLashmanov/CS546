@@ -5,7 +5,8 @@ import { reports } from '../config/mongoCollections.js';
 import { users } from '../config/mongoCollections.js';
 import * as validations from '../validations/Validations.js';
 import * as reportsData from './reportsData.js';
-import { AlertService } from '../services/AlertService.js'
+import { AlertService } from '../services/AlertService.js';
+import { ValidationError } from '../error/customErrors.js';
 
 export const getFraudsterById = async (fraudsterId) => {
   fraudsterId = validations.validateId(fraudsterId);
@@ -211,4 +212,57 @@ export async function getNumOfFraudsters() {
   const count = await fraudstersCollection.countDocuments();
   if (count === undefined) throw new Error('Fraudster not found based on provided attributes.');
   return count;
+}
+
+export async function findFraudstersByName(name) {
+
+  if (name.trim().length < 2 || name.trim().length > 20) throw new ValidationError("error: name length must be between 2 and 30");
+  const lim = 20;
+
+  const fraudsterCollection = await fraudsters();
+  const fraudstersExactName = await fraudsterCollection.find({ names: { $regex: new RegExp(`^${name}$`, 'i') } })
+    .sort({ updateDate: -1 })
+    .limit(lim).toArray();
+  const difference = lim - fraudstersExactName.length;
+
+  let numToFind;
+  let fraudsters2;
+  let fraudstersSomeMatch = [];
+
+  if (difference > 0) {
+    let someMatch = {
+      "names":
+      {
+        $elemMatch: { $regex: new RegExp(name, 'i') },
+        $not: {
+          $regex: new RegExp(`^${name}$`, 'i')
+        }
+      }
+    };
+    fraudstersSomeMatch = await fraudsterCollection.find(someMatch)
+      .sort({ updateDate: -1 })
+      .limit(difference)
+      .toArray();
+  }
+
+  const combinedFraudsters = [...fraudstersExactName, ...fraudstersSomeMatch];
+  let fraudstersResult = [];
+
+  for (let i = 0; i < combinedFraudsters.length; i++) {
+    let trending = await isFraudsterTrending(combinedFraudsters[i]._id.toString());
+
+    let toReturn = {
+      eins: combinedFraudsters[i].eins,
+      itins: combinedFraudsters[i].itins,
+      ssns: combinedFraudsters[i].ssns,
+      emails: combinedFraudsters[i].emails,
+      phones: combinedFraudsters[i].phones,
+      names: combinedFraudsters[i].names,
+      numReports: combinedFraudsters[i].numReports,
+      lastTimeReported: formatDate(combinedFraudsters[i].updateDate),
+      trending: trending
+    }
+    fraudstersResult.push(toReturn);
+  }
+  return fraudstersResult;
 }

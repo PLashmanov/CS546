@@ -27,7 +27,7 @@ export const createUser = async (
         notifications === undefined || notifications === null) {
         throw new Error('one or more arguments are missing in createUser');
     }
-
+    email = validations.validateEmail(email);
     const userCollection = await users();
     const existingUser = await userCollection.findOne({ email: email });
     if (existingUser) throw new Error(new BusinessError(`user with email ${email} already exists`));
@@ -35,7 +35,6 @@ export const createUser = async (
     firstName = validations.validateName(firstName, "firstName");
     lastName = validations.validateName(lastName, "lastName");
     companyName = validations.validateCompanyName(companyName);
-    email = validations.validateEmail(email);
     phoneNumber = validations.validatePhoneNumber(phoneNumber);
     password = validations.validatePassword(password);
     let hashedPassword = await hashPassword(password);
@@ -73,35 +72,18 @@ export const getUserById = async (id) => {
 
 // remove function affects fraudsters and reports collections:
 //fraudsters collection (array: users), reports collection(userId)
-export const removeUser = async (id) => {
-    id = validations.validateId(id);
-    let existingObjId = new ObjectId(id);
+export const removeUser = async (userId) => {
+    userId = validations.validateId(userId);
 
-    //make changes in reports collection:
-    //update userId in reports colelction to the id of the master. Save as string
     let usersCollection = await users();
-    if (! await usersCollection.findOne(existingObjId)) throw new Error(`user ${id} not found`);
-    let master = await usersCollection.findOne({ firstName: "MASTER" });
-    if (!master) throw new BusinessError(`error: users collection must have Master`);
-    let idToChangeTo = master._id.toString();
-    if (idToChangeTo === id) throw new Error(`error: master cannot be deleted`);
+    if (! await usersCollection.findOne(new ObjectId(userId))) throw new Error(`user ${userId} not found`);
+    let idToChangeTo = await updateReportsAfterRemoveUser(userId);
+    await updateFraudstersAfterRemoveUser(userId, idToChangeTo);
 
-    //FIXME: 
-    let reportCollection = await reports();
-    let changedUserId = reportCollection.updateMany(
-        { userId: existingObjId },
-        { $set: { userId: idToChangeTo } }
-    );
-    //make changes in fraudsters collection, users array
-    let fraudstersCollection = await fraudsters();
-    let updatedUserIds = await fraudstersCollection.updateMany({ users: existingObjId }, { $addToSet: { users: idToChangeTo } });
-    let deleteOldOne = await fraudstersCollection.updateMany({ users: existingObjId }, { $pull: { users: id } });
+    const removed = await usersCollection.findOneAndDelete({ _id: new ObjectId(userId) });
+    if (!removed) throw new Error(`User ${userId} could not be deleted`);
 
-    //remove user
-    const removed = await usersCollection.findOneAndDelete({ _id: existingObjId });
-    if (!removed) throw new Error(`User could not be deleted`);
-
-    return `User ${id} deleted`;
+    return `User ${userId} deleted`;
 };
 
 export const updateUserAfterCreateReport = async (userId, reportId) => {
@@ -162,4 +144,33 @@ export async function fetchUsersFromIds(userIds) {
         console.error("error while fetching user ids ", ex);
         throw ex;
     }
-} 
+}
+
+export async function updateReportsAfterRemoveUser(userId) {
+    userId = validations.validateId(userId);
+    //make changes in reports collection:
+    //update userId in reports colelction to the id of the master. Save as string
+    let usersCollection = await users();
+    let master = await usersCollection.findOne({ firstName: "MASTER" });
+    if (!master) throw new BusinessError(`error: users collection must have a Master`);
+    let idToChangeTo = master._id.toString();
+    if (idToChangeTo === userId) throw new Error(`error: Master cannot be deleted`);
+
+    let reportCollection = await reports();
+    reportCollection.updateMany(
+        { userId: userId },
+        { $set: { userId: idToChangeTo } }
+    );
+    return idToChangeTo;
+}
+
+export async function updateFraudstersAfterRemoveUser(userId, idToChangeTo) {
+    userId = validations.validateId(userId);
+    let fraudstersCollection = await fraudsters();
+    await fraudstersCollection.updateMany({ users: userId }, { $addToSet: { users: idToChangeTo } });
+    await fraudstersCollection.updateMany({ users: userId }, { $pull: { users: userId } });
+}
+
+export async function updateUser() {
+
+}
