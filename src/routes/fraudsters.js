@@ -39,10 +39,10 @@ router
     let fraudstersArr = []
     try {
         let {ein,itin,ssn,email,phone} = getFieldAndVal(req.params,['ein','itin','ssn','email','phone'])
-        let fraudsterId = await fraudsterData.fraudsterExists(ein, itin, ssn, email, phone)
-        if (fraudsterId){
-          const theFraudster = await fraudsterData.getFraudsterById(fraudsterId)
-          fraudstersArr.push(theFraudster)
+        let fraudster = await fraudsterData.findFraudsterByKeyAttributes(ein, itin, ssn, email, phone)
+        if (fraudster){
+          //const theFraudster = await fraudsterData.getFraudsterById(fraudsterId)
+          fraudstersArr.push(fraudster)
         }
         return res.json(fraudstersArr);
       } catch (e) {
