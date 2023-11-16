@@ -91,8 +91,6 @@ export function validateEmail(email) {
   var validFormat = /^(?=.{1,64}@.{4,64}$)(?=.{6,100}$)([a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*)@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})$/;
   if (!email.match(validFormat)) throw new ValidationError("Error: invalid email address");
   return email.toLowerCase();
-
-  //validator email function doesn't screen this out: "abc-@gmail.com" ??
 }
 
 export function validateEmailFr(email) {
@@ -115,7 +113,7 @@ export function validatePhoneNumber(phone) {
   if (!phoneNumber || !phoneNumber.isValid()) throw new ValidationError("Error: Invalid phone number");
   return phone;
 }
-//FIXME: update if format changes
+
 export function validatePhoneNumberFr(phone) {
   if (phone === null) return 'N/A';
   if (typeof phone === 'string' && phone.trim() === 'N/A') return phone;
@@ -153,39 +151,6 @@ function validateZip(zip) {
     if (!numbers.includes(x)) throw new ValidationError("Error: wrong zip");
   }
   return zip;
-}
-//FIXME: check at the end if we use this function, if not, delete
-export function validateAddress(address) { //attributes:streetAddress, city, state, zip
-  if (!address) throw new ValidationError("Error: enter address");
-  if (typeof address !== 'object') throw new ValidationError("eventLocation must be an object");
-  if (!address.streetAddress || !address.city || !address.state || !address.zip) throw new ValidationError("address does not have all the attrributes needed");
-  if (typeof address.streetAddress !== 'string' || typeof address.city !== 'string' || typeof address.state !== 'string'
-    || typeof address.zip !== 'string') throw new ValidationError("All address inputs must be strings");
-  if (address.streetAddress.trim().length === 0 || address.city.trim().length === 0 || address.state.trim() === 0
-    || address.zip.trim().length === 0) throw new ValidationError("All address inputs must be non-empty strings");
-  if (address.streetAddress.trim().length < 3) throw new ValidationError("Street address must be at least 3 characters long");
-  if (address.city.trim().length < 3) throw new ValidationError("City must be at least 3 characters long");
-  address.state = validateState(address.state);
-  address.zip = validateZip(address.zip);
-  return address;
-}
-
-export function validateAddressFr(address) {
-  if (address === null) return 'N/A';
-  if (typeof address === 'string' && address.trim() === 'N/A') return `N/A`;
-  if (typeof address === 'string' && address.trim().length === 0) return `N/A`;
-  if (typeof address !== 'object') throw new ValidationError(" address must be an object");
-  if (!address.streetAddress || !address.city || !address.state || !address.zip) throw new ValidationError("address does not have all the attrributes needed");
-  if (typeof address.streetAddress !== 'string' || typeof address.city !== 'string' || typeof address.state !== 'string'
-    || typeof address.zip !== 'string') throw new ValidationError("All address inputs must be strings");
-  if (address.streetAddress.trim().length === 0 || address.city.trim().length === 0 || address.state.trim() === 0
-    || address.zip.trim().length === 0) throw new ValidationError("All address inputs must be non-empty strings");
-  if (address.streetAddress.trim().length < 3) throw new ValidationError("Street address must be at least 3 characters long");
-  if (address.city.trim().length < 3) throw new ValidationError("City must be at least 3 characters long");
-  address.state = validateState(address.state);
-  address.zip = validateZip(address.zip);
-
-  return address;
 }
 
 export function validateName(name) {

@@ -170,7 +170,3 @@ export async function updateFraudstersAfterRemoveUser(userId, idToChangeTo) {
     await fraudstersCollection.updateMany({ users: userId }, { $addToSet: { users: idToChangeTo } });
     await fraudstersCollection.updateMany({ users: userId }, { $pull: { users: userId } });
 }
-
-export async function updateUser() {
-
-}
