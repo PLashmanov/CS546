@@ -4,6 +4,7 @@ import * as fraudsterData from "../db/fraudstersData.js"
 import * as reportData from "../db/reportsData.js"
 import { ValidationError, BusinessError} from '../error/customErrors.js';
 import * as validations from '../validations/Validations.js';
+import {buildFraudsterRequest} from '../util/ObjectUtil.js'
 
 
 // move to util
@@ -38,11 +39,16 @@ router
     // do the request
     let fraudstersArr = []
     try {
-        let {ein,itin,ssn,email,phone} = getFieldAndVal(req.params,['ein','itin','ssn','email','phone'])
-        let fraudster = await fraudsterData.findFraudsterByKeyAttributes(ein, itin, ssn, email, phone)
-        if (fraudster){
-          //const theFraudster = await fraudsterData.getFraudsterById(fraudsterId)
-          fraudstersArr.push(fraudster)
+        //let {name, ein, itin,ssn,email,phone} = getFieldAndVal(req.params,['name','ein','itin','ssn','email','phone'])
+        let {name, ein, itin,ssn,email,phone} = buildFraudsterRequest(req.params);
+        if (name){
+          fraudstersArr =  await fraudsterData.findFraudstersByName(name);
+        }else{
+
+          let fraudster = await fraudsterData.findFraudsterByKeyAttributes(ein, itin, ssn, email, phone)
+          if (fraudster){
+            fraudstersArr.push(fraudster)
+          }
         }
         return res.json(fraudstersArr);
       } catch (e) {

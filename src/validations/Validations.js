@@ -291,5 +291,5 @@ export function validateRequestHas1Field(params, arr) {
 }
 
 export function validateFraudsterAttrRequest(params) {
-  return validateRequestHas1Field(params, ['ein', 'itin', 'ssn', 'email', 'phone']);
+  return validateRequestHas1Field(params, ['name','ein', 'itin', 'ssn', 'email', 'phone']);
 }
