@@ -23,13 +23,16 @@ router
 
 router
     .post('/logout', (req, res) => {
-        req.session.destroy(ex => {
-        if (ex) {
-            return res.status(500).json( { error:'Could not log out user: ' + ex.message});
-        } else {
-            return res.status(200).json({ message: 'Logged out'});
-        }
-        });
+        if (req.session) {
+            req.session.destroy(ex => {
+            if (ex) {
+                return res.status(500).json( { error:'Could not log out user: ' + ex.message});
+            } else {
+                res.clearCookie('FrapSess');
+                return res.status(200).json({ message: 'Logged out'});
+            }
+            });
+    }
 });
 
 export default router;
