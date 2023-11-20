@@ -89,7 +89,7 @@ $(document).ready(function() {
                     window.location.href = '/';
                 },
                 error: function(ex) {
-                    $('#error-message').text('Regisration failed: ' + JSON.parse(ex.responseText).error);
+                    $('#error-message').text('Registration failed: ' + JSON.parse(ex.responseText).error);
                 }
             });
         }

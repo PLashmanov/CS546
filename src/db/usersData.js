@@ -25,12 +25,12 @@ export const createUser = async (
         phoneNumber === undefined ||
         password === undefined || password === null ||
         notifications === undefined || notifications === null) {
-        throw new Error('one or more arguments are missing in createUser');
+        throw new BusinessError('one or more arguments are missing in createUser');
     }
     email = validations.validateEmail(email);
     const userCollection = await users();
     const existingUser = await userCollection.findOne({ email: email });
-    if (existingUser) throw new Error(new BusinessError(`user with email ${email} already exists`));
+    if (existingUser) throw new BusinessError(`user with email ${email} already exists`);
 
     firstName = validations.validateName(firstName, "firstName");
     lastName = validations.validateName(lastName, "lastName");
