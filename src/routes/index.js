@@ -5,7 +5,7 @@ import userRoutes from './users.js'
 import fraudsterRoutes from './fraudsters.js'
 
 const constructorMethod = (app) => {
-  app.use('/', landingRoutes); //disable mandatory login
+  //app.use('/', landingRoutes); //disable mandatory login
   app.use('/auth', authRoutes);
   app.use('/user', userRoutes);
   app.use('/fraudster', fraudsterRoutes);
