@@ -1,20 +1,20 @@
 import {Router} from 'express';
 import  {createUser} from '../db/usersData.js';
 import { ValidationError, BusinessError} from '../error/customErrors.js';
-
-
+import  LoginService from '../services/LoginService.js';
+import {validatePasswordConfirmation} from '../validations/Validations.js'
 const router = Router();
 
 router
     .post('/register', async (req, res) => {
         try {
-            const email =  req.body.email;
-            const firstName =  req.body.firstName;
-            const lastName =  req.body.lastName;
-            const  companyName =  req.body.companyName;
-            const phoneNumber =  req.body.phoneNumber;
-            const password =  req.body.password;
-            const notifications =  req.body.notifications;
+            const { email, firstName, lastName, companyName, 
+                  phoneNumber, password, confirmPassword, notifications } = req.body;
+            
+            if (!email || !firstName || !lastName || !companyName || !phoneNumber || !password || !confirmPassword) {
+            throw new ValidationError("required field is missing ");
+            }
+            validatePasswordConfirmation(password,confirmPassword)
            const user  = await createUser(
                 email,
                 firstName,
@@ -24,7 +24,14 @@ router
                 password,
                 notifications 
             )
-            return res.status(200).json({ message: user.email});
+            if(user){
+                LoginService.createSession(req, user);
+                req.session.isLoggedIn = true;
+                req.session.user = {
+                    email: user.email
+                };
+            }
+            return res.status(200).json({ message: user});
         } catch (ex) {
             if (ex instanceof ValidationError) {
               return res.status(400).json({ error: ex.message });
