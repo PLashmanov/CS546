@@ -258,3 +258,9 @@ export function validateRequestHas1Field(params, arr) {
 export function validateFraudsterAttrRequest(params) {
   return validateRequestHas1Field(params, ['name','ein', 'itin', 'ssn', 'email', 'phone']);
 }
+
+export function validatePasswordConfirmation(pass, confirmPass){
+  if(pass!==confirmPass){
+    throw new ValidationError("password and confirmation password dont match"); 
+  }
+}

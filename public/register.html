@@ -13,7 +13,7 @@
 
     <section id="registration">
         <h1>Registration</h1>
-        <form action="/register" method="post">
+        <form id="registrationForm">
             <div class="input-group required">
                 <label for="firstName" >First Name</label>
                 <input type="text" id="reg-firstName" name="firstName" required placeholder="Jane">
@@ -30,17 +30,35 @@
             </div>
             <br>
             <div class="input-group required">
+                <label for="company">Company Name</label>
+                <input type="text" id="company-name" name="company" required placeholder="My Company">
+            </div>
+            <br>
+            <div class="input-group required">
                 <label for="phoneNumber" >Phone Number</label>
                 <input type="tel" id="reg-phoneNumber" name="phoneNumber" required placeholder="(808)-555-5588">
             </div>
+            <br>
+            <div class="input-group">
+                <label for="notificationEnabled">Enable Notifications</label>
+                <input type="checkbox" id="reg-notificationEnabled" name="notificationEnabled">
+            </div>
+            
             <br>
             <div class = "input-group required">
                 <label for="password">Desired Password</label>
                 <input type="password" id="reg-password" name="password" required>
             </div>
             <br>
+            <div class = "input-group required">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="reg-confirm-password" name="confirm-password" required>
+            </div>
+            <br>
             <button type="submit" id="reg-submit" class="button">Register</button>
         </form>
+        <br>
+        <p id="error-message" style="color: red;"></p>
     </section>
     <footer>
         <p>&copy; 2023 FRAP App</p>

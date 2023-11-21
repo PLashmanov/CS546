@@ -65,4 +65,31 @@ document.addEventListener('DOMContentLoaded', function () {
 });*/
 
 
-
+$(document).ready(function() {
+    $('#registrationForm').on('submit', function(event) {
+        event.preventDefault();
+            $.ajax({
+                url: '/user/register',
+                type: 'POST',
+                contentType: 'application/json', 
+                data: JSON.stringify({ 
+                    firstName: $('#reg-firstName').val(),
+                    lastName: $('#reg-lastName').val(),
+                    email: $('#reg-email').val(),
+                    companyName: $('#company-name').val(),
+                    phoneNumber: $('#reg-phoneNumber').val(),
+                    notifications: $('#reg-notificationEnabled').is(':checked'), 
+                    password: $('#reg-password').val(),
+                    confirmPassword: $('#reg-confirm-password').val()
+                }),
+                success: function(response) {
+                    const user = response.message;
+                    localStorage.setItem('user', JSON.stringify(user));
+                    window.location.href = '/';
+                },
+                error: function(ex) {
+                    $('#error-message').text('Registration failed: ' + JSON.parse(ex.responseText).error);
+                }
+            });
+    });
+});
