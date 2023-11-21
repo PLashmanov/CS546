@@ -26,7 +26,8 @@
                 </form>
             </div>
             <br>
-            
+            <br>
+        <p id="error-message" style="color: red;"></p>
         </section>
     <footer>
         <p>&copy; 2023 FRAP App</p>
@@ -50,7 +51,7 @@
                         window.location.href = '/';
                     },
                     error: function(ex) {
-                        alert('Login failed: ' + ex.responseText);
+                        $('#error-message').text('Login failed: ' + JSON.parse(ex.responseText).error);
                     }
                 });
             });

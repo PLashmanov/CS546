@@ -68,7 +68,6 @@ document.addEventListener('DOMContentLoaded', function () {
 $(document).ready(function() {
     $('#registrationForm').on('submit', function(event) {
         event.preventDefault();
-        if (true) {
             $.ajax({
                 url: '/user/register',
                 type: 'POST',
@@ -92,6 +91,5 @@ $(document).ready(function() {
                     $('#error-message').text('Registration failed: ' + JSON.parse(ex.responseText).error);
                 }
             });
-        }
     });
 });
