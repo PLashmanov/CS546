@@ -93,3 +93,23 @@ $(document).ready(function() {
             });
     });
 });
+$(document).ready(function() {
+    $('#deleteAccount').on('click', function(event) { 
+        event.preventDefault();
+        if (confirm('Are you sure you want to delete your account? We will sincerly miss you')) {
+            $.ajax({
+                url: '/user/delete',
+                type: 'DELETE',
+                contentType: 'application/json', 
+                success: function(response) {
+                    localStorage.removeItem('user');
+                    alert('Account deleted');
+                    window.location.href = '/login.html';
+                },
+                error: function(ex) {
+                    $('#error-message').text('Account deletion failed: ' + JSON.parse(ex.responseText).error);
+                }
+            });
+        }
+    });
+});

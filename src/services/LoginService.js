@@ -21,8 +21,13 @@ class LoginService {
         };
         return userDetails;
     }
-    static createSession(req, user) {
-        req.session.userEmail = user.email;
+    static async createSession(req, user) {
+        const userInfo = await this.#getUser(user.email);
+        req.session.user = {
+            email: userInfo.email,
+            id : userInfo._id.toString()
+        };
+
     }
    static async #verifyPassword(reqPassword, storedPass){
         return await bcrypt.compare(reqPassword, storedPass);

@@ -1,0 +1,48 @@
+
+    <div id="nav-placeholder"></div>
+
+    <section id="profile">
+        <h1>User Profile</h1>
+        <form id="updateProfileForm">
+            <div class="input-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" value="{{user.firstName}}" required>
+            </div>
+            <br>
+            <div class="input-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" value="{{user.lastName}}" required>
+            </div>
+            <br>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="{{user.email}}" required>
+            </div>
+            <br>
+            <div class="input-group">
+                <label for="company">Company Name</label>
+                <input type="text" id="company" name="company" value="{{user.companyName}}" required>
+            </div>
+            <br>
+            <div class="input-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" value="{{user.phoneNumber}}" required>
+            </div>
+            <br>
+            <div class="input-group">
+                <label for="notificationEnabled">Enable Notifications</label>
+                <input type="checkbox" id="notificationEnabled" name="notificationEnabled" {{#if user.notifications}}checked{{/if}}>
+            </div>
+            <br>
+            <button type="submit" class="button">Update Profile</button>
+        </form>
+        <br>
+        <p id="error-message" style="color: red;"></p>
+        <br>
+        <button id="deleteAccount" class="button" style="background-color: red; color: white;">Delete Account</button>
+    </section>
+
+    <footer>
+        <p>&copy; 2023 FRAP App</p>
+    </footer>
+
