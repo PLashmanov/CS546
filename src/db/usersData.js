@@ -170,3 +170,53 @@ export async function updateFraudstersAfterRemoveUser(userId, idToChangeTo) {
     await fraudstersCollection.updateMany({ users: userId }, { $addToSet: { users: idToChangeTo } });
     await fraudstersCollection.updateMany({ users: userId }, { $pull: { users: userId } });
 }
+
+function hasChanged(oldVal, newVal) {
+    return oldVal !== newVal;
+}
+
+export async function updateUser(
+    userId,
+    email,
+    companyName,
+    phoneNumber,
+    notifications) {
+
+    if (!userId || email === undefined || email === null ||
+        companyName === undefined ||
+        phoneNumber === undefined ||
+        notifications === undefined || notifications === null) {
+        throw new Error('one or more arguments are missing in updateUser');
+    }
+
+    userId = validations.validateId(userId);
+
+    let userInTheSystem = await getUserById(userId);
+    if (!userInTheSystem) throw new BusinessError(`user with id: ${userId} doesn't exist`);
+
+    email = validations.validateEmail(email);
+    companyName = validations.validateCompanyName(companyName);
+    phoneNumber = validations.validatePhoneNumber(phoneNumber);
+    notifications = validations.validateNotifications(notifications);
+
+    let changeFound = hasChanged(userInTheSystem.email, email) || hasChanged(userInTheSystem.companyName, companyName) ||
+        hasChanged(userInTheSystem.phoneNumber, phoneNumber) || hasChanged(userInTheSystem.notifications, notifications);
+
+    if (!changeFound) throw new Error("No changes found for update");
+
+    const userCollection = await users();
+    let updatedUser = await userCollection.findOneAndUpdate({ _id: new ObjectId(userId) },
+        {
+            $set: {
+                email: email,
+                companyName: companyName,
+                phoneNumber: phoneNumber,
+                notifications: notifications
+            },
+        },
+        { returnDocument: 'after' });
+
+    const toReturn = await getUserById(userId);
+
+    return toReturn;
+}

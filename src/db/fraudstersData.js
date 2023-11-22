@@ -110,7 +110,6 @@ export async function updateFraudsterAfterCreateReport(fraudsterId, ein, itin, s
     reportId: reportId,
     date: todaysDate
   };
-  type = validations.validateType(type); // FIXME create in Validations
 
   const fraudstersCollection = await fraudsters();
 
@@ -188,6 +187,7 @@ export async function findFraudsterByKeyAttributes(ein, itin, ssn, email, phone)
     if (!fraudster) throw new Error('fraudster was not found');
 
     const lastReported = formatDate(fraudster.updateDate);
+    let trending = await isFraudsterTrending(fraudsterId);
 
     const fraudsterAttributesToReturn = {
       eins: fraudster.eins,
@@ -198,7 +198,7 @@ export async function findFraudsterByKeyAttributes(ein, itin, ssn, email, phone)
       names: fraudster.names,
       numReports: fraudster.numReports,
       lastTimeReported: lastReported,
-      trending: fraudster.trending
+      trending: trending
     }
     return fraudsterAttributesToReturn;
   }
