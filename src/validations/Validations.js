@@ -61,7 +61,7 @@ export function validateEIN(ein) {
 export function validateSSN(ssn) {
   if (ssn === null) return 'N/A';
   if (typeof ssn === 'string' && ssn.trim() === 'N/A') return ssn;
-  if (typeof ssn !== 'string') new ValidationError(" ssn must be string");
+  if (typeof ssn !== 'string') throw new ValidationError(" ssn must be string");
   ssn = ssn.trim();
   if (ssn.length === 0) {
     ssn = "N/A";
@@ -212,12 +212,6 @@ export function validateNotifications(notifications) {
   return notifications;
 }
 
-//FIXME: create
-export function validateType(type) {
-
-  return type;
-}
-
 export function validatePassword(password) {
   if (password === undefined) throw new Error('please provide password');
   password = validateString(password, "password");
@@ -256,11 +250,11 @@ export function validateRequestHas1Field(params, arr) {
 }
 
 export function validateFraudsterAttrRequest(params) {
-  return validateRequestHas1Field(params, ['name','ein', 'itin', 'ssn', 'email', 'phone']);
+  return validateRequestHas1Field(params, ['name', 'ein', 'itin', 'ssn', 'email', 'phone']);
 }
 
-export function validatePasswordConfirmation(pass, confirmPass){
-  if(pass!==confirmPass){
-    throw new ValidationError("password and confirmation password dont match"); 
+export function validatePasswordConfirmation(pass, confirmPass) {
+  if (pass !== confirmPass) {
+    throw new ValidationError("password and confirmation password dont match");
   }
 }
