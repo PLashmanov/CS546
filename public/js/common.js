@@ -4,7 +4,7 @@ $(document).on('click', '#logout', function(e) {
         type: 'POST',
         url: '/auth/logout',
         success: function(response) {
-            window.location.href = '/login.html';
+            window.location.href = '/user/login';
         },
         error: function(ex) {
             alert('Logout failed: ' + ex.responseText);
@@ -12,14 +12,6 @@ $(document).on('click', '#logout', function(e) {
     });
 });
 
-
-
-
-//Navigation bar
-
- $(function(){
-    $("#nav-placeholder").load("nav.html");
- });
 
  //report functions date mandatory and 1 other mandatory field,needs more validations for email and other stuff.
 
@@ -42,22 +34,6 @@ function validateReport(){
     }
     return true;
 }
-
-//Log out navbar test with server , not live server, throwing error.
-/*
-document.addEventListener('DOMContentLoaded', function () {
-    const logout = document.getElementById('logout');
-    if (logout) { 
-        logout.addEventListener('click', function (event) {
-            event.preventDefault();
-            window.location.href = 'index.html';
-            alert('Thank you for your contributions. You have been logged out.');
-        });
-    } else {
-        console.error('Element with id "logout" not found in the DOM.');
-    }
-});*/
-
 
 $(document).ready(function() {
     $('#registrationForm').on('submit', function(event) {
@@ -95,7 +71,7 @@ $(document).ready(function() {
                 contentType: 'application/json', 
                 success: function(response) {
                     alert('Account deleted');
-                    window.location.href = '/login.html';
+                    window.location.href = '/user/login';
                 },
                 error: function(ex) {
                     $('#error-message').text('Account deletion failed: ' + JSON.parse(ex.responseText).error);
@@ -145,5 +121,28 @@ $(document).ready(function() {
             }
         });
     }
+});
+$(document).ready(function() {
+    $('#loginForm').submit(function(e) {
+        e.preventDefault(); 
+        const formData = {
+            email: $('#email').val(),
+            password: $('#password').val()
+        };
+        $.ajax({
+            type: 'POST',
+            url: '/auth/login',
+            data: JSON.stringify(formData), 
+            contentType: 'application/json', 
+            success: function(response) {
+                const user = response.message;
+                localStorage.setItem('user', JSON.stringify(user));
+                window.location.href = '/';
+            },
+            error: function(ex) {
+                $('#error-message').text('Login failed: ' + JSON.parse(ex.responseText).error);
+            }
+        });
+    });
 });
 

@@ -5,7 +5,7 @@ router.get('/', (req, res, next) => {
     next();
 }, isLoggedIn);
 
-router.get('/index.html', (req, res, next) => {
+router.get('/user/index', (req, res, next) => {
     next();
 }, isLoggedIn);
 
@@ -13,7 +13,7 @@ function isLoggedIn(req, res, next) {
     if (req.session.isLoggedIn) {
         next();  
     } else {
-        res.redirect('/login.html');  
+        res.redirect('/user/login');  
     }
 }
 

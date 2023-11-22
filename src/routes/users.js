@@ -65,6 +65,63 @@ router.delete('/delete', async (req, res) => {
         return res.status(500).json({ error: ex.message });
     }
 });
+router.get('/report', async (req, res) => {
+    try {
+        res.render('report', {title: "Report A Fraudster"});
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Error Rendering Page");
+    }
+});
+
+router.get('/lookup', async (req, res) => {
+    try {
+        res.render('lookup', {title: "Look up A Fraudster"});
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Error Rendering Page");
+    }
+});
+router.get('/index', async (req, res) => {
+    try {
+        res.render('index', {title: "Home"});
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Error Rendering Page");
+    }
+});
+router.get('/login', async (req, res) => {
+    try {
+        res.render('login', {title: "Login"});
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Error Rendering Page");
+    }
+});
+
+router.get('/register', async (req, res) => {
+    try {
+        res.render('register', {title: "Register"});
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Error Rendering Page");
+    }
+});
+
+router.get('/about', async (req, res) => {
+    try {
+        res.render('about', {title: "About FRAP"});
+    } catch (e) {
+        res.status(500).send("Error Rendering Page");
+    }
+});
+router.get('/contact', async (req, res) => {
+    try {
+        res.render('contact', {title: "Contact"});
+    } catch (e) {
+        res.status(500).send("Error Rendering Page");
+    }
+});
 router.get('/profile', async (req, res) => {
     try{
         if (req.session.isLoggedIn && req.session.user) {
