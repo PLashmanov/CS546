@@ -4,7 +4,6 @@ $(document).on('click', '#logout', function(e) {
         type: 'POST',
         url: '/auth/logout',
         success: function(response) {
-            localStorage.removeItem('user');
             window.location.href = '/login.html';
         },
         error: function(ex) {
@@ -15,12 +14,7 @@ $(document).on('click', '#logout', function(e) {
 
 
 
-$(document).ready(function() {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user && user.firstName) {
-        $('#userName').text(user.firstName);
-    }
-});
+
 //Navigation bar
 
  $(function(){
@@ -83,8 +77,6 @@ $(document).ready(function() {
                     confirmPassword: $('#reg-confirm-password').val()
                 }),
                 success: function(response) {
-                    const user = response.message;
-                    localStorage.setItem('user', JSON.stringify(user));
                     window.location.href = '/';
                 },
                 error: function(ex) {
@@ -102,7 +94,6 @@ $(document).ready(function() {
                 type: 'DELETE',
                 contentType: 'application/json', 
                 success: function(response) {
-                    localStorage.removeItem('user');
                     alert('Account deleted');
                     window.location.href = '/login.html';
                 },
@@ -129,8 +120,6 @@ $(document).ready(function() {
                     notifications: $('#notificationEnabled').is(':checked')
                 }),
                 success: function(response) {
-                    const user = response.message;
-                    localStorage.setItem('user', JSON.stringify(user));
                     alert("successfully update profile")
                     window.location.href = '/';
                 },
@@ -140,3 +129,21 @@ $(document).ready(function() {
             });
     });
 });
+
+$(document).ready(function() {
+    if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+        $.ajax({
+            url: '/user/getuserinfo',
+            type: 'GET',
+            success: function(response) {
+                if (response.user && response.user.firstName) {
+                    $('#userName').text(response.user.firstName);
+                }
+            },
+            error: function(ex) {
+                $('#error-message').text('Getting user data failed: ' + JSON.parse(ex.responseText).error);
+            }
+        });
+    }
+});
+

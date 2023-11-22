@@ -92,9 +92,9 @@ router.get('/profile', async (req, res) => {
 router.put('/update', async (req, res) => {
     try{
         if (req.session.isLoggedIn && req.session.user) {
-        const { email, firstName, lastName, companyName, phoneNumber, notifications } = req.body;
+        const { email, companyName, phoneNumber, notifications } = req.body;
         
-        if (!email || !firstName || !lastName || !companyName || !phoneNumber) {
+        if (!email || !companyName || !phoneNumber) {
         throw new ValidationError("attribute is missing ");
         }
        const user  = await updateUser(
@@ -119,5 +119,13 @@ router.put('/update', async (req, res) => {
         return res.status(500).json({ error: ex.message });
     }
 });
+router.get('/getuserinfo', (req, res) => {
+    if (req.session.isLoggedIn && req.session.user) {
+        return res.status(200).json({ user: req.session.user });
+    } else {
+        res.status(400).json({ error: 'User not logged in' });
+    }
+});
+
 
 export default router;

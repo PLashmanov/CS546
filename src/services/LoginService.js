@@ -25,6 +25,7 @@ class LoginService {
         const userInfo = await this.#getUser(user.email);
         req.session.user = {
             email: userInfo.email,
+            firstName: userInfo.firstName,
             id : userInfo._id.toString()
         };
 
