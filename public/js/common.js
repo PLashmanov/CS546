@@ -96,7 +96,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('#deleteAccount').on('click', function(event) { 
         event.preventDefault();
-        if (confirm('Are you sure you want to delete your account? We will sincerly miss you')) {
+        if (confirm('Are you sure? Frap will sincerly miss you')) {
             $.ajax({
                 url: '/user/delete',
                 type: 'DELETE',
@@ -111,5 +111,32 @@ $(document).ready(function() {
                 }
             });
         }
+    });
+});
+$(document).ready(function() {
+    $('#updateProfileForm').on('submit', function(event) {
+        event.preventDefault();
+            $.ajax({
+                url: '/user/update',
+                type: 'PUT',
+                contentType: 'application/json', 
+                data: JSON.stringify({ 
+                    firstName: $('#firstName').val(),
+                    lastName: $('#lastName').val(),
+                    email: $('#email').val(),
+                    companyName: $('#company').val(),
+                    phoneNumber: $('#phoneNumber').val(),
+                    notifications: $('#notificationEnabled').is(':checked')
+                }),
+                success: function(response) {
+                    const user = response.message;
+                    localStorage.setItem('user', JSON.stringify(user));
+                    alert("successfully update profile")
+                    window.location.href = '/';
+                },
+                error: function(ex) {
+                    $('#error-message').text('Update Profile failed: ' + JSON.parse(ex.responseText).error);
+                }
+            });
     });
 });

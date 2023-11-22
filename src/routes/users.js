@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import  {createUser, removeUser , getUserById} from '../db/usersData.js';
+import  {createUser, removeUser , getUserById , updateUser} from '../db/usersData.js';
 import { ValidationError, BusinessError} from '../error/customErrors.js';
 import  LoginService from '../services/LoginService.js';
 import {validatePasswordConfirmation} from '../validations/Validations.js'
@@ -88,6 +88,36 @@ router.get('/profile', async (req, res) => {
         res.status(400).render('error', { message: ex.message });
     }
     
+});
+router.put('/update', async (req, res) => {
+    try{
+        if (req.session.isLoggedIn && req.session.user) {
+        const { email, firstName, lastName, companyName, phoneNumber, notifications } = req.body;
+        
+        if (!email || !firstName || !lastName || !companyName || !phoneNumber) {
+        throw new ValidationError("attribute is missing ");
+        }
+       const user  = await updateUser(
+            req.session.user.id,
+            email,
+            companyName,
+            phoneNumber,
+            notifications 
+        )
+        return res.status(200).json({ message: user});
+    }
+        else{
+            res.status(400).render('error', { message: "user not logged in" });
+        }
+    } catch (ex) {
+        if (ex instanceof ValidationError) {
+          return res.status(400).json({ error: ex.message });
+        }
+        else if (ex instanceof BusinessError) {
+          return res.status(409).json({ error: ex.message });
+        }
+        return res.status(500).json({ error: ex.message });
+    }
 });
 
 export default router;
