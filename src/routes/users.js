@@ -132,7 +132,7 @@ router.get('/profile', async (req, res) => {
             });
         }
         else{
-            res.status(400).render('error', { message: "user not logged in" });
+            res.status(400).render('error', { message: "User Not Logged In!" });
         }
     }
     catch (ex) {

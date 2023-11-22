@@ -239,7 +239,7 @@ footer {
     cursor: pointer;
 }
 
-.about, .contact-us{
+.about, .contact-us, .error{
     text-align: center;
     padding: 2rem;
     background-color: #f5f5f5;
@@ -250,7 +250,7 @@ footer {
     flex-direction: column;
     max-width: fit-content;
     justify-content: center;
-    margin:auto;
+    margin:20px auto;
 }
 
 h2 {
@@ -263,4 +263,15 @@ li {
 }
 h3, p {
     margin-bottom: 7px;
+}
+
+
+.error h1{
+    color:red;
+    font-size:40px;
+}
+
+.error p {
+    color:royalblue;
+    font-size: 24px;
 }
