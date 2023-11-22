@@ -3,11 +3,16 @@ import configRoutesFunction from './routes/index.js';
 import express from 'express';
 import session  from "express-session";
 import MongoStore from 'connect-mongo';
-
+import exphbs from 'express-handlebars';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 async function main() {  
 
     dotenv.config();
     const app = express();
+    app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
+    app.set('view engine', 'handlebars');
+
     app.use(session({
         name: 'FrapSess',
         secret: process.env.SESSION_SECRET,
@@ -21,6 +26,12 @@ async function main() {
             secure: false
         }
     }));
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+
+    const staticDir = express.static(__dirname + '/public');
+    app.use('/public', staticDir);
+    app.use(express.static('public'));
     app.use(express.json());
     configRoutesFunction(app);
     app.listen(3000, () => {

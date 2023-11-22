@@ -7,11 +7,9 @@ router
     .post('/login', async (req, res) => {
         try {
             const user = await LoginService.authenticate(req.body.email, req.body.password);
-            LoginService.createSession(req, user);
+            await LoginService.createSession(req, user);
             req.session.isLoggedIn = true;
-            req.session.user = {
-                email: user.email
-            };
+            
             return res.status(200).json({ message: user});
         } catch (ex) {
             if (ex instanceof BusinessError) {
@@ -20,6 +18,7 @@ router
             return res.status(500).json({ error: ex.message });
         }
     });
+    
 
 router
     .post('/logout', (req, res) => {
