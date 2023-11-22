@@ -22,9 +22,12 @@
                  <li class ="nav-item"><a href="/user/register" class="register">Register</a></li>
                  <li class = "nav-item"><a href = "/user/report">Report</a></li>
                  <li class = "nav-item"><a href = "/user/lookup">Look Up</a></li>
-                 <li class = "nav-item"><a href = "/user/login">Log In</a></li>
+                 {{#if userLoggedIn}}
                  <li class="nav-item"><span id="logout">Logout</span></li> 
-                 <li class = "nav-item"><a href = "/user/profile">Profile</a></li>
+                 {{else}}
+                 <li class = "nav-item"><a href = "/user/login">Log In</a></li>
+                 {{/if}}
+                <li class = "nav-item"><a href = "/user/profile">Profile</a></li>
              </ul>
          </nav>
      </div>

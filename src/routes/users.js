@@ -67,7 +67,7 @@ router.delete('/delete', async (req, res) => {
 });
 router.get('/report', async (req, res) => {
     try {
-        res.render('report', {title: "Report A Fraudster"});
+        res.render('report', {title: "Report A Fraudster",userLoggedIn: req.session && req.session.isLoggedIn});
     } catch (e) {
         console.error(e);
         res.status(500).send("Error Rendering Page");
@@ -76,7 +76,7 @@ router.get('/report', async (req, res) => {
 
 router.get('/lookup', async (req, res) => {
     try {
-        res.render('lookup', {title: "Look up A Fraudster"});
+        res.render('lookup', {title: "Look up A Fraudster",userLoggedIn: req.session && req.session.isLoggedIn});
     } catch (e) {
         console.error(e);
         res.status(500).send("Error Rendering Page");
@@ -84,7 +84,7 @@ router.get('/lookup', async (req, res) => {
 });
 router.get('/index', async (req, res) => {
     try {
-        res.render('index', {title: "Home"});
+        res.render('index', {title: "Home",userLoggedIn: req.session && req.session.isLoggedIn});
     } catch (e) {
         console.error(e);
         res.status(500).send("Error Rendering Page");
@@ -92,7 +92,7 @@ router.get('/index', async (req, res) => {
 });
 router.get('/login', async (req, res) => {
     try {
-        res.render('login', {title: "Login"});
+        res.render('login', {title: "Login",userLoggedIn: req.session && req.session.isLoggedIn});
     } catch (e) {
         console.error(e);
         res.status(500).send("Error Rendering Page");
@@ -101,7 +101,7 @@ router.get('/login', async (req, res) => {
 
 router.get('/register', async (req, res) => {
     try {
-        res.render('register', {title: "Register"});
+        res.render('register', {title: "Register",userLoggedIn: req.session && req.session.isLoggedIn});
     } catch (e) {
         console.error(e);
         res.status(500).send("Error Rendering Page");
@@ -110,14 +110,14 @@ router.get('/register', async (req, res) => {
 
 router.get('/about', async (req, res) => {
     try {
-        res.render('about', {title: "About FRAP"});
+        res.render('about', {title: "About FRAP",userLoggedIn: req.session && req.session.isLoggedIn});
     } catch (e) {
         res.status(500).send("Error Rendering Page");
     }
 });
 router.get('/contact', async (req, res) => {
     try {
-        res.render('contact', {title: "Contact"});
+        res.render('contact', {title: "Contact",userLoggedIn: req.session && req.session.isLoggedIn});
     } catch (e) {
         res.status(500).send("Error Rendering Page");
     }
@@ -128,7 +128,8 @@ router.get('/profile', async (req, res) => {
             const userInfo = await getUserById(req.session.user.id)
             res.render('profile', { 
                 title: 'Profile',
-                user: userInfo
+                user: userInfo,
+                userLoggedIn:true,
             });
         }
         else{

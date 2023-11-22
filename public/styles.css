@@ -26,6 +26,30 @@ h1 {
     margin:0 auto 20px auto;
     text-align: center;
 }
+
+h2 {
+    margin-bottom: 10px;
+}
+
+li {
+    list-style-type: none;
+    margin-bottom:7px;    
+}
+h3, p {
+    margin-bottom: 7px;
+}
+
+
+.error h1{
+    color:red;
+    font-size:40px;
+}
+
+.error p {
+    color:royalblue;
+    font-size: 24px;
+}
+
 .logo {
     position: relative;
     top: 0px;
@@ -251,27 +275,4 @@ footer {
     max-width: fit-content;
     justify-content: center;
     margin:20px auto;
-}
-
-h2 {
-    margin-bottom: 10px;
-}
-
-li {
-    list-style-type: none;
-    margin-bottom:7px;    
-}
-h3, p {
-    margin-bottom: 7px;
-}
-
-
-.error h1{
-    color:red;
-    font-size:40px;
-}
-
-.error p {
-    color:royalblue;
-    font-size: 24px;
 }
