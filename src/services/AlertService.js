@@ -32,7 +32,6 @@ class AlertService {
     const emailAddresses = await this.#fetchEmailsWithAlertEnabled(fraudsterID) 
     if (!isArray(emailAddresses) || emailAddresses.length === 0) {
       console.error('No valid email addresses retrieved for fraudsterID:', fraudsterID);
-      throw new Error('No valid email addresses retrieved for fraudsterID:', fraudsterID);
     }
     for (let userEmail of emailAddresses) {  
       if (await isValidEmailAddress(userEmail)) {
