@@ -276,3 +276,12 @@ footer {
     justify-content: center;
     margin:20px auto;
 }
+
+#error-message {
+    color:red;
+}
+
+#deleteAccount {
+    background-color:red;
+    color:white;
+}
