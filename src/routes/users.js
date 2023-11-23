@@ -65,17 +65,75 @@ router.delete('/delete', async (req, res) => {
         return res.status(500).json({ error: ex.message });
     }
 });
+router.get('/report', async (req, res) => {
+    try {
+        res.render('report', {title: "Report A Fraudster",userLoggedIn: req.session && req.session.isLoggedIn});
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Error Rendering Page");
+    }
+});
+
+router.get('/lookup', async (req, res) => {
+    try {
+        res.render('lookup', {title: "Look up A Fraudster",userLoggedIn: req.session && req.session.isLoggedIn});
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Error Rendering Page");
+    }
+});
+router.get('/index', async (req, res) => {
+    try {
+        res.render('index', {title: "Home",userLoggedIn: req.session && req.session.isLoggedIn});
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Error Rendering Page");
+    }
+});
+router.get('/login', async (req, res) => {
+    try {
+        res.render('login', {title: "Login",userLoggedIn: req.session && req.session.isLoggedIn});
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Error Rendering Page");
+    }
+});
+
+router.get('/register', async (req, res) => {
+    try {
+        res.render('register', {title: "Register",userLoggedIn: req.session && req.session.isLoggedIn});
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Error Rendering Page");
+    }
+});
+
+router.get('/about', async (req, res) => {
+    try {
+        res.render('about', {title: "About FRAP",userLoggedIn: req.session && req.session.isLoggedIn});
+    } catch (e) {
+        res.status(500).send("Error Rendering Page");
+    }
+});
+router.get('/contact', async (req, res) => {
+    try {
+        res.render('contact', {title: "Contact",userLoggedIn: req.session && req.session.isLoggedIn});
+    } catch (e) {
+        res.status(500).send("Error Rendering Page");
+    }
+});
 router.get('/profile', async (req, res) => {
     try{
         if (req.session.isLoggedIn && req.session.user) {
             const userInfo = await getUserById(req.session.user.id)
             res.render('profile', { 
                 title: 'Profile',
-                user: userInfo
+                user: userInfo,
+                userLoggedIn:true,
             });
         }
         else{
-            res.status(400).render('error', { message: "user not logged in" });
+            res.status(400).render('error', { message: "User Not Logged In!" });
         }
     }
     catch (ex) {
