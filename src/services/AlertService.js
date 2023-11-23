@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb';
 import { isValidEmailAddress, isArray } from "../validations/Validations.js";
 import { getFraudsterById } from "../db/fraudstersData.js";
 
-class AlertService {
+export class AlertService {
   constructor() {
     this.mailSender = new MailSender();
     this.emailQueue = [];
@@ -28,23 +28,22 @@ class AlertService {
       }
     }
   }
-
   #initializeEmailWorker() {
     setInterval(() => {
       if (!this.isProcessing && this.emailQueue.length > 0) {
         this.isProcessing = true;
-        const task = this.emailQueue.shift(); 
-        this.#processEmail(task)
+        const user = this.emailQueue.shift(); 
+        this.#processEmail(user)
           .then(() => this.isProcessing = false)
-          .catch(error => {
-            console.error('Failed to process email task:', error);
+          .catch(ex => {
+            console.error('Failed to process email ', ex);
             this.isProcessing = false;
           });
       }
-    }, 2000);
+    }, 3000);
   }
-  async #processEmail(task) {
-    const { userEmail, fraudsterID } = task;
+  async #processEmail(user) {
+    const {userEmail, fraudsterID } = user;
     const status = await this.mailSender.sendMail({
       from: process.env.FRAP_EMAIL,
       to: userEmail,
@@ -64,4 +63,3 @@ class AlertService {
   }
 }
 
-export { AlertService };
