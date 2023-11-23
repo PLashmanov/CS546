@@ -29,20 +29,21 @@ export class AlertService {
     }
   }
   #initializeEmailWorker() {
-    setInterval(() => {
+    setInterval(async () => {
       if (!this.isProcessing && this.emailQueue.length > 0) {
         this.isProcessing = true;
-        const user = this.emailQueue.shift(); 
-        this.#processEmail(user)
-          .then(() => this.isProcessing = false)
-          .catch(ex => {
+        const user = this.emailQueue.shift();
+        try {
+          await this.#sendEmail(user);
+        } catch (ex) {
             console.error('Failed to process email ', ex);
-            this.isProcessing = false;
-          });
+        } finally {
+          this.isProcessing = false;
+        }
       }
     }, 3000);
   }
-  async #processEmail(user) {
+  async #sendEmail(user) {
     const {userEmail, fraudsterID } = user;
     const status = await this.mailSender.sendMail({
       from: process.env.FRAP_EMAIL,
