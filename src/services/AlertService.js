@@ -5,12 +5,19 @@ import { isValidEmailAddress, isArray } from "../validations/Validations.js";
 import { getFraudsterById } from "../db/fraudstersData.js";
 
 export class AlertService {
+  static instance = null;
   constructor() {
     this.mailSender = new MailSender();
     this.emailQueue = [];
     this.isProcessing = false;
     this.#initializeEmailWorker();
   }
+  static getInstance() {
+    if (!AlertService.instance) {
+        AlertService.instance = new AlertService();
+    }
+    return AlertService.instance;
+}
   async alertUsers(fraudsterID) {
     if (!ObjectId.isValid(fraudsterID)) {
       throw new Error('Invalid ObjectId passed to alert service:', fraudsterID);
