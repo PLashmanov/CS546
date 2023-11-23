@@ -276,3 +276,8 @@ footer {
     justify-content: center;
     margin:20px auto;
 }
+
+#error-message {
+    color: red;
+    margin-top: 20px; 
+}

@@ -1,7 +1,7 @@
 <section id="reportFraud">
         <h1>Report Fraud</h1>
         <br>
-        <form action="/report" method="post" onsubmit="return validateReport();">
+        <form id="reportForm">
             <div class="input-group">
             <p>Please enter any fraud information encountered and click Report Fraud when finished.</p>
             <div class ="person reporting">
@@ -45,19 +45,21 @@
                 <div class = "input-group">
                 <label for="fraud">Fraud Type:</label>
                 <select name="fraudType" id="rep-fraudType">
-                        <option value="Phone Scam">Wire Fraud</option>
-                        <option value ="Email Scam">Money Laundering</option>
-                        <option value ="Credit Card Scam Scam">Credit Card Fraud</option>
-                        <option value="Phone Scam">Check Fraud</option>
-                        <option value ="Email Scam">Insurance Fraud</option>
-                        <option value ="Credit Card Scam Scam">Identity Theft</option>
-                        <option value="Phone Scam">Phishing</option>
-                        <option value ="Email Scam">Embezzlement</option>
-                        <option value ="Credit Card Scam Scam">Mortgage Fraud</option>
-                        <option value ="Credit Card Scam Scam">Utility Scam</option>
+                        <option value="wire_fraud">Wire Fraud</option>
+                        <option value ="money_laundering">Money Laundering</option>
+                        <option value ="creditcard_fraud">Credit Card Fraud</option>
+                        <option value="check_fraud">Check Fraud</option>
+                        <option value ="insurance_fraud">Insurance Fraud</option>
+                        <option value ="identify_theft">Identitiy Theft</option>
+                        <option value="phishing">Phishing</option>
+                        <option value ="embezzlement">Embezzlement</option>
+                        <option value ="mortgage_fraud">Mortgage Fraud</option>
+                        <option value ="utility_scam">Utility Scam</option>
                 </select>
               </div>
               <br>
             <button type="submit" class="button">Report Fraud</button>
         </form>
+        <br>
+        <p id="error-message" style="color: red;"></p>
     </section>

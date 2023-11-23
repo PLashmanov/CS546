@@ -1,5 +1,5 @@
 $(document).on('click', '#logout', function(e) {
-    e.preventDefault(); // Prevent any default action if needed
+    e.preventDefault();
     $.ajax({
         type: 'POST',
         url: '/auth/logout',
@@ -143,6 +143,33 @@ $(document).ready(function() {
                 $('#error-message').text('Login failed: ' + JSON.parse(ex.responseText).error);
             }
         });
+    });
+});
+$(document).ready(function() {
+    $('#reportForm').on('submit', function(event) {
+        event.preventDefault();
+            $.ajax({
+                url: '/fraudster/report',
+                type: 'POST',
+                contentType: 'application/json', 
+                data: JSON.stringify({ 
+                    firstName: $('#rep-name').val(),
+                    email: $('#rep-email').val(),
+                    ein: $('#rep-ein').val(),
+                    ssn: $('#rep-ssn').val(),
+                    itin: $('#rep-itin').val(),
+                    phoneNumber: $('#rep-phoneNumber').val(),
+                    date: $('#rep-date').val(),
+                    fraudType: $('#rep-fraudType').val()
+                }),
+                success: function(response) {
+                    alert("Fraudster Reported! ")
+                    window.location.href = '/';
+                },
+                error: function(ex) {
+                    $('#error-message').text('Report failed: ' + JSON.parse(ex.responseText).error);
+                }
+            });
     });
 });
 
