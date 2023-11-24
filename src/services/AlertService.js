@@ -17,7 +17,7 @@ export class AlertService {
         AlertService.instance = new AlertService();
     }
     return AlertService.instance;
-}
+  }
   async alertUsers(fraudsterID) {
     if (!ObjectId.isValid(fraudsterID)) {
       throw new Error('Invalid ObjectId passed to alert service:', fraudsterID);
@@ -35,21 +35,25 @@ export class AlertService {
       }
     }
   }
+
   #initializeEmailWorker() {
     setInterval(async () => {
       if (!this.isProcessing && this.emailQueue.length > 0) {
         this.isProcessing = true;
-        const user = this.emailQueue.shift();
         try {
-          await this.#sendEmail(user);
+          while (this.emailQueue.length > 0) {
+            const user = this.emailQueue.shift();
+            await this.#sendEmail(user);
+          }
         } catch (ex) {
-            console.error('Failed to process email ', ex);
+            console.error('error sending email ', ex);
         } finally {
-          this.isProcessing = false;
+            this.isProcessing = false;
         }
       }
-    }, 3000);
+    }, 3000); 
   }
+
   async #sendEmail(user) {
     const {userEmail, fraudsterID } = user;
     const status = await this.mailSender.sendMail({
