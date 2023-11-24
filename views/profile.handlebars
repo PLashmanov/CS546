@@ -12,6 +12,13 @@
             <label>Last Name</label>
             <p id="lastName">{{user.lastName}}</p>
         </div>
+        {{#if user.badge}}
+            <div class="input-group badge">
+                <label class="star-user-label">Star User</label>
+                <img src="/Images/logo.png" alt="Badge" id="Badge"  class="badge-image"/>
+            </div>
+        {{/if}}
+    </div>
     </div>
 
     <form id="updateProfileForm">
