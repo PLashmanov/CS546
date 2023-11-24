@@ -44,6 +44,7 @@ export class AlertService {
           while (this.emailQueue.length > 0) {
             const user = this.emailQueue.shift();
             await this.#sendEmail(user);
+            await new Promise(resolve => setTimeout(resolve, 100));
           }
         } catch (ex) {
             console.error('error sending email ', ex);
