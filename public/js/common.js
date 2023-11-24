@@ -1,5 +1,6 @@
 $(document).on('click', '#logout', function(e) {
-    e.preventDefault(); // Prevent any default action if needed
+    e.preventDefault();
+    $(this).prop('disabled', true); 
     $.ajax({
         type: 'POST',
         url: '/auth/logout',
@@ -8,6 +9,7 @@ $(document).on('click', '#logout', function(e) {
         },
         error: function(ex) {
             alert('Logout failed: ' + ex.responseText);
+            $(this).prop('disabled', false); 
         }
     });
 });
@@ -38,6 +40,7 @@ function validateReport(){
 $(document).ready(function() {
     $('#registrationForm').on('submit', function(event) {
         event.preventDefault();
+        $('#registrationForm button[type="submit"]').prop('disabled', true);
             $.ajax({
                 url: '/user/register',
                 type: 'POST',
@@ -57,6 +60,7 @@ $(document).ready(function() {
                 },
                 error: function(ex) {
                     $('#error-message').text('Registration failed: ' + JSON.parse(ex.responseText).error);
+                    $('#registrationForm button[type="submit"]').prop('disabled', false);
                 }
             });
     });
@@ -83,6 +87,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('#updateProfileForm').on('submit', function(event) {
         event.preventDefault();
+        $('#updateProfileForm button[type="submit"]').prop('disabled', true);
             $.ajax({
                 url: '/user/update',
                 type: 'PUT',
@@ -101,6 +106,7 @@ $(document).ready(function() {
                 },
                 error: function(ex) {
                     $('#error-message').text('Update Profile failed: ' + JSON.parse(ex.responseText).error);
+                    $('#updateProfileForm button[type="submit"]').prop('disabled', false);
                 }
             });
     });
@@ -125,6 +131,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('#loginForm').submit(function(e) {
         e.preventDefault(); 
+        $('#loginForm button[type="submit"]').prop('disabled', true);
         const formData = {
             email: $('#email').val(),
             password: $('#password').val()
@@ -141,8 +148,38 @@ $(document).ready(function() {
             },
             error: function(ex) {
                 $('#error-message').text('Login failed: ' + JSON.parse(ex.responseText).error);
+                $('#loginForm button[type="submit"]').prop('disabled', false);
             }
         });
+    });
+});
+$(document).ready(function() {
+    $('#reportForm').on('submit', function(event) {
+        event.preventDefault();
+        $('#reportForm button[type="submit"]').prop('disabled', true);
+            $.ajax({
+                url: '/fraudster/report',
+                type: 'POST',
+                contentType: 'application/json', 
+                data: JSON.stringify({ 
+                    firstName: $('#rep-name').val(),
+                    email: $('#rep-email').val(),
+                    ein: $('#rep-ein').val(),
+                    ssn: $('#rep-ssn').val(),
+                    itin: $('#rep-itin').val(),
+                    phoneNumber: $('#rep-phoneNumber').val(),
+                    date: $('#rep-date').val(),
+                    fraudType: $('#rep-fraudType').val()
+                }),
+                success: function(response) {
+                    alert("Fraudster Reported! ")
+                    window.location.href = '/';
+                },
+                error: function(ex) {
+                    $('#error-message').text('Report failed: ' + JSON.parse(ex.responseText).error);
+                    $('#reportForm button[type="submit"]').prop('disabled', false);
+                }
+            });
     });
 });
 

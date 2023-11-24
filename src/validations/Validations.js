@@ -258,3 +258,16 @@ export function validatePasswordConfirmation(pass, confirmPass) {
     throw new ValidationError("password and confirmation password dont match");
   }
 }
+
+export function validateFraudType(input) {
+  const allowedFraudValues = new Set([
+    "wire_fraud", "money_laundering", "creditcard_fraud",
+      "check_fraud", "insurance_fraud", "identify_theft",
+    "phishing", "embezzlement", "mortgage_fraud", "utility_scam"
+  ]);
+  if (!allowedFraudValues.has(input)) {
+    throw new ValidationError("input does not match required fraud type");
+  }
+  return input;
+}
+

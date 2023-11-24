@@ -12,6 +12,13 @@
             <label>Last Name</label>
             <p id="lastName">{{user.lastName}}</p>
         </div>
+        {{#if user.badge}}
+            <div class="input-group badge">
+                <label class="star-user-label">Star User</label>
+                <img src="/Images/logo.png" alt="Badge" id="Badge"  class="badge-image"/>
+            </div>
+        {{/if}}
+    </div>
     </div>
 
     <form id="updateProfileForm">
@@ -43,7 +50,5 @@
     <br>
     <button id="deleteAccount" class="button" style="background-color: red; color: white;">Delete Account</button>
      <br>
-     <br>
-     <a href="/">Homepage</a>
 </section>
 

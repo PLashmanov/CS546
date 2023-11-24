@@ -276,3 +276,25 @@ footer {
     justify-content: center;
     margin:20px auto;
 }
+
+#error-message {
+    color: red;
+    margin-top: 20px; 
+}
+.badge-image {
+    max-width: 200px;
+    min-width: 50px;
+    width: 100%;
+    height: auto;
+}
+#profile {
+    position: relative;
+}
+.badge {
+    position: absolute;
+    left: 0; 
+    top: 0; 
+}
+.badge label {
+    color: rgb(37, 37, 195);
+}

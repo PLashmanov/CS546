@@ -33,7 +33,7 @@ export const createReport = async (
         && email === "N/A" && phone === 'N/A') throw new Error(`one of the following must be provided: ein, itin, ssn, email, phone or address`);
 
     nameFraudster = validations.validateNameFr(nameFraudster);
-    type = validations.validateType(type); //FIXME: create validateType
+    type = validations.validateFraudType(type); 
 
     let date = new Date();
 

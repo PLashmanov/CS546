@@ -56,5 +56,42 @@ router
     }
   })
   
+router.post('/report', async (req, res) => {
+  try {
+    if (req.session && req.session.user) {
+        let { email, firstName, ein, ssn, 
+              phoneNumber, itin, date, fraudType } = req.body;
+      
+        email = convertEmptyField(email);
+        firstName = convertEmptyField(firstName);
+        ein = convertEmptyField(ein);
+        ssn = convertEmptyField(ssn);
+        phoneNumber = convertEmptyField(phoneNumber);
+        itin = convertEmptyField(itin);
+        date = convertEmptyField(date);
+        fraudType = convertEmptyField(fraudType);
+    
+      const report = await reportData.createReport(
+          req.session.user.id,  ein, itin, ssn, email, phoneNumber, firstName, fraudType
+      )
+      return res.status(200).json({ message: report});
+      }
+      else {
+        return res.status(409).json({ error: "user not logged in"});
+    }
+  } catch (ex) {
+      if (ex instanceof ValidationError) {
+        return res.status(400).json({ error: ex.message });
+      }
+      else if (ex instanceof BusinessError) {
+        return res.status(409).json({ error: ex.message });
+      }
+      return res.status(500).json({ error: ex.message });
+  }
+});
+
+function convertEmptyField(value) {
+  return value || null;
+}
 
 export default router;
