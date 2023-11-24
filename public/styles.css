@@ -298,3 +298,7 @@ footer {
 .badge label {
     color: rgb(37, 37, 195);
 }
+#deleteAccount {
+    background-color: red;
+    color:white;
+}
