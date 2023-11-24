@@ -260,13 +260,14 @@ export function validatePasswordConfirmation(pass, confirmPass) {
 }
 
 export function validateFraudType(input) {
-  const allowedFraudValues = [
-      "wire_fraud", "money_laundering", "creditcard_fraud",
+  const allowedFraudValues = new Set([
+    "wire_fraud", "money_laundering", "creditcard_fraud",
       "check_fraud", "insurance_fraud", "identify_theft",
-      "phishing", "embezzlement", "mortgage_fraud", "utility_scam"
-  ];
-  if(!allowedFraudValues.includes(input)){
+    "phishing", "embezzlement", "mortgage_fraud", "utility_scam"
+  ]);
+  if (!allowedFraudValues.has(input)) {
     throw new ValidationError("input does not match required fraud type");
   }
-  return input; 
+  return input;
 }
+
