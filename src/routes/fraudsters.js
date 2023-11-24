@@ -7,22 +7,7 @@ import * as validations from '../validations/Validations.js';
 import {buildFraudsterRequest} from '../util/ObjectUtil.js'
 
 
-// move to util
-const getFieldAndVal = (params,fieldArr) =>{
-
-  let fieldValueObj = {}
-  fieldArr.forEach( (fieldName) => {
-    fieldValueObj[fieldName] = null
-    if (params.searchField == fieldName){
-      fieldValueObj[fieldName] = params.searchValue
-    }
-  });
-
-  return fieldValueObj
-}
-
 const router = Router();
-
 
 router
   .route('/:searchField/:searchValue')
@@ -39,8 +24,7 @@ router
     // do the request
     let fraudstersArr = []
     try {
-        //let {name, ein, itin,ssn,email,phone} = getFieldAndVal(req.params,['name','ein','itin','ssn','email','phone'])
-        let {name, ein, itin,ssn,email,phone} = buildFraudsterRequest(req.params);
+        let {name,ein,itin,ssn,email,phone} = buildFraudsterRequest(req.params);
         if (name){
           fraudstersArr =  await fraudsterData.findFraudstersByName(name);
         }else{

@@ -35,6 +35,7 @@ export const createUser = async (
     firstName = validations.validateName(firstName, "firstName");
     lastName = validations.validateName(lastName, "lastName");
     companyName = validations.validateCompanyName(companyName);
+    console.log(phoneNumber)
     phoneNumber = validations.validatePhoneNumber(phoneNumber);
     password = validations.validatePassword(password);
     let hashedPassword = await hashPassword(password);
