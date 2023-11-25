@@ -168,7 +168,6 @@ $(document).ready(function() {
                     ssn: $('#rep-ssn').val(),
                     itin: $('#rep-itin').val(),
                     phoneNumber: $('#rep-phoneNumber').val(),
-                    date: $('#rep-date').val(),
                     fraudType: $('#rep-fraudType').val()
                 }),
                 success: function(response) {

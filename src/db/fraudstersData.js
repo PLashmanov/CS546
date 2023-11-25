@@ -138,7 +138,12 @@ export async function updateFraudsterAfterCreateReport(fraudsterId, ein, itin, s
   if (!updatedFraudster || !updatedFraudster._id) {
     throw new Error('Fraudster not found or couldnt be updated');
   }
-  await AlertService.getInstance().alertUsers(updatedFraudster._id.toString());
+  try{
+    await AlertService.getInstance().alertUsers(updatedFraudster._id.toString());
+  }
+  catch(ex){
+    console.error("error occured during email service: " , ex)
+  }
   return updatedFraudster;
 }
 
