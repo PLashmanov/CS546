@@ -220,3 +220,10 @@ export async function updateUser(
 
     return toReturn;
 }
+
+export async function getNumOfUsers() {
+    const userCollection = await users();
+    const count = await userCollection.countDocuments();
+    if (count === undefined) throw new Error('User count cannot be retrieved.');
+    return count;
+}

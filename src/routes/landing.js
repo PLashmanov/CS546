@@ -1,3 +1,4 @@
+import { MetricService } from '../services/MetricService.js';
 import {Router} from 'express';
 const router = Router();
 
@@ -7,6 +8,16 @@ router.get('/', async (req, res) => {
     } catch (e) {
         console.error(e);
         res.status(500).send("Error Rendering Page");
+    }
+});
+
+router.get('/metrics', async (req, res) => {
+    try {
+        let metrics =  await MetricService.getInstance().getMetrics();
+        return res.json(metrics);
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Error Getting Metrics");
     }
 });
 /*
