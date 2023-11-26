@@ -2,7 +2,8 @@ import * as deepEmailValidator from 'deep-email-validator';
 import { ObjectId } from 'mongodb';
 import validator from 'validator';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
-import { ValidationError } from '../error/customErrors.js';
+import { ValidationError,BusinessError } from '../error/customErrors.js';
+
 export const isValidEmailAddress = async (userEmail) => {
   const result = await deepEmailValidator.validate({
     email: userEmail,
@@ -204,6 +205,31 @@ export function validateReportIds(reportIds) {
       if (!validateId(reportIds[i])) throw new ValidationError("error: one ore more report IDs are invalid IDs");
     }
   }
+}
+
+export function validateUserFields(user){
+
+  let {email,firstName,lastName,companyName,phoneNumber,hashedPassword,notifications} = user;
+  let password = hashedPassword;
+  if (email === undefined || email === null ||
+    firstName === undefined || firstName === null ||
+    lastName === undefined || lastName === null ||
+    companyName === undefined ||
+    phoneNumber === undefined ||
+    password === undefined || password === null ||
+    notifications === undefined || notifications === null) {
+    throw new BusinessError('one or more arguments are missing in createUser');
+  }
+  email = this.validateEmail(email);
+
+  firstName = this.validateName(firstName, "firstName");
+  lastName = this.validateName(lastName, "lastName");
+  companyName = this.validateCompanyName(companyName);
+
+  phoneNumber = this.validatePhoneNumber(phoneNumber);
+  password = this.validatePassword(password);
+  //let hashedPassword = await hashPassword(password);
+  notifications = this.validateNotifications(notifications);
 }
 
 export function validateNotifications(notifications) {

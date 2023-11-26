@@ -10,18 +10,18 @@ export const seed_config = {
                 firstName: 'Bernadette',
                 lastName: 'Tromp',
                 companyName: 'Rosenbaum and Sons',
-                phoneNumber: '446.804.7850 x0965',
+                phoneNumber: '+12018478921',
                 hashedPassword: 'pFPyfWNX_G2ePa0',
                 numofReports: 0,
                 badge: false,
                 notifications: false
             },
             {
-                email: 'fo@yahoo.fr',
+                email: 'fo@yahoo.com',
                 firstName: 'Langly',
                 lastName: 'Nomo',
                 companyName: 'Bonds and Sons',
-                phoneNumber: '546.804.7850 x0965',
+                phoneNumber: '+12128478921',
                 hashedPassword: 'pFPyfWNX_G2ePa0',
                 numofReports: 0,
                 badge: false,
@@ -128,7 +128,7 @@ export function trimIfNeeded(toTrim,num){
 
 export function createUser(email, firstName, lastName, companyName, phoneNumber, hashedPassword) {
     return {
-      email: ( (email != null )? email : [faker.internet.email()]),
+      email: ( (email != null )? email : faker.internet.email()),
       firstName: ( (firstName != null ) && (typeof firstName != 'number') && (firstName != 0) ? firstName : faker.person.firstName()),
       lastName: ( (lastName != null )? lastName : faker.person.lastName()),
       companyName: ( (companyName != null )? companyName : faker.company.name()),

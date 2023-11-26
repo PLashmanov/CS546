@@ -7,7 +7,23 @@ import bcrypt from 'bcrypt';
 import { BusinessError } from '../error/customErrors.js';
 import * as reportsData from './reportsData.js';
 
+export const insertMany = async (usersToInsert) =>{
 
+    usersToInsert.forEach(userToInsert => {
+        validations.validateUserFields(userToInsert)
+        validExistingUser(userToInsert.email);
+    });
+    const userCollection = await users();
+    await userCollection.insertMany(usersToInsert);
+}
+
+
+const validExistingUser = async(email) =>{
+
+    const userCollection = await users();
+    const existingUser = await userCollection.findOne({ email: email });
+    if (existingUser) throw new BusinessError(`user with email ${email} already exists`);
+}
 export const createUser = async (
     email,
     firstName,
@@ -35,7 +51,7 @@ export const createUser = async (
     firstName = validations.validateName(firstName, "firstName");
     lastName = validations.validateName(lastName, "lastName");
     companyName = validations.validateCompanyName(companyName);
-    console.log(phoneNumber)
+
     phoneNumber = validations.validatePhoneNumber(phoneNumber);
     password = validations.validatePassword(password);
     let hashedPassword = await hashPassword(password);

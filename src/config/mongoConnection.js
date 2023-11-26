@@ -16,5 +16,11 @@ export const dbConnection = async () => {
 };
 
 export const closeConnection = async () => {
-  await _connection.close();
+  if (isConnected()){
+    await _connection.close();
+  }
 };
+
+function isConnected() {
+  return !!_connection && !!_connection.topology && _connection.topology.isConnected()
+}
