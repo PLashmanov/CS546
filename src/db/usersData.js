@@ -62,6 +62,16 @@ export const createUser = async (
     return user;
 };
 
+export const getUserWithBadgeCount = async () => {
+    
+    const userCollection = await users();
+    const user = await userCollection
+    .find({ badge: true })
+    .toArray();
+    
+    return user.length;
+};
+
 export const getUserById = async (id) => {
     id = validations.validateId(id);
     const userCollection = await users();

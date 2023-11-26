@@ -1,4 +1,4 @@
-import { getNumOfUsers } from "../db/usersData.js";
+import { getNumOfUsers, getUserWithBadgeCount } from "../db/usersData.js";
 import { getNumOfFraudsters } from "../db/fraudstersData.js";
 import { getNumOfReports } from "../db/reportsData.js";
 
@@ -15,7 +15,7 @@ export class MetricService {
 
         let userCnt = await getNumOfUsers();
         //TODO
-        let userCntWithBadge = 0;
+        let userCntWithBadge = await getUserWithBadgeCount();
         let fraudstersCnt = await getNumOfFraudsters();
         //TODO
         let fraudsterCntTrending = 0;
