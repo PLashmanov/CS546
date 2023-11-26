@@ -9,14 +9,15 @@ import * as reportsData from './reportsData.js';
 
 export const insertMany = async (usersToInsert) =>{
 
+    // valdiate input
     usersToInsert.forEach(userToInsert => {
         validations.validateUserFields(userToInsert)
         validExistingUser(userToInsert.email);
     });
+    // inserrt many
     const userCollection = await users();
     await userCollection.insertMany(usersToInsert);
 }
-
 
 const validExistingUser = async(email) =>{
 
@@ -24,6 +25,7 @@ const validExistingUser = async(email) =>{
     const existingUser = await userCollection.findOne({ email: email });
     if (existingUser) throw new BusinessError(`user with email ${email} already exists`);
 }
+
 export const createUser = async (
     email,
     firstName,
