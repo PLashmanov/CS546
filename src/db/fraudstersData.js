@@ -207,6 +207,17 @@ export async function findFraudsterByKeyAttributes(ein, itin, ssn, email, phone)
   }
 }
 
+export async function getFraudsterTrendingCount() {
+  const fraudstersCollection = await fraudsters();
+  const fraudsterTrending = await fraudstersCollection
+  .find({ trending: true })
+  .toArray();
+
+  return fraudsterTrending.length;
+}
+
+
+
 export async function getNumOfFraudsters() {
   const fraudstersCollection = await fraudsters();
   const count = await fraudstersCollection.countDocuments();
