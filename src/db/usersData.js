@@ -62,6 +62,16 @@ export const createUser = async (
     return user;
 };
 
+export const getUserWithBadgeCount = async () => {
+    
+    const userCollection = await users();
+    const user = await userCollection
+    .find({ badge: true })
+    .toArray();
+    
+    return user.length;
+};
+
 export const getUserById = async (id) => {
     id = validations.validateId(id);
     const userCollection = await users();
@@ -219,4 +229,11 @@ export async function updateUser(
     const toReturn = await getUserById(userId);
 
     return toReturn;
+}
+
+export async function getNumOfUsers() {
+    const userCollection = await users();
+    const count = await userCollection.countDocuments();
+    if (count === undefined) throw new Error('User count cannot be retrieved.');
+    return count;
 }
