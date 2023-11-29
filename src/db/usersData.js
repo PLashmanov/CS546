@@ -63,12 +63,12 @@ export const createUser = async (
 };
 
 export const getUserWithBadgeCount = async () => {
-    
+
     const userCollection = await users();
     const user = await userCollection
-    .find({ badge: true })
-    .toArray();
-    
+        .find({ badge: true })
+        .toArray();
+
     return user.length;
 };
 
@@ -161,7 +161,13 @@ export async function updateReportsAfterRemoveUser(userId) {
     //make changes in reports collection:
     //update userId in reports colelction to the id of the master. Save as string
     let usersCollection = await users();
-    let master = await usersCollection.findOne({ firstName: "MASTER" });
+    let master = await usersCollection.findOne({
+        $and: [
+            { name: "MASTER" },
+            { email: "N/A" }
+        ]
+    });
+
     if (!master) throw new BusinessError(`error: users collection must have a Master`);
     let idToChangeTo = master._id.toString();
     if (idToChangeTo === userId) throw new Error(`error: Master cannot be deleted`);
@@ -236,4 +242,22 @@ export async function getNumOfUsers() {
     const count = await userCollection.countDocuments();
     if (count === undefined) throw new Error('User count cannot be retrieved.');
     return count;
+}
+
+export async function createMaster() {
+    let email = "N/A";
+    let name = "MASTER";
+
+    let master = {
+        name: name,
+        email: email
+    }
+
+    const userCollection = await users();
+    const insertedMaster = await userCollection.insertOne(master);
+    if (!insertedMaster.acknowledged || !insertedMaster.insertedId) throw new Error(`error: could not add Master`);
+
+    const newId = insertedMaster.insertedId.toString();
+    const userMaster = await getUserById(newId);
+    return userMaster;
 }
