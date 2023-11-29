@@ -12,7 +12,7 @@ const constructorMethod = (app) => {
   app.use(express.static('public'));
   app.use('/images', express.static('images'));
   app.use('*', (req, res) => {
-    res.status(400).render('error', { message: "Page Not Found" });
+    res.status(400).render('error', {title:"error", message: "Page Not Found" });
   });
 };
 

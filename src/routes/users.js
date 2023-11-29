@@ -133,7 +133,7 @@ router.get('/profile', async (req, res) => {
             });
         }
         else{
-            res.status(400).render('error', { message: "User Not Logged In!" });
+            res.status(400).render('error', {title: "error", message: "User Not Logged In!" });
         }
     }
     catch (ex) {
@@ -165,7 +165,7 @@ router.put('/update', async (req, res) => {
         return res.status(200).json({ message: user});
     }
         else{
-            res.status(400).render('error', { message: "user not logged in" });
+            res.status(400).render('error', {title: "error", message: "user not logged in" });
         }
     } catch (ex) {
         if (ex instanceof ValidationError) {
