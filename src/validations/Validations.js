@@ -3,6 +3,9 @@ import { ObjectId } from 'mongodb';
 import validator from 'validator';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { ValidationError } from '../error/customErrors.js';
+
+export const FRAUDSTER_FIELDS = ['name','id','ein','itin','ssn','email','phone']
+
 export const isValidEmailAddress = async (userEmail) => {
   const result = await deepEmailValidator.validate({
     email: userEmail,
@@ -250,7 +253,7 @@ export function validateRequestHas1Field(params, arr) {
 }
 
 export function validateFraudsterAttrRequest(params) {
-  return validateRequestHas1Field(params, ['name', 'ein', 'itin', 'ssn', 'email', 'phone']);
+  return validateRequestHas1Field(params, FRAUDSTER_FIELDS);
 }
 
 export function validatePasswordConfirmation(pass, confirmPass) {
@@ -269,5 +272,38 @@ export function validateFraudType(input) {
     throw new ValidationError("input does not match required fraud type");
   }
   return input;
+}
+
+export function fraudsterSearchWrappedValidation(name,id,ein,itin,ssn,email,phone){
+
+  if (name){
+    this.validateName(name);
+  }
+
+  if (id){
+    this.validateId(id);
+  }
+
+  if (ein){
+    this.validateEIN(ein);
+  }
+
+  if (itin){
+    this.validateITIN(itin);
+  }
+
+  if (ssn){
+    this.validateSSN(ssn);
+  }
+
+  if (email){
+    this.validateEmailFr(email);
+  }
+
+  if (phone){
+    this.validatePhoneNumberFr(phone);
+  }
+
+ 
 }
 

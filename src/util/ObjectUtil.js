@@ -1,6 +1,6 @@
-// move to util
 
- const FRAUDSTER_FIELDS = ['name','ein','itin','ssn','email','phone']
+
+ import * as validations from '../validations/Validations.js';
 
  const getFieldAndVal = (params,fieldArr) =>{
 
@@ -16,5 +16,5 @@
   }
 
   export const buildFraudsterRequest = (params ) =>{
-    return getFieldAndVal(params,FRAUDSTER_FIELDS);
+    return getFieldAndVal(params,validations.FRAUDSTER_FIELDS);
   }
