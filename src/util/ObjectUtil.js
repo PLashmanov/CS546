@@ -1,6 +1,6 @@
 // move to util
 
- const FRAUDSTER_FIELDS = ['name','ein','itin','ssn','email','phone']
+ const FRAUDSTER_FIELDS = ['name','id','ein','itin','ssn','email','phone']
 
  const getFieldAndVal = (params,fieldArr) =>{
 

@@ -7,20 +7,6 @@ import * as validations from '../validations/Validations.js';
 import {buildFraudsterRequest} from '../util/ObjectUtil.js'
 
 
-// move to util
-const getFieldAndVal = (params,fieldArr) =>{
-
-  let fieldValueObj = {}
-  fieldArr.forEach( (fieldName) => {
-    fieldValueObj[fieldName] = null
-    if (params.searchField == fieldName){
-      fieldValueObj[fieldName] = params.searchValue
-    }
-  });
-
-  return fieldValueObj
-}
-
 const router = Router();
 
 
@@ -28,10 +14,13 @@ router
   .route('/:searchField/:searchValue')
   .get(async (req, res) => {
 
-    // input validation
+    // extract attribute
+    let {name,id,ein,itin,ssn,email,phone} = buildFraudsterRequest(req.params);
+
+    // validations
     try{
       validations.validateFraudsterAttrRequest(req.params)
-      // to do validation on all input types
+      validations.fraudsterSearchWrappedValidation(name,id,ein,itin,ssn,email,phone)
     }catch(e){
       return res.status(400).send(e);
     }
@@ -39,12 +28,14 @@ router
     // do the request
     let fraudstersArr = []
     try {
-        //let {name, ein, itin,ssn,email,phone} = getFieldAndVal(req.params,['name','ein','itin','ssn','email','phone'])
-        let {name, ein, itin,ssn,email,phone} = buildFraudsterRequest(req.params);
         if (name){
           fraudstersArr =  await fraudsterData.findFraudstersByName(name);
+        }else if (id){
+          let fraudster = await fraudsterData.getFraudsterById(id);
+          if (fraudster){
+            fraudstersArr.push(fraudster)
+          }
         }else{
-
           let fraudster = await fraudsterData.findFraudsterByKeyAttributes(ein, itin, ssn, email, phone)
           if (fraudster){
             fraudstersArr.push(fraudster)
@@ -52,7 +43,7 @@ router
         }
         return res.json(fraudstersArr);
       } catch (e) {
-        return res.status(200).send(e);
+        return res.status(500).send(e);
     }
   })
   
@@ -93,5 +84,6 @@ router.post('/report', async (req, res) => {
 function convertEmptyField(value) {
   return value || null;
 }
+
 
 export default router;
