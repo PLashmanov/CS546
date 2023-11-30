@@ -3,6 +3,9 @@ import { ObjectId } from 'mongodb';
 import validator from 'validator';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { ValidationError } from '../error/customErrors.js';
+
+export const FRAUDSTER_FIELDS = ['name','id','ein','itin','ssn','email','phone']
+
 export const isValidEmailAddress = async (userEmail) => {
   const result = await deepEmailValidator.validate({
     email: userEmail,
@@ -250,7 +253,7 @@ export function validateRequestHas1Field(params, arr) {
 }
 
 export function validateFraudsterAttrRequest(params) {
-  return validateRequestHas1Field(params, ['name', 'id', 'ein', 'itin', 'ssn', 'email', 'phone']);
+  return validateRequestHas1Field(params, FRAUDSTER_FIELDS);
 }
 
 export function validatePasswordConfirmation(pass, confirmPass) {
