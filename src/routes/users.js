@@ -66,17 +66,83 @@ router.delete('/delete', async (req, res) => {
     }
 });
 router.get('/report', async (req, res) => {
-    try {
-        res.render('report', {title: "Report A Fraudster",userLoggedIn: req.session && req.session.isLoggedIn});
-    } catch (e) {
-        console.error(e);
-        res.status(500).send("Error Rendering Page");
+    try{
+        if (req.session.isLoggedIn && req.session.user) {
+            const userInfo = await getUserById(req.session.user.id)
+            res.render('report', { 
+                title: 'Report',
+                user: userInfo,
+                userLoggedIn:true,
+            });
+        }
+        else{
+            res.status(400).render('error', {title: "error", message: "User Not Logged In!" });
+        }
     }
+    catch (ex) {
+        if (ex instanceof ValidationError) {
+            res.status(400).render('error', { message: ex.message });
+        }
+        else if (ex instanceof BusinessError) {
+            res.status(409).render('error', { message: ex.message });
+        }
+        res.status(400).render('error', { message: ex.message });
+    }
+    
 });
-
+router.get('/dashboard', async (req, res) => {
+    try{
+        if (req.session.isLoggedIn && req.session.user) {
+            const userInfo = await getUserById(req.session.user.id)
+            res.render('dashboard', { 
+                title: 'Dashboard',
+                user: userInfo,
+                userLoggedIn:true,
+            });
+        }
+        else{
+            res.status(400).render('error', {title: "error", message: "User Not Logged In!" });
+        }
+    }
+    catch (ex) {
+        if (ex instanceof ValidationError) {
+            res.status(400).render('error', { message: ex.message });
+        }
+        else if (ex instanceof BusinessError) {
+            res.status(409).render('error', { message: ex.message });
+        }
+        res.status(400).render('error', { message: ex.message });
+    }
+    
+});
 router.get('/lookup', async (req, res) => {
+    try{
+        if (req.session.isLoggedIn && req.session.user) {
+            const userInfo = await getUserById(req.session.user.id)
+            res.render('lookup', { 
+                title: 'Search for Fraudster',
+                user: userInfo,
+                userLoggedIn:true,
+            });
+        }
+        else{
+            res.status(400).render('error', {title: "error", message: "User Not Logged In!" });
+        }
+    }
+    catch (ex) {
+        if (ex instanceof ValidationError) {
+            res.status(400).render('error', { message: ex.message });
+        }
+        else if (ex instanceof BusinessError) {
+            res.status(409).render('error', { message: ex.message });
+        }
+        res.status(400).render('error', { message: ex.message });
+    }
+    
+});
+router.get('/feedback', async (req, res) => {
     try {
-        res.render('lookup', {title: "Look up A Fraudster",userLoggedIn: req.session && req.session.isLoggedIn});
+        res.render('feedback', {title: "Feedback or Questions",userLoggedIn: req.session && req.session.isLoggedIn});
     } catch (e) {
         console.error(e);
         res.status(500).send("Error Rendering Page");
