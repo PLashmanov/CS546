@@ -37,7 +37,7 @@ export async function findReviewById(reviewId) {
 
 export async function getAllReviews() {
     const reviewsCollection = await reviews();
-    const allReviews = await reviewsCollection.find().sort({ date: -1 }).toArray();
+    const allReviews = await reviewsCollection.find().sort({ date: -1 }).limit(50).toArray();
 
     allReviews.forEach(review => {
         if (review.date) {
