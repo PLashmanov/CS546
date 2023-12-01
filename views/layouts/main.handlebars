@@ -1,47 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-      <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles.css">
     <title>{{title}}</title>
 </head>
+
 <body>
-     <header>
+    <header>
         <div class="logo">
             <a href="/user/index">
-             <img alt="frap-logo" src="../Images/logo.png" class="logo">
+                <img alt="frap-logo" src="../Images/logo.png" class="logo">
             </a>
-         </div>
-         <div>
-         <nav>
-             <ul class="nav-links">
-                 <li class="nav-item"><a href="/user/about">About</a></li>
-                 <li class="nav-item"><a href="/user/contact">Contact Us</a></li>
-                 <li class ="nav-item"><a href="/user/register" class="register">Register</a></li>
-                 <li class = "nav-item"><a href = "/user/report">Report</a></li>
-                 <li class = "nav-item"><a href = "/user/lookup">Look Up</a></li>
-                 {{#if userLoggedIn}}
-                 <li class="nav-item"><span id="logout">Logout</span></li> 
-                 {{else}}
-                 <li class = "nav-item"><a href = "/user/login">Log In</a></li>
-                 {{/if}}
-                <li class = "nav-item"><a href = "/user/profile">Profile</a></li>
-             </ul>
-         </nav>
-     </div>
-        
-         </header>
-         <div class="banner-container">
-             <img src="../Images/banner2.jpg" class="banner" alt="Frap Banner">
-          </div>
-     
+        </div>
+        <div>
+            <nav>
+                <ul class="nav-links">
+                    <li class="nav-item"><a href="/user/about">About</a></li>
+                    <li class="nav-item"><a href="/user/contact">Contact Us</a></li>
+                    <li class="nav-item"><a href="/user/register" class="register">Register</a></li>
+                    <li class="nav-item"><a href="/user/report">Report</a></li>
+                    <li class="nav-item"><a href="/user/lookup">Look Up</a></li>
+                    {{#if userLoggedIn}}
+                    <li class="nav-item"><span id="logout">Logout</span></li>
+                    {{else}}
+                    <li class="nav-item"><a href="/user/login">Log In</a></li>
+                    {{/if}}
+                    <li class="nav-item"><a href="/user/profile">Profile</a></li>
+                    <li class="nav-item"><a href="/reviews">Reviews</a></li>
+                </ul>
+            </nav>
+        </div>
+
+    </header>
+    <div class="banner-container">
+        <img src="../Images/banner2.jpg" class="banner" alt="Frap Banner">
+    </div>
+
     {{{body}}}
-     <script src="/js/common.js"></script>
-  <footer>
+    <script src="/js/common.js"></script>
+    <footer>
         <p>&copy; 2023 FRAP App</p>
-</footer>   
+    </footer>
 </body>
 
 </html>
