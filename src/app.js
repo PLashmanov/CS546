@@ -1,17 +1,18 @@
 import dotenv from 'dotenv';
 import configRoutesFunction from './routes/index.js';
 import express from 'express';
-import session  from "express-session";
+import session from "express-session";
 import MongoStore from 'connect-mongo';
 import exphbs from 'express-handlebars';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-async function main() {  
+async function main() {
 
     dotenv.config();
     const app = express();
-    app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
+    app.engine('handlebars', exphbs.engine({ defaultLayout: 'main' }));
     app.set('view engine', 'handlebars');
+    app.use(express.urlencoded({ extended: true }));
 
     app.use(session({
         name: 'FrapSess',
@@ -20,7 +21,7 @@ async function main() {
         saveUninitialized: false,
         store: MongoStore.create({
             mongoUrl: process.env.MONGO_SESSION_URL
-          }) ,  
+        }),
         cookie: {
             maxAge: 3600000,
             secure: false
@@ -35,7 +36,7 @@ async function main() {
     app.use(express.json());
     configRoutesFunction(app);
     app.listen(3000, () => {
-    console.log('app running on http://localhost:3000');
+        console.log('app running on http://localhost:3000');
     });
 }
 main();
