@@ -404,3 +404,10 @@ footer {
 .review-group textarea {
     height: 150px;
 }
+
+.reviewError {
+    color: red;
+    font-size: 15px;
+    margin-top: 20px;
+    text-align: center;
+}

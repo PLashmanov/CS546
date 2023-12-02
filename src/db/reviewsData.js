@@ -26,7 +26,7 @@ export async function createReview(userId, nickName, body) {
     const reviewId = insertedReview.insertedId.toString();
     const reviewToReturn = await findReviewById(reviewId);
 
-    return reviewToReturn;
+    return { insertedReview: true };
 }
 
 export async function findReviewById(reviewId) {

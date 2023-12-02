@@ -1,14 +1,20 @@
+{{#if errorMessage}}
+<p id="reviewError" class="reviewError">{{errorMessage}}</p>
+{{/if}}
+
 <div class="submit-review-container">
     <h2>Submit Your Review</h2>
-    <form action="/reviews/submit-review" method="POST">
+    <form id="reviews-form" action="/reviews/submit-review" method="POST">
         <div class="review-group">
             <label for="nickName">Nickname:</label>
-            <input type="text" id="nickName" name="nickName" required>
+            <input type="text" id="nickName" name="nickName" value="{{nickNameInput}}" required>
         </div>
-        <div class="review-group">
+        <div class=" review-group">
             <label for="reviewBody">Review:</label>
-            <textarea id="reviewBody" name="body" required></textarea>
+            <textarea id="reviewBody" name="body" required>{{bodyInput}}</textarea>
         </div>
-        <button class="button" type="submit">Submit Review</button>
+        <button class=" button" type="submit">Submit Review</button>
     </form>
 </div>
+
+<script src="/js/clientSideValidationReviews.js"></script>
