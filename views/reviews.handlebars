@@ -1,0 +1,21 @@
+<div class="submit-review-link">
+    <a href="/reviews/submit-review">Review Frap</a>
+</div>
+
+<div class="reviews-container">
+    <h2>Reviews</h2>
+
+    {{#if reviews.length}}
+    <ul class="reviews-list">
+        {{#each reviews}}
+        <li class="review-item">
+            <h3>{{this.nickName}}</h3>
+            <p>{{this.body}}</p>
+            <span class="review-date">{{this.formattedDate}}</span>
+        </li>
+        {{/each}}
+    </ul>
+    {{else}}
+    <p>No reviews available.</p>
+    {{/if}}
+</div>

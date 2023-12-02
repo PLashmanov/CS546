@@ -4,7 +4,7 @@ import validator from 'validator';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { ValidationError } from '../error/customErrors.js';
 
-export const FRAUDSTER_FIELDS = ['name','id','ein','itin','ssn','email','phone']
+export const FRAUDSTER_FIELDS = ['name', 'id', 'ein', 'itin', 'ssn', 'email', 'phone']
 
 export const isValidEmailAddress = async (userEmail) => {
   const result = await deepEmailValidator.validate({
@@ -265,7 +265,7 @@ export function validatePasswordConfirmation(pass, confirmPass) {
 export function validateFraudType(input) {
   const allowedFraudValues = new Set([
     "wire_fraud", "money_laundering", "creditcard_fraud",
-      "check_fraud", "insurance_fraud", "identify_theft",
+    "check_fraud", "insurance_fraud", "identify_theft",
     "phishing", "embezzlement", "mortgage_fraud", "utility_scam"
   ]);
   if (!allowedFraudValues.has(input)) {
@@ -274,36 +274,47 @@ export function validateFraudType(input) {
   return input;
 }
 
-export function fraudsterSearchWrappedValidation(name,id,ein,itin,ssn,email,phone){
+export function fraudsterSearchWrappedValidation(name, id, ein, itin, ssn, email, phone) {
 
-  if (name){
+  if (name) {
     this.validateName(name);
   }
 
-  if (id){
+  if (id) {
     this.validateId(id);
   }
 
-  if (ein){
+  if (ein) {
     this.validateEIN(ein);
   }
 
-  if (itin){
+  if (itin) {
     this.validateITIN(itin);
   }
 
-  if (ssn){
+  if (ssn) {
     this.validateSSN(ssn);
   }
 
-  if (email){
+  if (email) {
     this.validateEmailFr(email);
   }
 
-  if (phone){
+  if (phone) {
     this.validatePhoneNumberFr(phone);
   }
 
- 
+
 }
 
+export function validateBody(body) {
+  body = validateString(body, "review");
+  if (body.length < 10 || body.length > 250) throw new ValidationError("review length must be between 10 and 250 characters");
+  return body;
+}
+
+export function validateNickname(name) {
+  name = validateString(name, "name");
+  if (name.length < 2 || name.length > 20) throw new ValidationError("nickname length must be between 2 and 30");
+  return name;
+}
