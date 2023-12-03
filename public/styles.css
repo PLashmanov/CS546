@@ -445,3 +445,49 @@ footer {
 #review-img {
     width:150px;
 }
+
+#dash-table {
+    width: 100%;
+    display: table;
+}
+#dash-table-body{
+    display: table-row-group;
+}
+.dash-table-row{
+    display: table-row;
+    background-color: lightslategray;
+}
+.dash-table-body-cell-metric{
+    display: table-cell;
+    border: .25px solid #dddddd;
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: middle;
+    font-size: 4em;
+    font-weight: bolder;
+    color: #1b1b1b;
+}
+
+.dash-table-body-cell{
+    display: table-cell;
+    border: .25px solid #dddddd;
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+
+}
+
+.dash-table-body{
+    display: table-cell;
+    border: .25px solid #dddddd;
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    
+}
+
+#p-metric-header {
+    font-size: medium;
+    font-weight: 100;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}

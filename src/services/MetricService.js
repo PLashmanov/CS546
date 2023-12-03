@@ -19,13 +19,12 @@ export class MetricService {
         let fraudsterCntTrending = await getFraudsterTrendingCount()
         let reportCnt = await getNumOfReports();
         //TODO
-        let reportTop5 = await this.getType5Fraud();
+        let numTopFraud = 50
+        let topFraudType= "insurance_fraud"
+        let numReviews = 55
+        return  {numUsers : userCnt, numUsersWithBadges: userCntWithBadge, numFraudsters: fraudstersCnt, numTrendingFraudsters: fraudsterCntTrending, numReports: reportCnt, numTopFraud: numTopFraud, topFraudType: topFraudType, numReviews: numReviews };
+      }
 
-        return  {numUsers : userCnt, numUsersWithBadges: userCntWithBadge, numFraudsters: fraudstersCnt, numTrendingFraudsters: fraudsterCntTrending, numReports: reportCnt,  top5FraudTypes: reportTop5};
-      }
-      async getType5Fraud() {
-        return [ {type: 'wire_fraud', cnt: 5},{type: 'creditcard_fraud', cnt: 4} ,{type: 'check_fraud', cnt: 3} ,{type: 'insurance_fraud', cnt: 2} ,{type: 'identify_theft', cnt: 1} ]
-      }
 
 }
 
