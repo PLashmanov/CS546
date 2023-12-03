@@ -14,29 +14,6 @@ $(document).on('click', '#logout', function(e) {
     });
 });
 
-
- //report functions date mandatory and 1 other mandatory field,needs more validations for email and other stuff.
-
-function validateReport(){
-    const dateField = document.getElementById('rep-fraudDate');
-    const restFields = ['rep-firstName', 'rep-lastName', 'rep-email', 'rep-website', 'rep-phoneNumber'];
-
-    if(dateField.value.trim() === ''){
-        alert('Date is required.');
-        return false;
-    }
-
-    const oneFieldCompleted = restFields.some(fieldName => {
-        const field = document.getElementById(fieldName);
-        return field.value.trim() !== '';
-    });
-    if(!oneFieldCompleted) {
-        alert('At least one field is required.');
-        return false;
-    }
-    return true;
-}
-
 $(document).ready(function() {
     $('#registrationForm').on('submit', function(event) {
         event.preventDefault();

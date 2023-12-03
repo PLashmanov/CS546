@@ -288,10 +288,15 @@ footer {
     margin: 20px auto;
 }
 
-.reg-error{
+.reg-error, .rep-error{
     display: none;
     color: red;
     font-size: 0.8em;
+}
+.report-error {
+    display:none;
+    color:red;
+    font-size:1.3em;
 }
 #error-message {
     color: red;
