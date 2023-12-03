@@ -13,7 +13,7 @@ function validateNameClient(name) {
 }
 
 function validateCompanyNameClient(companyName) {
-    return companyName.length >= 3 && companyName.length <= 50;
+    return companyName.length === 0 || (companyName.length >= 3 && companyName.length <= 50);
 }
 
 function validatePasswordClient(password) {
@@ -88,9 +88,9 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('confirm-password-error').textContent = '';
         }
         if (!validateCompanyNameClient(companyName)) {
-            const companyNameError = document.getElementById('company-name-error');
-            companyNameError.textContent = 'Invalid company name';
-            companyNameError.style.display = 'block';
+            document.getElementById('company-name-error').textContent = 'Company name must be between 3 and 50 characters';
+            document.getElementById('company-name-error').style.display = 'block';
+            isValid = false;
         } else {
             document.getElementById('company-name-error').style.display = 'none';
             document.getElementById('company-name-error').textContent = '';
