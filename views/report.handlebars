@@ -1,44 +1,52 @@
 <section id="reportFraud">
         <h1>Report Fraud</h1>
         <br>
+        <span class="report-error" id="report-error"></span>
         <form id="reportForm">
             <div class="input-group">
             <p>Please enter any fraud information encountered and click Report Fraud when finished.</p>
-            <div class ="person reporting">
+            <div class="input-group required" >
                 <br>
-                <label for="rep-name">Name</label>
-                <input type="text" id="rep-name" name="name" placeholder="John Smith">
+                <label for="rep-name" >Your Name</label>
+                <input type="text" id="rep-name" name="name" placeholder="John Smith" required>
+                <span class="rep-error" id="name-error"></span>
             </div>
                 <br>
             <div class="input-group">
                 <label for="rep-email">Email</label>
                 <input type="email" id="rep-email" name="email"  placeholder="jsmith@gmail.com">
+                <span class="rep-error" id="email-error"></span>
             </div>
                 <br>
             <div class="input-group">
                 <label for="rep-ein">EIN</label>
                 <input type="text" id="rep-ein" name="ein" placeholder="12-3456789">
+                <span class="rep-error" id="ein-error"></span>
             </div>
             <br>
             <div class="input-group">
                 <label for="rep-ssn">SSN</label>
                 <input type="text" id="rep-ssn" name="ssn" placeholder="123-45-6789">
+                <span class="rep-error" id="ssn-error"></span>
             </div>
             <br>
             <div class="input-group">
                 <label for="rep-itin">ITIN</label>
                 <input type="text" id="rep-itin" name="itin" placeholder="999-45-6789">
+                <span class="rep-error" id="itin-error"></span>
             </div>
             <br>
             <div class="input-group">
                 <label for="rep-phoneNumber">Phone Number</label>
-                <input type="tel" id="rep-phoneNumber" name="phoneNumber" placeholder="808-000-8899">
+                <input type="tel" id="rep-phoneNumber" name="phoneNumber" placeholder="808-000-8899" value="+1">
+                <span class="rep-error" id="phone-error"></span>
             </div>
             <br>
           </div>
                 <div class = "input-group">
                 <label for="rep-fraudType">Fraud Type:</label>
                 <select name="fraudType" id="rep-fraudType">
+                        <option value="select_fraud_type">Select Fraud Type</option>
                         <option value="wire_fraud">Wire Fraud</option>
                         <option value ="money_laundering">Money Laundering</option>
                         <option value ="creditcard_fraud">Credit Card Fraud</option>
@@ -57,3 +65,4 @@
         <br>
         <p id="error-message"></p>
     </section>
+    <script src="/js/clientSideReport.js"></script>
