@@ -14,23 +14,16 @@ function validateFeedbackText(feedbackText) {
     const minLetterPercentage = 0.6;
 
     if (!feedbackText || feedbackText.trim().length < minLength || feedbackText.trim().length > maxLength) {
-        console.log("Length check failed");
-        return false; // Check length requirements
+        
+        return false;
     }
 
     const lettersCount = feedbackText.split('').filter(char => char.match(/[A-Za-z]/)).length;
     const letterPercentage = lettersCount / feedbackText.trim().length;
-
-    console.log("Letters Count:", lettersCount);
-    console.log("Total Length:", feedbackText.trim().length);
-    console.log("Letter Percentage:", letterPercentage);
-
     if (letterPercentage < minLetterPercentage) {
-        console.log("Letter percentage check failed");
-        return false; // Check letter percentage
+        return false;
     }
-
-    return true; // Passed all checks
+    return true;
 }
 
 
@@ -74,8 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('text-error').textContent = '';
         }
 
-        if (isValid){
-            form.submit();
+        if (!isValid){
+            event.preventDefault();
         }
     });
 });

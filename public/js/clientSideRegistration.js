@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const password = document.getElementById('reg-password').value;
         const confirmPassword = document.getElementById('reg-confirm-password').value;
 
-        // Validate first name
+        
         if (!validateNameClient(firstName)) {
             const firstNameError = document.getElementById('first-name-error');
             firstNameError.textContent = 'Invalid first name';
