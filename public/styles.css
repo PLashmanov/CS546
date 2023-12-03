@@ -288,6 +288,11 @@ footer {
     margin: 20px auto;
 }
 
+.reg-error{
+    display: none;
+    color: red;
+    font-size: 0.8em;
+}
 #error-message {
     color: red;
     margin-top: 20px;
@@ -377,9 +382,10 @@ footer {
 }
 
 .submit-review-link {
-    text-align: left;
+    text-align: center;
     margin-bottom: 20px;
     color: rgb(119, 155, 226);
+    padding: 20px;
 }
 
 .submit-review-link a {
@@ -387,12 +393,6 @@ footer {
     text-decoration: underline;
     font-weight: bold;
     font-size: large;
-}
-
-.submit-review-link {
-    padding: 20px;
-    text-align: right;
-    padding-right: 40px;
 }
 
 .submit-review-container {
@@ -440,4 +440,8 @@ footer {
     font-size: 15px;
     margin-top: 20px;
     text-align: center;
+}
+
+#review-img {
+    width:150px;
 }
