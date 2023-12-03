@@ -191,6 +191,7 @@ router.get('/contact', async (req, res) => {
         res.status(500).send("Error Rendering Page");
     }
 });
+
 router.get('/profile', async (req, res) => {
     try{
         if (req.session.isLoggedIn && req.session.user) {
