@@ -4,26 +4,31 @@
             <div class="input-group required">
                 <label for="reg-firstName" >First Name</label>
                 <input type="text" id="reg-firstName" name="firstName" required placeholder="Jane">
+                <span class="reg-error" id="first-name-error" hidden></span>
             </div>
             <br>
             <div class="input-group required">
                 <label for="reg-lastName" >Last Name</label>
                 <input type="text" id="reg-lastName" name="lastName" required placeholder="Smith">
+                <span class="reg-error" id="last-name-error"></span>
             </div>
             <br>
             <div class="input-group required">
                 <label for="reg-email">Email</label>
                 <input type="email" id="reg-email" name="email" required placeholder="jsmith@gmail.com">
+                <span class="reg-error" id="email-error"></span>
             </div>
             <br>
             <div class="input-group required">
                 <label for="company-name">Company Name</label>
-                <input type="text" id="company-name" name="company" required placeholder="My Company">
+                <input type="text" id="company-name" name="company" placeholder="My Company">
+                <span class="reg-error" id="company-name-error"></span>
             </div>
             <br>
             <div class="input-group required">
                 <label for="reg-phoneNumber" >Phone Number</label>
-                <input type="tel" id="reg-phoneNumber" name="phoneNumber" required placeholder="(808)-555-5588">
+                <input type="tel" id="reg-phoneNumber" name="phoneNumber" required placeholder="(808)-555-5588" value="+1">
+                <span class="reg-error" id="phone-error"></span>
             </div>
             <br>
             <div class="input-group">
@@ -35,11 +40,13 @@
             <div class = "input-group required">
                 <label for="reg-password">Desired Password</label>
                 <input type="password" id="reg-password" name="password" required>
+                <span class="reg-error" id="password-error"></span>
             </div>
             <br>
             <div class = "input-group required">
                 <label for="reg-confirm-password">Confirm Password</label>
                 <input type="password" id="reg-confirm-password" name="confirm-password" required>
+                <span class="reg-error" id="confirm-password-error"></span>
             </div>
             <br>
             <button type="submit" id="reg-submit" class="button">Register</button>
@@ -47,3 +54,4 @@
         <br>
         <p id="error-message"></p>
     </section>
+    <script src="/js/clientSideRegistration.js"></script>
