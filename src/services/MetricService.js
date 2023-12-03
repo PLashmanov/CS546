@@ -1,6 +1,7 @@
 import { getNumOfUsers, getUserWithBadgeCount } from "../db/usersData.js";
 import { getNumOfFraudsters, getFraudsterTrendingCount } from "../db/fraudstersData.js";
-import { getNumOfReports } from "../db/reportsData.js";
+import { getNumOfReports, getTopFraudTypeAndCount } from "../db/reportsData.js";
+import { getNumOfReviews } from "../db/reviewsData.js";
 
 export class MetricService {
     static instance = null;
@@ -18,14 +19,12 @@ export class MetricService {
         let fraudstersCnt = await getNumOfFraudsters();
         let fraudsterCntTrending = await getFraudsterTrendingCount()
         let reportCnt = await getNumOfReports();
-        //TODO
-        let reportTop5 = await this.getType5Fraud();
+        let numReviews = await getNumOfReviews();
+        let topFraudDetails = await getTopFraudTypeAndCount();
+                
+        return  {numUsers : userCnt, numUsersWithBadges: userCntWithBadge, numFraudsters: fraudstersCnt, numTrendingFraudsters: fraudsterCntTrending, numReports: reportCnt, numTopFraud: topFraudDetails.count, topFraudType: topFraudDetails.type, numReviews: numReviews };
+      }
 
-        return  {numUsers : userCnt, numUsersWithBadges: userCntWithBadge, numFraudsters: fraudstersCnt, numTrendingFraudsters: fraudsterCntTrending, numReports: reportCnt,  top5FraudTypes: reportTop5};
-      }
-      async getType5Fraud() {
-        return [ {type: 'wire_fraud', cnt: 5},{type: 'creditcard_fraud', cnt: 4} ,{type: 'check_fraud', cnt: 3} ,{type: 'insurance_fraud', cnt: 2} ,{type: 'identify_theft', cnt: 1} ]
-      }
 
 }
 

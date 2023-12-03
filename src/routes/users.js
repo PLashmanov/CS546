@@ -2,6 +2,7 @@ import {Router} from 'express';
 import  {createUser, removeUser , getUserById , updateUser} from '../db/usersData.js';
 import { ValidationError, BusinessError} from '../error/customErrors.js';
 import  LoginService from '../services/LoginService.js';
+import { MetricService } from '../services/MetricService.js';
 import {validatePasswordConfirmation} from '../validations/Validations.js'
 const router = Router();
 
@@ -94,10 +95,12 @@ router.get('/dashboard', async (req, res) => {
     try{
         if (req.session.isLoggedIn && req.session.user) {
             const userInfo = await getUserById(req.session.user.id)
+            let metrics =  await MetricService.getInstance().getMetrics();
             res.render('dashboard', { 
                 title: 'Dashboard',
                 user: userInfo,
                 userLoggedIn:true,
+                metrics: metrics,
             });
         }
         else{

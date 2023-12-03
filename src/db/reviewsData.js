@@ -48,3 +48,11 @@ export async function getAllReviews() {
     })
     return allReviews;
 }
+
+export async function getNumOfReviews() {
+
+    const reviewsCollection = await reviews();
+    const count = await reviewsCollection.countDocuments();
+    if (count === undefined) throw new Error('User Reviews count cannot be retrieved.');
+    return count;
+}

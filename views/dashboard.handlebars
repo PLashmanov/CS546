@@ -1,1 +1,51 @@
-<h1>Work in progress</h1>
+
+
+<section id="dashboard">
+
+    <div id="dash-table">
+    <div id="dash-table-body">
+        <div class="dash-table-row"> 
+            <div class="dash-table-body-cell-metric">
+                 {{metrics.numUsers}}
+                 <p id="p-metric-header">Total Registered Users</p>
+            </div>
+            <div class="dash-table-body-cell-metric">
+                 {{metrics.numUsersWithBadges}}
+                 <p id="p-metric-header">Total Users With Badges</p>
+            </div>
+            <div class="dash-table-body-cell-metric">
+                 {{metrics.numFraudsters}}
+                 <p id="p-metric-header">Total Number Of Fraudsters</p>
+            </div>
+            <div class="dash-table-body-cell-metric">
+                 {{metrics.numTrendingFraudsters}}
+                 <p id="p-metric-header">Total Trending Fraudsters</p>
+            </div>
+        </div>
+
+        <div class="dash-table-row"> 
+            <div class="dash-table-body-cell-metric">
+                 {{metrics.numReports}}
+                 <p id="p-metric-header">Total Fraud Reports</p>
+            </div>
+            <div class="dash-table-body-cell-metric">
+                 {{metrics.numTopFraud}}
+                 <p id="p-metric-header">Top Fraud Type: {{metrics.topFraudType}}</p>
+            </div>
+            <div class="dash-table-body-cell-metric">
+                 {{metrics.numReviews}}
+                 <p id="p-metric-header">Total Number Of Reviews</p>
+            </div>
+            <div class="dash-table-body-cell-metric">
+                 4
+                 <p id="p-metric-header">Total Totally Cool Frap Developers</p>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</div>
+
+
+   
+</section>

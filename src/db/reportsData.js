@@ -101,3 +101,19 @@ export const getAllReportsForFraudster = async (fraudsterId) => {
     const fraudsterReports = fraudster.reports.map(report => report.reportId);
     return fraudsterReports;
 }
+
+
+export const getTopFraudTypeAndCount = async () => {
+
+    const reportsCollection = await reports();
+    const groupByResultArray = await reportsCollection
+        .aggregate([
+           {"$group" : {_id:{type:"$type"}, count:{$sum:1}}},{$sort:{"count":-1}}
+        ])
+        .limit(1)
+        .toArray()
+        
+    if (groupByResultArray === undefined) throw new Error(`could not get the top fraud type and count`);
+    return  {type: groupByResultArray[0]._id.type, count: groupByResultArray[0].count};
+
+}
