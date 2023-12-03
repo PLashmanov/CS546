@@ -173,14 +173,17 @@ export function validateNameFr(name) {
 }
 
 export function validateCompanyName(companyName) {
-  if (companyName === undefined) throw new ValidationError("error: companyName is missing");
-  if (typeof companyName !== 'string') throw new ValidationError("error: companyName must be a string");
-  companyName = companyName.trim();
-  if (companyName.length === 0) {
-    return 'N/A';
-  }
-  if (companyName.length < 3 || companyName.length > 50) throw new ValidationError("error: company name must be between 3 and 50 characters");
-  return companyName.toUpperCase();
+    if (typeof companyName !== 'string') {
+        return 'N/A'; 
+    }
+    companyName = companyName.trim();
+    if (companyName.length === 0) {
+        return 'N/A';
+    }
+    if (companyName.length < 3 || companyName.length > 50) {
+        throw new ValidationError("error: Company name must be between 3 and 50 characters");
+    }
+    return companyName.toUpperCase();
 }
 
 export function validateCity(city) {

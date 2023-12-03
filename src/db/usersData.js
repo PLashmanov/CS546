@@ -12,7 +12,7 @@ export const createUser = async (
     email,
     firstName,
     lastName,
-    companyName,
+    companyName = 'N/A',
     phoneNumber,
     password,
     notifications
@@ -21,7 +21,6 @@ export const createUser = async (
     if (email === undefined || email === null ||
         firstName === undefined || firstName === null ||
         lastName === undefined || lastName === null ||
-        companyName === undefined ||
         phoneNumber === undefined ||
         password === undefined || password === null ||
         notifications === undefined || notifications === null) {

@@ -10,7 +10,7 @@ router.post('/register', async (req, res) => {
             const { email, firstName, lastName, companyName, 
                   phoneNumber, password, confirmPassword, notifications } = req.body;
             
-            if (!email || !firstName || !lastName || !companyName || !phoneNumber || !password || !confirmPassword) {
+            if (!email || !firstName || !lastName || !phoneNumber || !password || !confirmPassword) {
             throw new ValidationError("required field is missing ");
             }
             validatePasswordConfirmation(password,confirmPassword)
