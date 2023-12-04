@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { DectionService } from '../services/DetectionService.js';
+import { FraudDectionService } from '../services/FraudDetectionService.js';
 import multer from 'multer';
+
 const upload = multer({ dest: './public/upload/' })
 
 const router = Router();
@@ -28,6 +29,6 @@ router.post('/submit-detect', upload.single('uploaded_file'), async (req, res) =
 
     const uploadedFile = req.file;
 
-    let detectionResult =  await DectionService.getInstance().detectFraud(uploadedFile.path);
+    let detectionResult =  await FraudDectionService.getInstance().detectFraud(uploadedFile.path);
  });
 export default router;
