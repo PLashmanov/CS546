@@ -331,5 +331,5 @@ export function validateFeedbackText(feedbackText) {
   const lettersCount = feedbackText.split('').filter(char => char.match(/[A-Za-z]/)).length;
   const letterPercentage = lettersCount / feedbackText.trim().length;
   if (letterPercentage < minLetterPercentage) throw new ValidationError("Text has to contain a minimum of 60% letters")
-  return true;
+  return feedbackText;
 }

@@ -23,7 +23,7 @@ function validateFeedbackText(feedbackText) {
     if (letterPercentage < minLetterPercentage) {
         return false;
     }
-    return true;
+    return feedbackText;
 }
 
 

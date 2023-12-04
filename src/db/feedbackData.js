@@ -27,6 +27,6 @@ export async function createFeedback(userId, name, email, feedbackText) {
         throw new Error(`Could not add feedback`);
     }
 
-    return { insertedFeedback: true };
+    return insertedFeedback;
 }
 
