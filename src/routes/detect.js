@@ -28,7 +28,11 @@ router.get('/submit-detect', async (req, res) => {
 router.post('/submit-detect', upload.single('uploaded_file'), async (req, res) => {
 
     const uploadedFile = req.file;
-
-    let detectionResult =  await FraudDectionService.getInstance().detectFraud(uploadedFile.path);
+    try {
+        let detectionResult =  await FraudDectionService.getInstance().detectFraud(uploadedFile.path);
+        res.render('detectResults', {frauldResult: detectionResult});
+    } catch (error) {
+        res.status(500).send("Error with getting detect route");
+    }
  });
 export default router;

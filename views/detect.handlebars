@@ -1,16 +1,8 @@
-{{#if errorMessage}}
-<p id="detctError" class="detectError">{{errorMessage}}</p>
-{{/if}}
-
-<div class="submit-detect-container">
-    <h2>Submit Your detect</h2>
-    <form action="/detect/submit-detect" enctype="multipart/form-data" method="post">
-    <div class="form-group">
-         <label for="detectFile">Upload possible fraud:</label>
+<h1>Submit a file to detect fraud</h1>
+<div>
+    <form id="search-bar" action="/detect/submit-detect" enctype="multipart/form-data" method="post">
+        <label for="detectFile"></label>
         <input id="detectFile" type="file" class="form-control-file" name="uploaded_file">
-        <button class=" button" type="submit">Upload File For Fraud Detection</button>         
-    </div>
+        <button class="button" type="submit" id="search-button">Detect Fraud in File</button>
     </form>
 </div>
-
-<script src="/js/clientSideValidationdetects.js"></script>
