@@ -67,8 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('text-error').textContent = '';
         }
 
-        if (!isValid){
-            event.preventDefault();
+        if (isValid){
+            form.submit();
         }
     });
 });

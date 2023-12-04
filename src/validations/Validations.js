@@ -321,3 +321,15 @@ export function validateNickname(name) {
   if (name.length < 2 || name.length > 20) throw new ValidationError("nickname length must be between 2 and 30");
   return name;
 }
+
+export function validateFeedbackText(feedbackText) {
+  const minLength = 10;
+  const maxLength = 250;
+  const minLetterPercentage = 0.6;
+
+  if (!feedbackText || feedbackText.trim().length < minLength || feedbackText.trim().length > maxLength) throw new ValidationError ("Feedback length must be between 10 and 250 characters ")
+  const lettersCount = feedbackText.split('').filter(char => char.match(/[A-Za-z]/)).length;
+  const letterPercentage = lettersCount / feedbackText.trim().length;
+  if (letterPercentage < minLetterPercentage) throw new ValidationError("Text has to contain a minimum of 60% letters")
+  return true;
+}

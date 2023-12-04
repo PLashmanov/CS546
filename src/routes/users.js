@@ -143,14 +143,14 @@ router.get('/lookup', async (req, res) => {
     }
     
 });
-router.get('/feedback', async (req, res) => {
+/*router.get('/feedback', async (req, res) => {
     try {
         res.render('feedback', {title: "Feedback or Questions",userLoggedIn: req.session && req.session.isLoggedIn});
     } catch (e) {
         console.error(e);
         res.status(500).send("Error Rendering Page");
     }
-});
+});*/
 router.get('/index', async (req, res) => {
     try {
         res.render('index', {title: "Home",userLoggedIn: req.session && req.session.isLoggedIn});

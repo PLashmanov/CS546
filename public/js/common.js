@@ -158,6 +158,3 @@ $(document).ready(function() {
             });
     });
 });
-
-
-
