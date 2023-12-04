@@ -1,7 +1,6 @@
   <h1>Fraudster Lookup</h1>
     <form id="search-bar">
         <select id="search-criteria">
-            <!--add the ID and  then add the getelement in js for the ID with the validations-->
             <option value="EIN" id="look-ein" name="ein">EIN</option>
             <option value="TIN" id="look-tin" name="tin">TIN</option>
             <option value="SSN" id="look-ssn" name="ssn">SSN</option>
@@ -10,6 +9,6 @@
             <option value="phone" id="look-phone" name="phone">Phone</option>
             </select>
         <input type="text" id="search-query" placeholder="Enter a search query">
-        <button class="button" type="button" id="search-button">Search Fraudster Database</button>
+        <button class="button" type="submit" id="search-button">Search Fraudster Database</button>
     </form>
     <script src="/js/lookup.js"></script>
