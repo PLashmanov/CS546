@@ -11,7 +11,7 @@ export class FraudDectionService {
     constructor() {
         this.flp = new FraudValidation('OSJYSQ9YRJ39SJKJ1VNUXBXZRTIUQSXV');
         this.chatGptAPI = new ChatGPTAPI({
-            apiKey: "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"
+            apiKey: "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"
         })
     }
 
@@ -23,25 +23,23 @@ export class FraudDectionService {
     }
     
     async extractEntitiesFromChatGPT(text) {
-/*         const api = new ChatGPTAPI({
-            apiKey: "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"
-        }) */
 
-        const nerChatGPTResult = await this.chatGptAPI.sendMessage('Please extract named enttities returning json in the following text:' + text);
+        const nerChatGPTResult = await this.chatGptAPI.sendMessage('Please extract named enttities (email, last_name, first_name, address, city, state, zip_code, country and phone_number ) returning json in the following text:' + text);
         const nerObj = JSON.parse(nerChatGPTResult.text);
         return nerObj;
     }
 
-    async constructFraudRequest(nerResult) {
+     async constructFraudRequest(nerResult) {
 
-        let email = nerResult.named_entities.EMAIL[0];
-        let last_name = nerResult.named_entities.PERSON.split()[1];
-        let first_name = nerResult.named_entities.PERSON.split()[0];
-        let address = nerResult.named_entities.ADDRESS[1];
-        let city = nerResult.named_entities.LOCATION[1];
-        let state = nerResult.named_entities.LOCATION[2];
-        let zip_code = nerResult.named_entities.LOCATION[3];
-        let country = nerResult.named_entities.LOCATION[4];
+        let email = nerResult.email;
+        let phone_number = nerResult.phone_number
+        let last_name = nerResult.last_name;
+        let first_name = nerResult.first_name
+        let address = nerResult.address
+        let city = nerResult.city
+        let state = nerResult.state
+        let zip_code = nerResult.zip_code
+        let country = nerResult.country
 
         let params = {
             billing: {
@@ -52,9 +50,32 @@ export class FraudDectionService {
                     state: state,
                     zip_code: zip_code,
                     country: country,
-                    phone: phone,
-                    email: email
+                    phone: phone_number,
+                    email: email,
             },
+            shipping: {
+                last_name: last_name,
+                first_name: first_name,
+                address: address,
+                city: city,
+                state: state,
+                zip_code: zip_code,
+                country: country,
+            },
+            order: {
+                order_id: undefined,
+                currency: undefined,
+                amount: undefined,
+                quantity:undefined,
+                order_memo: undefined,
+                department: undefined,
+                payment_gateway: undefined,
+                payment_mode: undefined,
+                bin_no: undefined,
+                avs_result: undefined,
+                cvv_result: undefined,
+            },
+            items: undefined,
             flp_checksum: ''
         };
         
@@ -80,9 +101,12 @@ export class FraudDectionService {
             // extract key value pairs from chatgpt ner
             let potentialFraudDetails = await this.extractEntitiesFromChatGPT(fileData);
             // construct fraud score request
-            let fraudRequest = this.constructFraudRequest(potentialFraudDetails);
-            let fraudResult = random.int(0,100) //await this.doFraudCheck();
+            let fraudRequest = await this.constructFraudRequest(potentialFraudDetails);
+            // do fraud check
+            let fraudResult = await this.doFraudCheck(fraudRequest); //random.int(0,100) //await this.doFraudCheck();
+            // if over 70 from fraud check score, its fraud y'all!
             let isFraud = (fraudResult > 70) ? true: false;
+            // submit metric for reporting dashboard
             let detectFraudRecord = await createDetectionRecord(isFraud,fraudResult,potentialFraudDetails);
             return {isFraud: isFraud, fraudScore: fraudResult, fraudDetails: potentialFraudDetails};
 
@@ -90,58 +114,13 @@ export class FraudDectionService {
              new Error('An error occurred while detecting fraud', error);
         } 
     }
-    async doFraudCheck(potentialFraud){
-
-        let params = {
-            ip: '146.112.62.105',
-            billing: {
-                    last_name: 'Henderson',
-                    first_name: 'Hector',
-                    address: '1766 Powder House Road',
-                    city: 'West Palm Beach',
-                    state: 'FL',
-                    zip_code: '33401',
-                    country: 'US',
-                    phone: '561-628-8674',
-                    email: 'hh5566@gmail.com',
-            },
-            shipping: {
-                    last_name: 'John',
-                    first_name: 'Doe',
-                    address: '4469 Chestnut Street',
-                    city: 'Tampa',
-                    state: 'FL',
-                    zip_code: '33602',
-                    country: 'US',
-            },
-            order: {
-                    order_id: '67398',
-                    currency: 'USD',
-                    amount: '79.89',
-                    quantity: 1,
-                    order_memo: 'Online shop',
-                    department: 'Online Store',
-                    payment_gateway: 'stripe',
-                    payment_mode: 'creditcard',
-                    bin_no: '455655',
-                    avs_result: 'Y',
-                    cvv_result: 'M',
-            },
-            items: [{
-                    sku: '10001',
-                    quantity: 1,
-                    type: 'physical'
-            }],
-            username: 'hh5566',
-            flp_checksum: ''
-        };
-
-
+    async doFraudCheck(theParameters){
+      
         const doFraudCheckCall = async () => {
             return await new Promise((resolve, reject) => {
-                this.flp.validate(params, (err, data) => {
+                this.flp.validate(theParameters, (err, data) => {
                     if (!err) {
-                        resolve(data)
+                        resolve(data)                     
                     }else{
                         reject(err)
                     }
