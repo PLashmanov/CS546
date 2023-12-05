@@ -12,6 +12,7 @@ const constructorMethod = (app) => {
   app.use('/auth', authRoutes);
   app.use('/user', userRoutes);
   app.use('/fraudster', fraudsterRoutes);
+  app.use('/detect', detectRoutes);
   app.use('/reviews', reviewsRoutes);
   app.use(express.static('public'));
   app.use('/images', express.static('images'));
