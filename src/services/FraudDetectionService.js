@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import pdf from 'pdf-parse-fork'
 import * as fs from 'fs';
 import {FraudValidation} from "fraudlabspro-nodejs";
@@ -9,10 +10,22 @@ export class FraudDectionService {
     static instance = null;
 
     constructor() {
-        this.flp = new FraudValidation('OSJYSQ9YRJ39SJKJ1VNUXBXZRTIUQSXV');
-        this.chatGptAPI = new ChatGPTAPI({
-            apiKey: "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"
-        })
+
+        this.useChatGPT = false;
+        this.useFraudLab = false;
+        if (process.env.CHATGPT_KEY){
+
+            this.useChatGPT = true;
+            this.chatGptAPI = new ChatGPTAPI({
+                apiKey: process.env.CHATGPT_KEY
+            })
+
+        }
+        if (process.env.FRAUDLAB_KEY){
+            this.useFraudLab = true;
+            this.flp = new FraudValidation(process.env.FRAUDLAB_KEY);
+        }
+       
     }
 
     static getInstance() {
@@ -24,12 +37,25 @@ export class FraudDectionService {
     
     async extractEntitiesFromChatGPT(text) {
 
-        const nerChatGPTResult = await this.chatGptAPI.sendMessage('Please extract named enttities (email, last_name, first_name, address, city, state, zip_code, country and phone_number ) returning json in the following text:' + text);
-        const nerObj = JSON.parse(nerChatGPTResult.text);
+        let nerObj = {}
+        if (!this.useChatGPT){
+            return nerObj
+        }
+        try{
+            const nerChatGPTResult = await this.chatGptAPI.sendMessage('Please extract named enttities (email, last_name, first_name, address, city, state, zip_code, country and phone_number ) returning json in the following text:' + text);
+            nerObj = JSON.parse(nerChatGPTResult.text);
+        }catch (e){
+            console.error("we got a bad response from chatgpt. We'll return a blank response to continue the pipeline. error: " + e)
+        }
         return nerObj;
     }
 
      async constructFraudRequest(nerResult) {
+
+
+        if (!this.useChatGPT || Object.keys(nerResult).length === 0){
+            return {}
+        }
 
         let email = nerResult.email;
         let phone_number = nerResult.phone_number
@@ -114,7 +140,17 @@ export class FraudDectionService {
              new Error('An error occurred while detecting fraud', error);
         } 
     }
+
+    async simulateFraudScore(){
+        return random.int(0,100);
+    }
     async doFraudCheck(theParameters){
+
+        // if we dont use fraudlabs or input params is blank, just simulate score
+        if (!this.useFraudLab || Object.keys(theParameters).length === 0){
+            let fraudResultSimulatedScore =  await this.simulateFraudScore();
+            return fraudResultSimulatedScore;
+        }
       
         const doFraudCheckCall = async () => {
             return await new Promise((resolve, reject) => {
@@ -126,9 +162,15 @@ export class FraudDectionService {
                     }
                 });
         })}
-
-        let fraudResult = await doFraudCheckCall();
-        return fraudResult.fraudlabspro_score;
+        try{
+            let fraudResult = await doFraudCheckCall();
+            return fraudResult.fraudlabspro_score;
+        }catch(e){
+            console.error("we got a bad response from fraudlabs. We'll return a simulated response to continue the pipeline. error: " + e)
+            let fraudResultSimulatedScore =  await this.simulateFraudScore();
+            return fraudResultSimulatedScore;
+        }
+        
     }
 
 }
