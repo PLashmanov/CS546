@@ -14,6 +14,7 @@ const constructorMethod = (app) => {
   app.use('/fraudster', fraudsterRoutes);
   app.use('/detect', detectRoutes);
   app.use('/reviews', reviewsRoutes);
+  app.use('/feedback',feedbackRoutes);
   app.use(express.static('public'));
   app.use('/images', express.static('images'));
   app.use('*', (req, res) => {
