@@ -12,6 +12,7 @@ export class FraudDectionService {
     constructor() {
 
         this.chatGptPrompt = 'Please extract named enttities (email, last_name, first_name, address, city, state, zip_code, country and phone_number ) returning json in the following text:'
+        this.chatGptFraudScorePrompt = 'I need a fraud score! Please provide fraud score from 1 to 100 returning json for the given text: '//'Please access fraud on a scale of 1 to 100 returning json with the key fraud_score on the following text:'
         this.useChatGPT = false;
         this.useFraudLab = false;
         this.isSimulated = true;
@@ -39,6 +40,23 @@ export class FraudDectionService {
         return FraudDectionService.instance;
     }
     
+    async chatGPTFraudScore(text) {
+
+        let chatgptFraudScoreResponse = {}
+        if (!this.useChatGPT){
+            return await this.simulateFraudScore();
+        }
+        try{
+            const chatGPTResult = await this.chatGptAPI.sendMessage(this.chatGptFraudScorePrompt + text);
+            chatgptFraudScoreResponse = JSON.parse(chatGPTResult.text);
+        }catch (e){
+            console.error("we got a bad response from chatgpt. We'll return a simulated score. error: " + e)
+            this.useChatGPT = false;
+            this.isError = true;
+        }
+        return chatgptFraudScoreResponse;
+    }
+
     async extractEntitiesFromChatGPT(text) {
 
         let nerObj = {}
@@ -57,7 +75,6 @@ export class FraudDectionService {
     }
 
      async constructFraudRequest(nerResult) {
-
 
         if (!this.useChatGPT || Object.keys(nerResult).length === 0){
             return {}
@@ -149,6 +166,7 @@ export class FraudDectionService {
         try {    
             // get text from pdf        
             let fileData =  await this.processPDF(file);
+     
             // extract key value pairs from chatgpt ner
             let potentialFraudDetails = await this.extractEntitiesFromChatGPT(fileData);
             // construct fraud score request
