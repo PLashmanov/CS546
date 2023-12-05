@@ -5,6 +5,7 @@ import userRoutes from './users.js'
 import fraudsterRoutes from './fraudsters.js'
 import reviewsRoutes from './reviews.js';
 import detectRoutes from './detect.js';
+import feedbackRoutes from './feedback.js';
 
 const constructorMethod = (app) => {
   app.use('/', landingRoutes); //disable mandatory login
@@ -12,7 +13,6 @@ const constructorMethod = (app) => {
   app.use('/user', userRoutes);
   app.use('/fraudster', fraudsterRoutes);
   app.use('/reviews', reviewsRoutes);
-  app.use('/detect', detectRoutes);
   app.use(express.static('public'));
   app.use('/images', express.static('images'));
   app.use('*', (req, res) => {

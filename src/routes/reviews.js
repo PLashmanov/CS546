@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { getAllReviews, createReview } from '../db/reviewsData.js';
 import { ValidationError, BusinessError } from '../error/customErrors.js';
 import { validateNickname, validateBody } from '../validations/Validations.js';
+import xss from 'xss';
 
 const router = Router();
 
@@ -38,7 +39,8 @@ router.post('/submit-review', async (req, res) => {
         let userId = req.session.user.id;
 
         let errorMessages = [];
-        let { nickName, body } = req.body;
+        let nickName = xss(req.body.nickName);
+        let body = xss(req.body.body)
 
         try {
             if (!nickName) errorMessages.push("Please enter a nickname");

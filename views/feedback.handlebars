@@ -1,22 +1,29 @@
-    <section id="feedback">
+ <section id="feedback">
+    
     <h2>Have a question? Or Feedback? Please let us know!</h2>
-       <form id = "feedbackForm">
+    
+
+       <form id = "feedbackForm" action="/feedback/submit-feedback" method="POST">
         <div class="input-group required">
-        <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
+        <label for="feed-name">Name:</label>
+            <input type="text" id="feed-name" name="name" required>
+            <span class="feedback-error" id="name-error"></span>
             </div>
         <br>
         <div class="input-group required">
-        <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+        <label for="feed-email">Email:</label>
+            <input type="email" id="feed-email" name="email" required>
+            <span class="feedback-error" id="email-error"></span>
             </div>
         <br>
         <div class="input-group required">
             <label for="feedbackText">Feedback or Question:</label>
                 <textarea id="feedbackText" name="feedback" required></textarea>
+                <span class="feedback-error" id="text-error"></span>
                 </div>
         <br>
             <button type="submit" class="button">Submit</button>
        </form>
     
    </div>
+   <script src="/js/clientSideFeedback.js"></script>

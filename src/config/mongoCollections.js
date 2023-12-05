@@ -17,3 +17,4 @@ export const fraudsters = getCollectionFn('fraudsters');
 export const reports = getCollectionFn('reports');
 export const reviews = getCollectionFn('reviews');
 export const detections = getCollectionFn('detections');
+export const feedbacks = getCollectionFn('feedback');

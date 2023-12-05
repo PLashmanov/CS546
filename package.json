@@ -26,6 +26,7 @@
     "nodemailer": "^6.9.6",
     "pdf-parse-fork": "^1.2.0",
     "random": "^4.1.0",
-    "validator": "^13.11.0"
+    "validator": "^13.11.0",
+    "xss": "^1.0.14"
   }
 }

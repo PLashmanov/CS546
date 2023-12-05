@@ -288,7 +288,7 @@ footer {
     margin: 20px auto;
 }
 
-.reg-error, .rep-error{
+.reg-error, .rep-error, .feedback-error{
     display: none;
     color: red;
     font-size: 0.8em;
@@ -448,7 +448,7 @@ footer {
 }
 
 #review-img {
-    width:150px;
+    width:200px;
 }
 
 #dash-table {
