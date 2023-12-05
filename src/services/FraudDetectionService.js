@@ -134,6 +134,17 @@ export class FraudDectionService {
             return ""
         } 
     }
+
+    responseMessage(){
+        if (this.useChatGPT && this.useFraudLab && !this.isError && !this.isSimulated ){
+            return "We used chatgpt and fraudlabs to return these results."
+        }else if (this.isSimulated && !this.isError){
+            return "We simulated these fraud score results"
+        }else if (this.isSimulated && this.isError){
+            return "We had an error in either chatgpt or fraudlabs and simulated these fraud score results"
+        }
+    }
+
     async detectFraud(file) {
         try {    
             // get text from pdf        
@@ -148,12 +159,7 @@ export class FraudDectionService {
             let isFraud = (fraudResult > 70) ? true: false;
             // submit metric for reporting dashboard
             let detectFraudRecord = await createDetectionRecord(isFraud,fraudResult,potentialFraudDetails);
-            return {isFraud: isFraud, fraudScore: fraudResult, fraudDetails: potentialFraudDetails, process: {
-                useChatGPT : this.useChatGPT,
-                useFraudLab : this.useFraudLab,
-                isSimulated : this.isSimulated,
-                isError : this.isError,
-            }};
+            return {isFraud: isFraud, fraudScore: fraudResult, fraudDetails: potentialFraudDetails, disclaimer: this.responseMessage() };
 
         } catch (error) {
              new Error('An error occurred while detecting fraud', error);
@@ -188,6 +194,7 @@ export class FraudDectionService {
         }catch(e){
             console.error("we got a bad response from fraudlabs. We'll return a simulated response to continue the pipeline. error: " + e)
             let fraudResultSimulatedScore =  await this.simulateFraudScore();
+            this.useFraudLab = false;
             return fraudResultSimulatedScore;
         }
         

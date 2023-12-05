@@ -30,6 +30,7 @@ h2 {
     margin-bottom: 10px;
 }
 
+
 li {
     list-style-type: none;
     margin-bottom: 7px;
@@ -533,4 +534,15 @@ footer {
     border-radius: 50%; 
     margin-right: 15px;
     float: left
+}
+
+#detect-disclaimer {
+    font-style: italic;
+    font-size: small;
+}
+
+#detect-h4 {
+    margin: 0 auto 20px auto;
+    text-align: center;
+    font-weight: 400;
 }
