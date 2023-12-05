@@ -1,0 +1,10 @@
+<h1>Fraud Detection</h1>
+<p></p>
+<h4 id="detect-h4">Upload a pdf file and we run analysis to detect if its fraud.</h4>
+<div>
+    <form id="search-bar" action="/detect/submit-detect" enctype="multipart/form-data" method="post">
+        <label for="detectFile"></label>
+        <input id="detectFile" type="file" class="form-control-file" name="uploaded_file">
+        <button class="button" type="submit" id="search-button">Detect Fraud in File</button>
+    </form>
+</div>

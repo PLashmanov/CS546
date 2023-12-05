@@ -4,6 +4,7 @@ import express from 'express';
 import userRoutes from './users.js'
 import fraudsterRoutes from './fraudsters.js'
 import reviewsRoutes from './reviews.js';
+import detectRoutes from './detect.js';
 import feedbackRoutes from './feedback.js';
 
 const constructorMethod = (app) => {
@@ -11,6 +12,7 @@ const constructorMethod = (app) => {
   app.use('/auth', authRoutes);
   app.use('/user', userRoutes);
   app.use('/fraudster', fraudsterRoutes);
+  app.use('/detect', detectRoutes);
   app.use('/reviews', reviewsRoutes);
   app.use('/feedback',feedbackRoutes);
   app.use(express.static('public'));

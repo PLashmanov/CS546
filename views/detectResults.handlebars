@@ -1,0 +1,27 @@
+
+
+<div class="submit-result-container">
+
+        
+        <table class="fraud-detection">
+             {{#if frauldResult.isFraud}}
+                <tr>
+                    <td><img src="/Images/warning.png" alt="image of warning"></td>
+                    <td><strong>Warning! From the input you provided, we detected possible fraud with a score of {{frauldResult.fraudScore}}!</strong></td> 
+                        
+                </tr>
+             {{else}}
+                <tr>
+                    <td><img src="/Images/ok.jpeg" alt="image of ok"></td>
+                    <td><strong>From the input you provided, we did not detect fraud. The result was a score of {{frauldResult.fraudScore}}!</strong></td>
+                </tr>
+             {{/if}}    
+                 <tr>
+                    <td></td>
+                    <td id="detect-disclaimer">{{frauldResult.disclaimer}}</td>
+                </tr>    
+        </table>
+
+
+</div>
+
