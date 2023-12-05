@@ -11,18 +11,22 @@ export class FraudDectionService {
 
     constructor() {
 
+        this.chatGptPrompt = 'Please extract named enttities (email, last_name, first_name, address, city, state, zip_code, country and phone_number ) returning json in the following text:'
         this.useChatGPT = false;
         this.useFraudLab = false;
-        if (process.env.CHATGPT_KEY){
+        this.isSimulated = true;
+        this.isError = false;
 
+        if (process.env.CHATGPT_KEY){
             this.useChatGPT = true;
+            this.isSimulated = false;
             this.chatGptAPI = new ChatGPTAPI({
                 apiKey: process.env.CHATGPT_KEY
             })
-
         }
         if (process.env.FRAUDLAB_KEY){
             this.useFraudLab = true;
+            this.isSimulated = false;
             this.flp = new FraudValidation(process.env.FRAUDLAB_KEY);
         }
        
@@ -42,10 +46,12 @@ export class FraudDectionService {
             return nerObj
         }
         try{
-            const nerChatGPTResult = await this.chatGptAPI.sendMessage('Please extract named enttities (email, last_name, first_name, address, city, state, zip_code, country and phone_number ) returning json in the following text:' + text);
+            const nerChatGPTResult = await this.chatGptAPI.sendMessage(this.chatGptPrompt + text);
             nerObj = JSON.parse(nerChatGPTResult.text);
         }catch (e){
             console.error("we got a bad response from chatgpt. We'll return a blank response to continue the pipeline. error: " + e)
+            this.useChatGPT = false;
+            this.isError = true;
         }
         return nerObj;
     }
@@ -57,18 +63,30 @@ export class FraudDectionService {
             return {}
         }
 
-        let email = nerResult.email;
-        let phone_number = nerResult.phone_number
-        let last_name = nerResult.last_name;
-        let first_name = nerResult.first_name
-        let address = nerResult.address
-        let city = nerResult.city
-        let state = nerResult.state
-        let zip_code = nerResult.zip_code
-        let country = nerResult.country
+        try{
+            let email = nerResult.email;
+            let phone_number = nerResult.phone_number
+            let last_name = nerResult.last_name;
+            let first_name = nerResult.first_name
+            let address = nerResult.address
+            let city = nerResult.city
+            let state = nerResult.state
+            let zip_code = nerResult.zip_code
+            let country = nerResult.country
 
-        let params = {
-            billing: {
+            let params = {
+                billing: {
+                        last_name: last_name,
+                        first_name: first_name,
+                        address: address,
+                        city: city,
+                        state: state,
+                        zip_code: zip_code,
+                        country: country,
+                        phone: phone_number,
+                        email: email,
+                },
+                shipping: {
                     last_name: last_name,
                     first_name: first_name,
                     address: address,
@@ -76,36 +94,30 @@ export class FraudDectionService {
                     state: state,
                     zip_code: zip_code,
                     country: country,
-                    phone: phone_number,
-                    email: email,
-            },
-            shipping: {
-                last_name: last_name,
-                first_name: first_name,
-                address: address,
-                city: city,
-                state: state,
-                zip_code: zip_code,
-                country: country,
-            },
-            order: {
-                order_id: undefined,
-                currency: undefined,
-                amount: undefined,
-                quantity:undefined,
-                order_memo: undefined,
-                department: undefined,
-                payment_gateway: undefined,
-                payment_mode: undefined,
-                bin_no: undefined,
-                avs_result: undefined,
-                cvv_result: undefined,
-            },
-            items: undefined,
-            flp_checksum: ''
-        };
-        
-        return params;
+                },
+                order: {
+                    order_id: undefined,
+                    currency: undefined,
+                    amount: undefined,
+                    quantity:undefined,
+                    order_memo: undefined,
+                    department: undefined,
+                    payment_gateway: undefined,
+                    payment_mode: undefined,
+                    bin_no: undefined,
+                    avs_result: undefined,
+                    cvv_result: undefined,
+                },
+                items: undefined,
+                flp_checksum: ''
+            };
+            
+            return params;
+        }catch(e){
+            console.error("we got a problem parsing results from chatgpt. We'll return a blank response to continue the pipeline. error: " + e)
+            this.isError = true;
+            return {}
+        }
     }
     
     async processPDF(pdfFilePath) {
@@ -117,7 +129,9 @@ export class FraudDectionService {
             });
             return pdfData;
         } catch (error) {
-             new Error('An error occurred while processing the PDF:', error);
+            console.error("we got a problem processing the pdf. We'll return a blank string to continue the pipeline. error: " + e)
+            this.isError = true;
+            return ""
         } 
     }
     async detectFraud(file) {
@@ -134,7 +148,12 @@ export class FraudDectionService {
             let isFraud = (fraudResult > 70) ? true: false;
             // submit metric for reporting dashboard
             let detectFraudRecord = await createDetectionRecord(isFraud,fraudResult,potentialFraudDetails);
-            return {isFraud: isFraud, fraudScore: fraudResult, fraudDetails: potentialFraudDetails};
+            return {isFraud: isFraud, fraudScore: fraudResult, fraudDetails: potentialFraudDetails, process: {
+                useChatGPT : this.useChatGPT,
+                useFraudLab : this.useFraudLab,
+                isSimulated : this.isSimulated,
+                isError : this.isError,
+            }};
 
         } catch (error) {
              new Error('An error occurred while detecting fraud', error);
@@ -142,6 +161,7 @@ export class FraudDectionService {
     }
 
     async simulateFraudScore(){
+        this.isSimulated = true;
         return random.int(0,100);
     }
     async doFraudCheck(theParameters){
