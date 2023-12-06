@@ -12,7 +12,7 @@ export class FraudDectionService {
     constructor() {
 
         this.chatGptPrompt = 'Please extract named enttities (email, last_name, first_name, address, city, state, zip_code, country and phone_number ) returning json in the following text:'
-        this.chatGptFraudScorePrompt = 'Please review the text and give a fraud score based on the text from 1-100. put the score in json{fraud_Score=fraudScore , reason= }  where the fraud_score key should contain the fraud score and the reason key should have the reason for the fraud score. Be very strict and do a thorough analysis based on the attributes in this text to detect. Anything that seems suspicious should be noted even if it isnt obvious and put findings in the reason attribute: '
+        this.chatGptFraudScorePrompt = 'Please review the text and give a fraud score based on the text from 1-100. put the score in json{fraudScore= , reason= }  where the fraud_score key should contain the fraud score and the reason key should have the reason for the fraud score. Be very strict and do a thorough analysis based on the attributes in this text to detect. Anything that seems suspicious should be noted even if it isnt obvious and put findings in the reason attribute: '
         //this.reset();
         /*  this.useChatGPT = false;
         this.isSimulated = true;
