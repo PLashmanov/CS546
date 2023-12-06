@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import pdf from 'pdf-parse-fork'
 import * as fs from 'fs';
-import {FraudValidation} from "fraudlabspro-nodejs";
 import { createDetectionRecord } from "../db/detectionsData.js";
 import random from 'random'
 import { ChatGPTAPI } from 'chatgpt'
@@ -9,11 +8,13 @@ import { ChatGPTAPI } from 'chatgpt'
 export class FraudDectionService {
     static instance = null;
 
+    
     constructor() {
 
         this.chatGptPrompt = 'Please extract named enttities (email, last_name, first_name, address, city, state, zip_code, country and phone_number ) returning json in the following text:'
-        this.useChatGPT = false;
-        this.useFraudLab = false;
+        this.chatGptFraudScorePrompt = 'Please review the text and give a fraud score based on the text from 1-100. put the score in json{fraud_Score=fraudScore , reason= }  where the fraud_score key should contain the fraud score and the reason key should have the reason for the fraud score. Be very strict and do a thorough analysis based on the attributes in this text to detect. Anything that seems suspicious should be noted even if it isnt obvious and put findings in the reason attribute: '
+        //this.reset();
+        /*  this.useChatGPT = false;
         this.isSimulated = true;
         this.isError = false;
 
@@ -23,22 +24,50 @@ export class FraudDectionService {
             this.chatGptAPI = new ChatGPTAPI({
                 apiKey: process.env.CHATGPT_KEY
             })
-        }
-        if (process.env.FRAUDLAB_KEY){
-            this.useFraudLab = true;
-            this.isSimulated = false;
-            this.flp = new FraudValidation(process.env.FRAUDLAB_KEY);
-        }
-       
+        } */
+
     }
 
     static getInstance() {
         if (!FraudDectionService.instance) {
             FraudDectionService.instance = new FraudDectionService();
         }
+        FraudDectionService.instance.reset();
         return FraudDectionService.instance;
     }
     
+    reset(){
+
+        this.useChatGPT = false;
+        this.isSimulated = true;
+        this.isError = false;
+        if (process.env.CHATGPT_KEY){
+            this.useChatGPT = true;
+            this.isSimulated = false;
+            this.chatGptAPI = new ChatGPTAPI({
+                apiKey: process.env.CHATGPT_KEY
+            })
+        }
+    }
+
+    async chatGPTFraudScore(text) {
+
+        let chatgptFraudScoreResponse = {}
+        if (!this.useChatGPT){
+            return await this.simulateFraudScore();
+        }
+        try{
+            const chatGPTResult = await this.chatGptAPI.sendMessage(this.chatGptFraudScorePrompt + text);
+            chatgptFraudScoreResponse = JSON.parse(chatGPTResult.text);
+        }catch (e){
+            console.error("we got a bad response from chatgpt. We'll return a simulated score. error: " + e)
+            this.useChatGPT = false;
+            this.isError = true;
+            chatgptFraudScoreResponse = await this.simulateFraudScore();
+        }
+        return chatgptFraudScoreResponse;
+    }
+
     async extractEntitiesFromChatGPT(text) {
 
         let nerObj = {}
@@ -56,70 +85,7 @@ export class FraudDectionService {
         return nerObj;
     }
 
-     async constructFraudRequest(nerResult) {
-
-
-        if (!this.useChatGPT || Object.keys(nerResult).length === 0){
-            return {}
-        }
-
-        try{
-            let email = nerResult.email;
-            let phone_number = nerResult.phone_number
-            let last_name = nerResult.last_name;
-            let first_name = nerResult.first_name
-            let address = nerResult.address
-            let city = nerResult.city
-            let state = nerResult.state
-            let zip_code = nerResult.zip_code
-            let country = nerResult.country
-
-            let params = {
-                billing: {
-                        last_name: last_name,
-                        first_name: first_name,
-                        address: address,
-                        city: city,
-                        state: state,
-                        zip_code: zip_code,
-                        country: country,
-                        phone: phone_number,
-                        email: email,
-                },
-                shipping: {
-                    last_name: last_name,
-                    first_name: first_name,
-                    address: address,
-                    city: city,
-                    state: state,
-                    zip_code: zip_code,
-                    country: country,
-                },
-                order: {
-                    order_id: undefined,
-                    currency: undefined,
-                    amount: undefined,
-                    quantity:undefined,
-                    order_memo: undefined,
-                    department: undefined,
-                    payment_gateway: undefined,
-                    payment_mode: undefined,
-                    bin_no: undefined,
-                    avs_result: undefined,
-                    cvv_result: undefined,
-                },
-                items: undefined,
-                flp_checksum: ''
-            };
-            
-            return params;
-        }catch(e){
-            console.error("we got a problem parsing results from chatgpt. We'll return a blank response to continue the pipeline. error: " + e)
-            this.isError = true;
-            return {}
-        }
-    }
-    
+  
     async processPDF(pdfFilePath) {
         try {            
 
@@ -135,70 +101,46 @@ export class FraudDectionService {
         } 
     }
 
-    responseMessage(){
+    logProcessMessage(){
+        let processMessage  = ""
         if (this.useChatGPT && this.useFraudLab && !this.isError && !this.isSimulated ){
-            return "We used chatgpt and fraudlabs to return these results."
+            processMessage = "We used chatgpt to return these results."
         }else if (this.isSimulated && !this.isError){
-            return "We simulated these fraud score results"
+            processMessage =  "We simulated these fraud score results"
         }else if (this.isSimulated && this.isError){
-            return "We had an error in either chatgpt or fraudlabs and simulated these fraud score results"
+            processMessage = "We had an error in either chatgpt and simulated these fraud score results"
         }
+        console.log(processMessage)
     }
 
     async detectFraud(file) {
         try {    
             // get text from pdf        
             let fileData =  await this.processPDF(file);
-            // extract key value pairs from chatgpt ner
-            let potentialFraudDetails = await this.extractEntitiesFromChatGPT(fileData);
-            // construct fraud score request
-            let fraudRequest = await this.constructFraudRequest(potentialFraudDetails);
-            // do fraud check
-            let fraudResult = await this.doFraudCheck(fraudRequest); //random.int(0,100) //await this.doFraudCheck();
+
+            // fraudscore and reason from chatgpt
+            let fraudResult = await this.chatGPTFraudScore(fileData);
+
             // if over 70 from fraud check score, its fraud y'all!
-            let isFraud = (fraudResult > 70) ? true: false;
+            let fraudScore = fraudResult.fraudScore
+            let isFraud = (fraudScore> 70) ? true: false;
+
             // submit metric for reporting dashboard
-            let detectFraudRecord = await createDetectionRecord(isFraud,fraudResult,potentialFraudDetails);
-            return {isFraud: isFraud, fraudScore: fraudResult, fraudDetails: potentialFraudDetails, disclaimer: this.responseMessage() };
+            let detectFraudRecord = await createDetectionRecord(isFraud,fraudResult.fraudScore,fraudResult.reason);
+
+            this.logProcessMessage();
+            return {isFraud: isFraud, fraudScore: fraudScore, fraudDetails: fraudResult.reason };
 
         } catch (error) {
-             new Error('An error occurred while detecting fraud', error);
+            console.error(e)
+            new Error('An error occurred while detecting fraud', error);
         } 
     }
 
     async simulateFraudScore(){
         this.isSimulated = true;
-        return random.int(0,100);
+        return {'fraudScore': random.int(0,100), 'reason': 'The provided details show inconsistencies and potential red flags. The mismatch in the country (stated as China) compared to the address in West Palm Beach, FL, USA is a significant anomaly. Additionally, the use of an email with China as the country and the request to bypass the account application form may indicate a potential attempt to manipulate the account opening process. While the language is generally polite, these discrepancies raise concerns, warranting further scrutiny and verification' };
     }
-    async doFraudCheck(theParameters){
-
-        // if we dont use fraudlabs or input params is blank, just simulate score
-        if (!this.useFraudLab || Object.keys(theParameters).length === 0){
-            let fraudResultSimulatedScore =  await this.simulateFraudScore();
-            return fraudResultSimulatedScore;
-        }
-      
-        const doFraudCheckCall = async () => {
-            return await new Promise((resolve, reject) => {
-                this.flp.validate(theParameters, (err, data) => {
-                    if (!err) {
-                        resolve(data)                     
-                    }else{
-                        reject(err)
-                    }
-                });
-        })}
-        try{
-            let fraudResult = await doFraudCheckCall();
-            return fraudResult.fraudlabspro_score;
-        }catch(e){
-            console.error("we got a bad response from fraudlabs. We'll return a simulated response to continue the pipeline. error: " + e)
-            let fraudResultSimulatedScore =  await this.simulateFraudScore();
-            this.useFraudLab = false;
-            return fraudResultSimulatedScore;
-        }
-        
-    }
-
+    
 }
 

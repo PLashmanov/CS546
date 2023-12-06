@@ -27,12 +27,17 @@ router.get('/submit-detect', async (req, res) => {
 
 router.post('/submit-detect', upload.single('uploaded_file'), async (req, res) => {
 
+    if (!req.session || !req.session.isLoggedIn) {
+        return res.redirect('/user/login');
+    }
+
     const uploadedFile = req.file;
     try {
         let detectionResult =  await FraudDectionService.getInstance().detectFraud(uploadedFile.path);
-        res.render('detectResults', {frauldResult: detectionResult});
+        res.render('detectResults', {fraudResult: detectionResult});
     } catch (error) {
-        res.status(500).send("Error with getting detect route");
+        //res.status(500).send("Error with getting detect route");
+        res.render('detect', {title: "Detect Fraud",error: error, userLoggedIn: req.session && req.session.isLoggedIn});
     }
  });
 export default router;
