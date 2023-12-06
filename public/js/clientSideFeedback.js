@@ -66,9 +66,24 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('text-error').style.display = 'none';
             document.getElementById('text-error').textContent = '';
         }
-
-        if (isValid){
-            form.submit();
+        if (isValid) {
+            $.ajax({
+                url: '/feedback/submit-feedback',
+                type: 'POST',
+                contentType: 'application/json', 
+                data: JSON.stringify({ 
+                    name: feedbackName,
+                    email: feedbackEmail,
+                    feedback: feedbackText
+                }),
+                success: function(response) {
+                    alert("Feedback Submitted!");
+                    window.location.href = '/';
+                },
+                error: function(ex) {
+                    $('#error-message').text('Feedback failed: ' + JSON.parse(ex.responseText).error);
+                }
+            });
         }
     });
 });
