@@ -18,7 +18,6 @@
     "express": "^4.18.2",
     "express-handlebars": "^7.1.2",
     "express-session": "^1.17.3",
-    "fraudlabspro-nodejs": "^2.2.0",
     "libphonenumber-js": "^1.10.49",
     "moment": "^2.29.4",
     "mongodb": "^6.2.0",

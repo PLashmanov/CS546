@@ -4,21 +4,21 @@
 
         
         <table class="fraud-detection">
-             {{#if frauldResult.isFraud}}
+             {{#if fraudResult.isFraud }}
                 <tr>
                     <td><img src="/Images/warning.png" alt="image of warning"></td>
-                    <td><strong>Warning! From the input you provided, we detected possible fraud with a score of {{frauldResult.fraudScore}}!</strong></td> 
+                    <td><strong>Warning! From the input you provided, we detected possible fraud with a score of {{ fraudResult.fraudScore }} !</strong></td> 
                         
                 </tr>
              {{else}}
                 <tr>
                     <td><img src="/Images/ok.jpeg" alt="image of ok"></td>
-                    <td><strong>From the input you provided, we did not detect fraud. The result was a score of {{frauldResult.fraudScore}}!</strong></td>
+                    <td><strong>From the input you provided, we did not detect fraud. The result was a score of {{ fraudResult.fraudScore }} !</strong></td>
                 </tr>
              {{/if}}    
                  <tr>
                     <td></td>
-                    <td id="detect-disclaimer">{{frauldResult.disclaimer}}</td>
+                    <td id="detect-disclaimer">{{fraudResult.fraudDetails}}</td>
                 </tr>    
         </table>
 
