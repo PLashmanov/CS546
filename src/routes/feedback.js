@@ -7,10 +7,15 @@ const router = Router();
 
 router.get('/', async (req, res) => {
     try {
-        res.render('feedback', {
-            title: "Feedback",
-            userLoggedIn: req.session && req.session.isLoggedIn
-        })
+        if (req.session && req.session.isLoggedIn) {
+            res.render('feedback', {
+                title: "Feedback",
+                userLoggedIn: req.session && req.session.isLoggedIn
+            })
+        }
+        else{
+            res.redirect('/user/login');
+        }
     } catch (error) {
         console.error("Error fetching reviews:", error);
         res.status(500).send("Error fetching reviews");
@@ -18,13 +23,17 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/feedback', (req, res) => {
-   
     const success = req.query.status === 'success';
-    res.render('feedback', {
-        title: "Feedback or Question",
-        userLoggedIn: req.session && req.session.isLoggedIn,
-        successMessage: success ? "Feedback submitted successfully!" : null
-    });
+    if (req.session && req.session.isLoggedIn) {
+        res.render('feedback', {
+            title: "Feedback or Question",
+            userLoggedIn: req.session && req.session.isLoggedIn,
+            successMessage: success ? "Feedback submitted successfully!" : null
+        });
+    }
+    else{
+        res.redirect('/user/login');
+    }
 });
 
 
