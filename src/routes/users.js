@@ -228,8 +228,6 @@ router.put('/update', async (req, res) => {
     try {
         if (req.session.isLoggedIn && req.session.user) {
             let { email, companyName, phoneNumber, notifications } = req.body;
-            
-            // Sanitize inputs
             email = xss(email);
             companyName = xss(companyName);
             phoneNumber = xss(phoneNumber);
