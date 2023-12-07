@@ -22,3 +22,11 @@ export async function createDetectionRecord(isFraud,fraudScore, potentialFraudDe
     const detectionInserted = await detectionsCollection.findOne({ _id: new ObjectId(detectionId) });
     return detectionInserted;
 }
+
+
+export async function getNumOfDetections() {
+  const detectionsCollection = await detections();
+  const count = await detectionsCollection.countDocuments();
+  if (count === undefined) throw new Error(`could not get the count of detections`);
+  return count;
+}
