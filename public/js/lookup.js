@@ -47,7 +47,7 @@ function searchValidation(event) {
             }
             break;
         case 'phone':
-            const phoneP =   /^\+1\d{10}$/;
+            const phoneP =/^\+1\d{10}$/;
             if(!phoneP.test(searchQuery)){
                 errorMessage = 'Invalid Phone number format';
                 isValid = false;
