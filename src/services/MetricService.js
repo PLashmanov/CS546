@@ -2,6 +2,7 @@ import { getNumOfUsers, getUserWithBadgeCount } from "../db/usersData.js";
 import { getNumOfFraudsters, getFraudsterTrendingCount } from "../db/fraudstersData.js";
 import { getNumOfReports, getTopFraudTypeAndCount } from "../db/reportsData.js";
 import { getNumOfReviews } from "../db/reviewsData.js";
+import { getNumOfFraudDetections } from "../db/detectionsData.js"
 
 export class MetricService {
     static instance = null;
@@ -21,10 +22,19 @@ export class MetricService {
         let reportCnt = await getNumOfReports();
         let numReviews = await getNumOfReviews();
         let topFraudDetails = await getTopFraudTypeAndCount();
-                
-        return  {numUsers : userCnt, numUsersWithBadges: userCntWithBadge, numFraudsters: fraudstersCnt, numTrendingFraudsters: fraudsterCntTrending, numReports: reportCnt, numTopFraud: topFraudDetails.count, topFraudType: topFraudDetails.type, numReviews: numReviews };
-      }
+        let fraudsDetectedCnt = await getNumOfFraudDetections();
 
-
+        return {
+            numUsers: userCnt,
+            numUsersWithBadges: userCntWithBadge,
+            numFraudsters: fraudstersCnt,
+            numTrendingFraudsters: fraudsterCntTrending,
+            numReports: reportCnt,
+            numTopFraud: topFraudDetails.count,
+            topFraudType: topFraudDetails.type,
+            numReviews: numReviews,
+            numFraudsDetected: fraudsDetectedCnt
+        };
+    }
 }
 
