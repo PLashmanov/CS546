@@ -5,6 +5,7 @@ import * as reportData from "../db/reportsData.js"
 import { ValidationError, BusinessError} from '../error/customErrors.js';
 import * as validations from '../validations/Validations.js';
 import {buildFraudsterRequest} from '../util/ObjectUtil.js'
+import xss from 'xss';
 
 
 const router = Router();
@@ -111,17 +112,15 @@ router
 router.post('/report', async (req, res) => {
   try {
     if (req.session && req.session.user) {
-        let { email, firstName, ein, ssn, 
-              phoneNumber, itin, date, fraudType } = req.body;
-      
-        email = convertEmptyField(email);
-        firstName = convertEmptyField(firstName);
-        ein = convertEmptyField(ein);
-        ssn = convertEmptyField(ssn);
-        phoneNumber = convertEmptyField(phoneNumber);
-        itin = convertEmptyField(itin);
-        date = convertEmptyField(date);
-        fraudType = convertEmptyField(fraudType);
+        let { email, firstName, ein, ssn, phoneNumber, itin, date, fraudType } = req.body;
+        email = xss(convertEmptyField(email));
+        firstName = xss(convertEmptyField(firstName));
+        ein = xss(convertEmptyField(ein));
+        ssn = xss(convertEmptyField(ssn));
+        phoneNumber = xss(convertEmptyField(phoneNumber));
+        itin = xss(convertEmptyField(itin));
+        date = xss(convertEmptyField(date));
+        fraudType = xss(convertEmptyField(fraudType));
     
       const report = await reportData.createReport(
           req.session.user.id,  ein, itin, ssn, email, phoneNumber, firstName, fraudType

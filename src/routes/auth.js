@@ -1,12 +1,14 @@
 import {Router} from 'express';
 import  LoginService from '../services/LoginService.js';
 import { BusinessError } from '../error/customErrors.js';
+import xss from 'xss';
 const router = Router();
 
 router
     .post('/login', async (req, res) => {
         try {
-            const user = await LoginService.authenticate(req.body.email, req.body.password);
+            const sanitizedEmail = xss(req.body.email);
+            const user = await LoginService.authenticate(sanitizedEmail, req.body.password);
             await LoginService.createSession(req, user);
             req.session.isLoggedIn = true;
             

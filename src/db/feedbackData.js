@@ -30,3 +30,9 @@ export async function createFeedback(userId, name, email, feedbackText) {
     return insertedFeedback;
 }
 
+export async function getNumOfFeedback() {
+    const feedbackCollection = await feedbacks();
+    const count = await feedbackCollection.countDocuments();
+    if (count === undefined) throw new Error(`could not get the count of feedback`);
+    return count;
+}
