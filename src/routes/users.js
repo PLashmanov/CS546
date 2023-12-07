@@ -4,12 +4,19 @@ import { ValidationError, BusinessError} from '../error/customErrors.js';
 import  LoginService from '../services/LoginService.js';
 import { MetricService } from '../services/MetricService.js';
 import {validatePasswordConfirmation} from '../validations/Validations.js'
+import xss from 'xss';
 const router = Router();
 
 router.post('/register', async (req, res) => {
-        try {
-            const { email, firstName, lastName, companyName, 
-                  phoneNumber, password, confirmPassword, notifications } = req.body;
+    try {
+        let { email, firstName, lastName, companyName, phoneNumber, password, confirmPassword, notifications } = req.body;
+        
+      
+        email = xss(email);
+        firstName = xss(firstName);
+        lastName = xss(lastName);
+        companyName = xss(companyName);
+        phoneNumber = xss(phoneNumber);
             
             if (!email || !firstName || !lastName || !phoneNumber || !password || !confirmPassword) {
             throw new ValidationError("required field is missing ");
@@ -218,10 +225,14 @@ router.get('/profile', async (req, res) => {
     
 });
 router.put('/update', async (req, res) => {
-    try{
+    try {
         if (req.session.isLoggedIn && req.session.user) {
-        const { email, companyName, phoneNumber, notifications } = req.body;
-        
+            let { email, companyName, phoneNumber, notifications } = req.body;
+            
+            // Sanitize inputs
+            email = xss(email);
+            companyName = xss(companyName);
+            phoneNumber = xss(phoneNumber);
         if (!email || !companyName || !phoneNumber) {
         throw new ValidationError("attribute is missing ");
         }
