@@ -12,21 +12,21 @@ function searchValidation(event) {
 
     switch (searchCriteria) {
         case 'EIN':
-            const einP = /^\d{9}$/;
+            const einP =  /^\d{2}-\d{7}$/;
             if(!einP.test(searchQuery)){
                 errorMessage = 'Invalid name EIN format - 9 digits required';
                 isValid = false;
             }
             break;
-        case 'TIN':
-            const itinP = /^\d{9}$/;
+        case 'ITIN':
+            const itinP =/^9\d{2}-\d{2}-\d{4}$/;
             if(!itinP.test(searchQuery)){
                 errorMessage = 'Invalid name ITIN format - 9 digits required';
                 isValid = false;
             }
             break;
         case 'SSN':
-            const ssnP = /^\d{9}$/;
+            const ssnP =/^(?!666|000|9\d\d)\d{3}-(?!00)\d{2}-(?!0000)\d{4}$/;
             if(!ssnP.test(searchQuery)){
                 errorMessage = 'Invalid name SSN format - 9 digits required';
                 isValid = false;
@@ -47,7 +47,7 @@ function searchValidation(event) {
             }
             break;
         case 'phone':
-            const phoneP =  /^\d{10}$/;
+            const phoneP =/^\+1\d{10}$/;
             if(!phoneP.test(searchQuery)){
                 errorMessage = 'Invalid Phone number format';
                 isValid = false;
