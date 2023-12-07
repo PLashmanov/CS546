@@ -9,6 +9,67 @@ import {buildFraudsterRequest} from '../util/ObjectUtil.js'
 
 const router = Router();
 
+router.post('/lookup', async (req, res) => {
+  try {
+     // extract attribute
+     let name,id,ein,itin,ssn,email,phone = null //;buildFraudsterRequest(req.params);
+
+     let searchCriteria= req.body['search-criteria']
+     let searchQuery= req.body['search-query']
+     if (searchCriteria === 'name'){
+        name = searchQuery;
+     }else if (searchCriteria === 'id'){
+        id = searchQuery;
+     }else if (searchCriteria === 'ein'){
+      ein = searchQuery;
+     }else if (searchCriteria === 'itin'){
+      itin = searchQuery;
+     }else if (searchCriteria === 'ssn'){
+      ssn = searchQuery;
+     }else if (searchCriteria === 'email'){
+      email = searchQuery;
+     }else if (searchCriteria === 'phone'){
+      phone = searchQuery;
+     }else{
+      return res.status(400).send(e);
+     }
+
+ 
+     // do the request
+     let fraudstersArr = []
+     try {
+         if (name){
+           fraudstersArr =  await fraudsterData.findFraudstersByName(name);
+         }else if (id){
+           let fraudster = await fraudsterData.getFraudsterById(id);
+           if (fraudster){
+             fraudstersArr.push(fraudster)
+           }
+         }else{
+           let fraudster = await fraudsterData.findFraudsterByKeyAttributes(ein, itin, ssn, email, phone)
+           if (fraudster){
+             fraudstersArr.push(fraudster)
+           }
+         }
+         //res.render('lookup', {results: fraudstersArr, userLoggedIn: req.session && req.session.isLoggedIn});
+         res.render('lookup', { 
+          results: fraudstersArr,
+          title: 'Search for Fraudster',
+          userLoggedIn: req.session && req.session.isLoggedIn,
+      });
+       } catch (e) {
+         return res.status(500).send(e);
+     }
+  } catch (ex) {
+      if (ex instanceof ValidationError) {
+        return res.status(400).json({ error: ex.message });
+      }
+      else if (ex instanceof BusinessError) {
+        return res.status(409).json({ error: ex.message });
+      }
+      return res.status(500).json({ error: ex.message });
+  }
+});
 
 router
   .route('/:searchField/:searchValue')

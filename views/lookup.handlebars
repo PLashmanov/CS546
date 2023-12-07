@@ -1,14 +1,25 @@
   <h1>Fraudster Lookup</h1>
-    <form id="search-bar">
-        <select id="search-criteria">
-            <option value="EIN" id="look-ein" name="ein">EIN</option>
-            <option value="ITIN" id="look-tin" name="tin">ITIN</option>
-            <option value="SSN" id="look-ssn" name="ssn">SSN</option>
-            <option value="name" id="look-name" name="name">Name</option>
-            <option value="email" id="look-email" name="email">Email</option>
-            <option value="phone" id="look-phone" name="phone">Phone</option>
-            </select>
-        <input type="text" id="search-query" placeholder="Enter a search query">
+    <form id="search-bar" action="/fraudster/lookup" method="post">
+             <div class = "input-group">
+                {{!-- <label for="rep-search-criteria">Fraud Type:</label> --}}
+                <select name="search-criteria" id="rep-search-criteria">
+                         <option value="EIN" id="look-ein" name="ein">EIN</option>
+                        <option value="ITIN" id="look-tin" name="tin">ITIN</option>
+                        <option value="SSN" id="look-ssn" name="ssn">SSN</option>
+                        <option value="name" id="look-name" name="name">Name</option>
+                        <option value="email" id="look-email" name="email">Email</option>
+                        <option value="phone" id="look-phone" name="phone">Phone</option>
+                </select>
+              </div>
+        <input type="text" id="search-query" name="search-query" placeholder="Enter a search query">
         <button class="button" type="submit" id="search-button">Search Fraudster Database</button>
     </form>
+
+
+   {{#if results}}
+   {{#each results}}
+    <div class="row"></div>
+    {{/each}}
+   {{/if}}  
+
     <script src="/js/lookup.js"></script>
