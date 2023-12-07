@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { FraudDectionService } from '../services/FraudDetectionService.js';
 import multer from 'multer';
+import xss from 'xss';
 
 const upload = multer({ dest: './public/upload/' })
 
@@ -34,6 +35,7 @@ router.post('/submit-detect', upload.single('uploaded_file'), async (req, res) =
     const uploadedFile = req.file;
     try {
         let detectionResult =  await FraudDectionService.getInstance().detectFraud(uploadedFile.path);
+        //detectionResult = xss(detectionResult);maybe needed, not sure....
         res.render('detectResults', {fraudResult: detectionResult,
                     userLoggedIn: req.session && req.session.isLoggedIn});
     } catch (error) {
