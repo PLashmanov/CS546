@@ -1,52 +1,77 @@
 import {Router} from 'express';
-import  {createUser} from '../db/usersData.js';
 import * as fraudsterData from "../db/fraudstersData.js"
 import * as reportData from "../db/reportsData.js"
 import { ValidationError, BusinessError} from '../error/customErrors.js';
 import * as validations from '../validations/Validations.js';
-import {buildFraudsterRequest} from '../util/ObjectUtil.js'
+import {buildFraudsterRequest,defaultFraudsterRequest,flattenArray, evalLookupRequest} from '../util/ObjectUtil.js'
 import xss from 'xss';
+
 
 
 const router = Router();
 
+router.post('/lookup', async (req, res) => {
 
-router
-  .route('/:searchField/:searchValue')
-  .get(async (req, res) => {
-
-    // extract attribute
-    let {name,id,ein,itin,ssn,email,phone} = buildFraudsterRequest(req.params);
+    let {name,id,ein,itin,ssn,email,phone} = evalLookupRequest(req.body)
 
     // validations
     try{
-      validations.validateFraudsterAttrRequest(req.params)
+      name = xss(name)
+      id = xss(id)
+      ein = xss(ein)
+      itin = xss(itin)
+      ssn = xss(ssn)
+      id = xss(id)
+      email = xss(email)
+      phone = xss(phone)
       validations.fraudsterSearchWrappedValidation(name,id,ein,itin,ssn,email,phone)
     }catch(e){
-      return res.status(400).send(e);
-    }
 
-    // do the request
-    let fraudstersArr = []
-    try {
-        if (name){
-          fraudstersArr =  await fraudsterData.findFraudstersByName(name);
-        }else if (id){
-          let fraudster = await fraudsterData.getFraudsterById(id);
-          if (fraudster){
-            fraudstersArr.push(fraudster)
-          }
-        }else{
-          let fraudster = await fraudsterData.findFraudsterByKeyAttributes(ein, itin, ssn, email, phone)
-          if (fraudster){
-            fraudstersArr.push(fraudster)
-          }
-        }
-        return res.json(fraudstersArr);
-      } catch (e) {
-        return res.status(500).send(e);
+      return res.render('lookup', { 
+        isError: true,
+        error: e,
+        title: 'Search for Fraudster',
+        userLoggedIn: req.session && req.session.isLoggedIn,
+      })
+      
     }
-  })
+ 
+     // do the request
+     let fraudstersArr = []
+     try {
+         if (name && name != 'N/A'){
+           fraudstersArr =  await fraudsterData.findFraudstersByName(name);
+         }else if (id && id != 'N/A'){
+           let fraudster = await fraudsterData.getFraudsterById(id);
+           if (fraudster){
+             fraudster.id = fraudster._id.toString()
+             fraudstersArr.push(fraudster)
+           }
+         }else{
+           let fraudster = await fraudsterData.findFraudsterByKeyAttributes(ein, itin, ssn, email, phone)
+           if (fraudster){
+             fraudstersArr.push(fraudster)
+           }
+         }
+         fraudstersArr = flattenArray(fraudstersArr)
+         res.render('lookup', { 
+          hasResults: (fraudstersArr.length > 0) ? true: false,
+          resultCount: fraudstersArr.length,
+          results: fraudstersArr,
+          title: 'Search for Fraudster',
+          userLoggedIn: req.session && req.session.isLoggedIn,
+      });
+    } catch (e) {
+      
+      return res.render('lookup', { 
+        isError: true,
+        error: e,
+        title: 'Search for Fraudster',
+        userLoggedIn: req.session && req.session.isLoggedIn,
+      })
+    }
+});
+
   
 router.post('/report', async (req, res) => {
   try {

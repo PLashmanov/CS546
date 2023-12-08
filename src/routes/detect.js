@@ -39,7 +39,6 @@ router.post('/submit-detect', upload.single('uploaded_file'), async (req, res) =
         res.render('detectResults', {fraudResult: detectionResult,
                     userLoggedIn: req.session && req.session.isLoggedIn});
     } catch (error) {
-        //res.status(500).send("Error with getting detect route");
         res.render('detect', {title: "Detect Fraud",error: error, userLoggedIn: req.session && req.session.isLoggedIn});
     }
  });
