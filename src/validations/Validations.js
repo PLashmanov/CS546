@@ -279,31 +279,31 @@ export function validateFraudType(input) {
 
 export function fraudsterSearchWrappedValidation(name, id, ein, itin, ssn, email, phone) {
 
-  if (name) {
+  if (name && name != 'N/A') {
     this.validateName(name);
   }
 
-  if (id) {
+  if (id && id != 'N/A') {
     this.validateId(id);
   }
 
-  if (ein) {
+  if (ein && ein != 'N/A') {
     this.validateEIN(ein);
   }
 
-  if (itin) {
+  if (itin && itin != 'N/A') {
     this.validateITIN(itin);
   }
 
-  if (ssn) {
+  if (ssn && ssn != 'N/A') {
     this.validateSSN(ssn);
   }
 
-  if (email) {
+  if (email && email != 'N/A') {
     this.validateEmailFr(email);
   }
 
-  if (phone) {
+  if (phone && phone != 'N/A') {
     this.validatePhoneNumberFr(phone);
   }
 
