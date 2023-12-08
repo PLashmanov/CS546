@@ -1,25 +1,75 @@
-  <h1>Fraudster Lookup</h1>
-    <form id="search-bar" action="/fraudster/lookup" method="post">
+  {{#if hasResults}}
+  <h1>Fraudster Lookup Results ( {{resultCount}} )</h1>
+  {{else}}
+   <h1>Fraudster Lookup</h1>
+  {{/if}}  
+
+  <div id="fraud-lookup">
+  <form id="search-bar" action="/fraudster/lookup" method="post">
              <div class = "input-group">
-                {{!-- <label for="rep-search-criteria">Fraud Type:</label> --}}
-                <select name="search-criteria" id="rep-search-criteria">
-                         <option value="EIN" id="look-ein" name="ein">EIN</option>
-                        <option value="ITIN" id="look-tin" name="tin">ITIN</option>
-                        <option value="SSN" id="look-ssn" name="ssn">SSN</option>
+                <select name="search-criteria" id="search-criteria">
                         <option value="name" id="look-name" name="name">Name</option>
                         <option value="email" id="look-email" name="email">Email</option>
                         <option value="phone" id="look-phone" name="phone">Phone</option>
+                        <option value="id" id="look-id" name="id">FraudsterID</option>
+                        <option value="EIN" id="look-ein" name="ein">EIN</option>
+                        <option value="ITIN" id="look-tin" name="tin">ITIN</option>
+                        <option value="SSN" id="look-ssn" name="ssn">SSN</option>
+
                 </select>
               </div>
         <input type="text" id="search-query" name="search-query" placeholder="Enter a search query">
         <button class="button" type="submit" id="search-button">Search Fraudster Database</button>
     </form>
+  </div>
 
+ 
+    {{#if isError}}
+      <div id="lookup-error">
+      <p id="error-message">{{error}}</p>
+      </div>
+    {{else}}
 
-   {{#if results}}
-   {{#each results}}
-    <div class="row"></div>
-    {{/each}}
-   {{/if}}  
+      {{#if hasResults}}
+          <div id="fraud-lookup-results">
+          <p></p>
+          <table id="fraud-lookup-results-table">
+          <tr id="lookup-results-td">
+                <th>FraudsterID</th>
+                <th>Names</th>
+                <th>Emails</th>
+                <th>Phones</th>
+                <th>SSNs</th>
+                <th>EINs</th>
+                <th>ITINs</th>
+                <th>Reports</th>
+                <th>LastReport</th>
+                <th>Trending</th>
+          </tr>
+      {{#each results}}     
+            <tr>
+                <td id="lookup-results-td">{{this.id}}</td>
+                <td id="lookup-results-td">{{this.names}}</td>
+                <td id="lookup-results-td">{{this.emails}}</td>
+                <td id="lookup-results-td">{{this.phones}}</td>
+                <td id="lookup-results-td">{{this.ssns}}</td>
+                <td id="lookup-results-td">{{this.eins}}</td>
+                <td id="lookup-results-td">{{this.itins}}</td>
+                <td id="lookup-results-td">{{this.numReports}}</td>
+                <td id="lookup-results-td">{{this.lastTimeReported}}</td>
+                <td id="lookup-results-td">{{this.trending}}</td> 
+            </tr>
+        {{/each}}
+          </table>
+          </div>
+      {{else}}
+        <div id="lookup-noresults">
+            <p>No results found. Please try again.</p>
+        </div>
+      {{/if}}  
 
-    <script src="/js/lookup.js"></script>
+    {{/if}}  
+
+    <br>
+
+  <script src="/js/lookup.js"></script>

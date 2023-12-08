@@ -195,6 +195,7 @@ export async function findFraudsterByKeyAttributes(ein, itin, ssn, email, phone)
     let trending = await isFraudsterTrending(fraudsterId);
 
     const fraudsterAttributesToReturn = {
+      id: fraudster._id.toString(),
       eins: fraudster.eins,
       itins: fraudster.itins,
       ssns: fraudster.ssns,
@@ -268,6 +269,7 @@ export async function findFraudstersByName(name) {
     let trending = await isFraudsterTrending(combinedFraudsters[i]._id.toString());
 
     let toReturn = {
+      id: combinedFraudsters[i]._id.toString(),
       eins: combinedFraudsters[i].eins,
       itins: combinedFraudsters[i].itins,
       ssns: combinedFraudsters[i].ssns,

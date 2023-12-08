@@ -546,3 +546,35 @@ footer {
     text-align: center;
     font-weight: 400;
 }
+
+#fraud-lookup-results-table {
+    width: 90%;
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#lookup-results-th  {
+    font-size: small;
+}
+
+#lookup-results-td  {
+    font-size: small;
+    border: .1px solid black;
+}
+
+#lookup-error{
+    width: 90%;
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+#lookup-noresults{
+    width: 90%;
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
