@@ -173,17 +173,17 @@ export function validateNameFr(name) {
 }
 
 export function validateCompanyName(companyName) {
-    if (typeof companyName !== 'string') {
-        return 'N/A'; 
-    }
-    companyName = companyName.trim();
-    if (companyName.length === 0) {
-        return 'N/A';
-    }
-    if (companyName.length < 3 || companyName.length > 50) {
-        throw new ValidationError("error: Company name must be between 3 and 50 characters");
-    }
-    return companyName.toUpperCase();
+  if (typeof companyName !== 'string') {
+    return 'N/A';
+  }
+  companyName = companyName.trim();
+  if (companyName.length === 0) {
+    return 'N/A';
+  }
+  if (companyName.length < 3 || companyName.length > 50) {
+    throw new ValidationError("error: Company name must be between 3 and 50 characters");
+  }
+  return companyName.toUpperCase();
 }
 
 export function validateCity(city) {
@@ -327,9 +327,16 @@ export function validateFeedbackText(feedbackText) {
   const maxLength = 250;
   const minLetterPercentage = 0.6;
 
-  if (!feedbackText || feedbackText.trim().length < minLength || feedbackText.trim().length > maxLength) throw new ValidationError ("Feedback length must be between 10 and 250 characters ")
+  if (!feedbackText || feedbackText.trim().length < minLength || feedbackText.trim().length > maxLength) throw new ValidationError("Feedback length must be between 10 and 250 characters ")
   const lettersCount = feedbackText.split('').filter(char => char.match(/[A-Za-z]/)).length;
   const letterPercentage = lettersCount / feedbackText.trim().length;
   if (letterPercentage < minLetterPercentage) throw new ValidationError("Text has to contain a minimum of 60% letters")
   return feedbackText;
+}
+
+export function validateFrIds(frIds) {
+  if (!frIds) throw new ValidationError('frIds is missing');
+  if (!Array.isArray(frIds)) throw new ValidationError('validateFrIds argument must be an array');
+  if (frIds.length === 0) throw new ValidationError('frIds must be a non empty array');
+  return frIds;
 }

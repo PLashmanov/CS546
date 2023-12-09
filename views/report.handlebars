@@ -1,23 +1,23 @@
 <section id="reportFraud">
-        <h1>Report Fraud</h1>
-        <br>
-        <span class="report-error" id="report-error"></span>
-        <form id="reportForm">
-            <div class="input-group">
+    <h1>Report Fraud</h1>
+    <br>
+    <span class="report-error" id="report-error"></span>
+    <form id="reportForm">
+        <div class="input-group">
             <p>Please enter any fraud information encountered and click Report Fraud when finished.</p>
-            <div class="input-group required" >
+            <div class="input-group">
                 <br>
-                <label for="rep-name" >Your Name</label>
-                <input type="text" id="rep-name" name="name" placeholder="John Smith" required>
+                <label for="rep-name">Fraudster Name</label>
+                <input type="text" id="rep-name" name="name" placeholder="John Smith">
                 <span class="rep-error" id="name-error"></span>
             </div>
-                <br>
+            <br>
             <div class="input-group">
                 <label for="rep-email">Fraudster Email</label>
-                <input type="email" id="rep-email" name="email"  placeholder="jsmith@gmail.com">
+                <input type="email" id="rep-email" name="email" placeholder="jsmith@gmail.com">
                 <span class="rep-error" id="email-error"></span>
             </div>
-                <br>
+            <br>
             <div class="input-group">
                 <label for="rep-ein">Fraudster EIN</label>
                 <input type="text" id="rep-ein" name="ein" placeholder="12-3456789">
@@ -42,27 +42,27 @@
                 <span class="rep-error" id="phone-error"></span>
             </div>
             <br>
-          </div>
-                <div class = "input-group">
-                <label for="rep-fraudType">Fraud Type:</label>
-                <select name="fraudType" id="rep-fraudType">
-                        <option value="select_fraud_type">Select Fraud Type</option>
-                        <option value="wire_fraud">Wire Fraud</option>
-                        <option value ="money_laundering">Money Laundering</option>
-                        <option value ="creditcard_fraud">Credit Card Fraud</option>
-                        <option value="check_fraud">Check Fraud</option>
-                        <option value ="insurance_fraud">Insurance Fraud</option>
-                        <option value ="identify_theft">Identitiy Theft</option>
-                        <option value="phishing">Phishing</option>
-                        <option value ="embezzlement">Embezzlement</option>
-                        <option value ="mortgage_fraud">Mortgage Fraud</option>
-                        <option value ="utility_scam">Utility Scam</option>
-                </select>
-              </div>
-              <br>
-            <button type="submit" class="button">Report Fraud</button>
-        </form>
+        </div>
+        <div class="input-group">
+            <label for="rep-fraudType">Fraud Type:</label>
+            <select name="fraudType" id="rep-fraudType">
+                <option value="select_fraud_type">Select Fraud Type</option>
+                <option value="wire_fraud">Wire Fraud</option>
+                <option value="money_laundering">Money Laundering</option>
+                <option value="creditcard_fraud">Credit Card Fraud</option>
+                <option value="check_fraud">Check Fraud</option>
+                <option value="insurance_fraud">Insurance Fraud</option>
+                <option value="identify_theft">Identitiy Theft</option>
+                <option value="phishing">Phishing</option>
+                <option value="embezzlement">Embezzlement</option>
+                <option value="mortgage_fraud">Mortgage Fraud</option>
+                <option value="utility_scam">Utility Scam</option>
+            </select>
+        </div>
         <br>
-        <p id="error-message"></p>
-    </section>
-    <script src="/js/clientSideReport.js"></script>
+        <button type="submit" class="button">Report Fraud</button>
+    </form>
+    <br>
+    <p id="error-message"></p>
+</section>
+<script src="/js/clientSideReport.js"></script>
