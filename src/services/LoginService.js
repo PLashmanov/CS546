@@ -13,7 +13,7 @@ class LoginService {
         const user = await this.#getUser(reqEmail)
         const isPasswordValid = await this.#verifyPassword(reqPassword, user.hashedPassword); 
         if (!isPasswordValid) {
-            throw new BusinessError('Invalid password');
+            throw new BusinessError('Either Password or Login is invalid');
         }
         const userDetails = {
             firstName: user.firstName,
@@ -37,7 +37,7 @@ class LoginService {
         const userCollection = await users();
         const user = await userCollection.findOne({ email: reqEmail });
         if (!user) {
-            throw new Error('User not found');
+            throw new Error('Either Password or Login is invalid');
         }
         return user; 
     }
