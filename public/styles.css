@@ -33,12 +33,12 @@ h2 {
 
 li {
     list-style-type: none;
-    margin-bottom: 7px;
+    margin-bottom: 10px;
 }
 
 h3,
 p {
-    margin-bottom: 7px;
+    margin-bottom: 15px;
 }
 
 
@@ -70,17 +70,17 @@ p {
     align-items: center;
     height: 300px;
     background-size: cover;
-    background-image: url('../Images/banner.jpg');
+    background-image: url('../Images/background.jpg');
     background-repeat: no-repeat;
-
 }
 
 .banner {
     max-width: 100%;
-    max-height: 200px;
+    max-height: 300px;
     height: auto;
     margin: 0 auto;
 }
+
 
 /* navigation menu */
 nav {
@@ -110,6 +110,7 @@ nav {
 .nav-item a:visited {
     color: #f5f5f5;
 }
+
 
 /* login form */
 .login-form {
@@ -578,3 +579,61 @@ footer {
     margin-right: auto;
     text-align: center;
 }
+
+/* *********** Responsive *************/
+
+@media screen and (max-width: 768px) {
+    section, .submit-review-container, .submit-detect-container, .submit-result-container {
+        padding: 16px;
+        margin: 10px;
+        width: auto;
+    }
+
+    footer {
+        padding: 8px 0;
+    }
+    .login-form, .login-form form, #search-bar, .submit-review-container, .submit-detect-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .input-group input, .review-group input, .review-group textarea, #feedbackText, #search-criteria, #search-query {
+        width: 100%; 
+    }
+    #dash-table {
+        display: block;
+    }
+    .dash-table-row {
+        display: block;
+    }
+    .dash-table-body-cell, .dash-table-body-cell-metric {
+        display: block;
+        width: auto;
+        text-align: center;
+    }
+    .badge-image, .team-member img, #review-img, .fraud-detection img {
+        max-width: 100px; 
+        height: auto;
+    }
+
+    .team-member {
+        flex-direction: column;
+        align-items: center;
+    }
+    .nav-links {
+        flex-direction: column;
+    }
+
+    .nav-item {
+        margin: 10px 0;
+    }
+    .banner-container {
+        height: 150px;
+    }
+
+    .banner {
+        max-height: 150px; 
+    }
+    
+}
+
