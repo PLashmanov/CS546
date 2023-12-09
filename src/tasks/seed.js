@@ -42,8 +42,6 @@ let fraud10 = await createReport(user1._id.toString(), '12-3456789', null, null,
 let fraud11 = await createReport(user2._id.toString(), '12-3456789', null, null, 'badperson@gmail.com', '+12123453456', "Bad Johnny", 'wire_fraud')
 let fraud12 = await createReport(user3._id.toString(), '12-3456789', null, null, 'badperson@gmail.com', '+12123453456', "Tim Johnny", 'wire_fraud')
 let fraud13 = await createReport(user4._id.toString(), '12-3456789', null, null, 'badperson@gmail.com', '+12123453456', "Nan Navi", 'wire_fraud')
-
-
 let fraud14 = await createReport(user5._id.toString(), '11-3456789', null, null, 'badman@gmail.com', '+12123453457', "", 'mortgage_fraud')
 let fraud15 = await createReport(user5._id.toString(), '10-3456789', null, null, 'badwoman@gmail.com', '+12123453458', "Bad", 'mortgage_fraud')
 let fraud16 = await createReport(user5._id.toString(), '19-3456789', null, null, 'badkid@gmail.com', '+12123453459', "Jim", 'mortgage_fraud')
@@ -53,6 +51,23 @@ let fraud19 = await createReport(user5._id.toString(), '15-3456789', null, null,
 let fraud20 = await createReport(user5._id.toString(), '16-3456789', null, null, 'cheat@gmail.com', '+12123453463', "Knot Good", 'mortgage_fraud')
 let fraud21 = await createReport(user5._id.toString(), '17-3456789', null, null, 'robber@gmail.com', '+12123453464', "Nat", 'mortgage_fraud')
 let fraud22 = await createReport(user5._id.toString(), '17-3456789', null, null, 'thiswillhurt@gmail.com', '+12123453465', "Lucky Bob", 'mortgage_fraud')
+let fraud23 = await createReport(user5._id.toString(), null, null, '035-57-9978', 'badmatt@gmail.com', '+12123453758', "Bad Matt", 'insurance_fraud')
+let fraud24 = await createReport(user5._id.toString(), null, null, '519-11-1385', 'badmatt3@gmail.com', '+12123453459', "Jim", 'mortgage_fraud')
+let fraud25 = await createReport(user5._id.toString(), null, null, '185-37-7785', 'badstudent1@gmail.com', '+12123453460', "Annabell", 'identify_theft')
+let fraud26 = await createReport(user5._id.toString(), null, null, '785-12-4489', 'badann@gmail.com', '+12123473461', "Ann", 'identify_theft')
+let fraud27 = await createReport(user5._id.toString(), null, null, '115-88-1336', 'fraud12@gmail.com', '+12123453762', "Sue", 'identify_theft')
+let fraud28 = await createReport(user5._id.toString(), null, null, '896-78-1385', 'cheat55@gmail.com', '+12128453463', "Knot Good", 'identify_theft')
+let fraud29 = await createReport(user5._id.toString(), null, null, '225-98-8823', 'robber404@gmail.com', '+12129853464', "Nat", 'identify_theft')
+let fraud30 = await createReport(user5._id.toString(), null, null, '123-77-4468', 'thiswillhurt22@gmail.com', '+19173453465', "Lucky Bob", 'identify_theft')
+let fraud31 = await createReport(user5._id.toString(), '17-3456789', null, null, 'thiswillhurt5@gmail.com', '+12013453465', "Lucky Bob", 'mortgage_fraud')
+let fraud32 = await createReport(user5._id.toString(), null, '935-57-7970', null, 'badmatthew@gmail.com', '+12123466758', "Bad Matt", 'insurance_fraud')
+let fraud33 = await createReport(user5._id.toString(), null, '950-57-7174', null, 'badmatt388@gmail.com', '+12123452459', "Jim", 'mortgage_fraud')
+let fraud34 = await createReport(user5._id.toString(), null, '901-33-6942', null, 'badstudent10@gmail.com', '+12126553460', "Annabell", 'money_laundering')
+let fraud35 = await createReport(user5._id.toString(), null, '933-45-7782', null, 'badannie@gmail.com', '+12123473981', "Ann", 'utility_scam')
+let fraud36 = await createReport(user5._id.toString(), null, '922-78-9877', null, 'frauder@gmail.com', '+12123983762', "Sue", 'money_laundering')
+let fraud37 = await createReport(user5._id.toString(), null, '954-44-7764', null, 'cheating@gmail.com', '+12125553463', "Knot Good", 'utility_scam')
+let fraud38 = await createReport(user5._id.toString(), null, '903-38-6689', null, 'robbers@gmail.com', '+12129873464', "Nat", 'phishing')
+let fraud39 = await createReport(user5._id.toString(), null, '904-98-1315', null, 'thiswillhurttomorrow@gmail.com', '+12126653465', "Lucky Bob", 'phishing')
 
 
 console.log('\n')

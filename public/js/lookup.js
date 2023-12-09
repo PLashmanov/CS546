@@ -1,7 +1,21 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('search-bar').addEventListener('submit', searchValidation);
+    const searchCriteria = document.getElementById('search-criteria');
+    const searchQuery = document.getElementById('search-query');
+
+    searchQuery.addEventListener('focus', function() {
+        if (searchCriteria.value === 'phone' && !this.value.startsWith('+1')) {
+            this.value = '+1' + this.value.replace(/[^\d]/g, '').slice(1);
+        }
+    });
+    searchQuery.addEventListener('blur', function() {
+        if (searchCriteria.value === 'phone' && this.value === '+1') {
+            this.value = '';
+        }
+    });
 });
+
 
 function searchValidation(event) {
     const lookupForm = document.getElementById('search-bar');
