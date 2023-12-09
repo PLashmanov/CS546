@@ -18,8 +18,12 @@ function validateEmailClient(email) {
     return email.trim() === '' || validEmail.test(email);
 }
 function validatePhoneNumberClient(phone) {
+    if (phone.trim() === '' || phone.trim() === '+1') {
+        return true;
+    }
+
     const phonePattern = /^\+1\d{10}$/;
-    return phone.trim() === '' || phonePattern.test(phone);
+    return phonePattern.test(phone);
 }
 function validateEINClient(ein) {
     const einPattern = /^\d{2}-\d{7}$/;
@@ -37,7 +41,7 @@ function validateReport() {
     const reportIds = ['rep-ein', 'rep-itin', 'rep-ssn', 'rep-email', 'rep-phoneNumber'];
     const oneFilled = reportIds.some(fieldId => {
         const field = document.getElementById(fieldId);
-        return field && field.value.trim() !== '';
+        return field && (field.value.trim() !== '' || field.value.trim() === '+1');
     });
 
 
@@ -57,6 +61,16 @@ function validateReport() {
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('reportForm');
+    document.getElementById('rep-phoneNumber').addEventListener('focus', function () {
+        if (this.value.trim() === '') {
+            this.value = '+1';
+        }
+    });
+    document.getElementById('rep-phoneNumber').addEventListener('blur', function () {
+        if (this.value.trim() === '+1') {
+            this.value = '';
+        }
+    });
     document.getElementById('rep-phoneNumber').addEventListener('input', function () {
         if (!this.value.startsWith('+1')) {
             this.value = '+1' + this.value.replace(/[^\d]/g, '').slice(1);
