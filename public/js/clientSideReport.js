@@ -3,10 +3,10 @@ function validateNameClient(name) {
     const validFormat = /^[A-Za-z ]+$/;
 
     if (!name || name.trim().length === 0) {
-        return false;
+        return true;
     }
     if (name.trim().length < 2 || name.trim().length > 20) {
-        return false; 
+        return false;
     }
     if (!validFormat.test(name.trim())) {
         return false;
@@ -40,7 +40,7 @@ function validateReport() {
         return field && field.value.trim() !== '';
     });
 
-   
+
     const reportError = document.getElementById('report-error');
     if (!oneFilled) {
         reportError.textContent = 'Report failed: one of the following must be provided: EIN, ITIN, SSN, email or phone.';
@@ -57,7 +57,7 @@ function validateReport() {
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('reportForm');
-    document.getElementById('rep-phoneNumber').addEventListener('input', function () { 
+    document.getElementById('rep-phoneNumber').addEventListener('input', function () {
         if (!this.value.startsWith('+1')) {
             this.value = '+1' + this.value.replace(/[^\d]/g, '').slice(1);
         }
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const nameError = document.getElementById('name-error');
             nameError.textContent = 'Invalid Name';
             nameError.style.display = 'block';
-        }else {
+        } else {
             document.getElementById('name-error').style.display = 'none';
             document.getElementById('name-error').textContent = '';
         }
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!isValid) {
             event.preventDefault();
-            
+
         } else {
         }
     });

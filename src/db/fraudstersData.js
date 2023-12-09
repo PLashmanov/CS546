@@ -6,7 +6,7 @@ import { users } from '../config/mongoCollections.js';
 import * as validations from '../validations/Validations.js';
 import * as reportsData from './reportsData.js';
 import { AlertService } from '../services/AlertService.js';
-import { ValidationError } from '../error/customErrors.js';
+import { BusinessError, ValidationError } from '../error/customErrors.js';
 
 export const getFraudsterById = async (fraudsterId) => {
   fraudsterId = validations.validateId(fraudsterId);
@@ -21,7 +21,6 @@ export const getFraudsterById = async (fraudsterId) => {
   return fraudster;
 }
 
-// checks if fraudster exists in collection and returns their id, false otherwise
 export async function fraudsterExists(ein, itin, ssn, email, phone) {
   ein = validations.validateEIN(ein);
   itin = validations.validateITIN(itin);
@@ -30,33 +29,37 @@ export async function fraudsterExists(ein, itin, ssn, email, phone) {
   phone = validations.validatePhoneNumberFr(phone);
 
   let fraudstersCollection = await fraudsters();
-  let fraudster;
+  let fraudsterIds = new Set();
   if (ein !== 'N/A') {
-    if (fraudster = await fraudstersCollection.findOne({ eins: ein })) {
-      return fraudster._id.toString();
-    }
-
-  } else if (itin !== 'N/A') {
-    if (fraudster = await fraudstersCollection.findOne({ itins: itin })) {
-      return fraudster._id.toString();
-    }
-
-  } else if (ssn !== 'N/A') {
-    if (fraudster = await fraudstersCollection.findOne({ ssns: ssn })) {
-      return fraudster._id.toString();
-    }
-
-  } else if (email !== 'N/A') {
-    if (fraudster = await fraudstersCollection.findOne({ emails: email })) {
-      return fraudster._id.toString();
-    }
-
-  } else if (phone !== 'N/A') {
-    if (fraudster = await fraudstersCollection.findOne({ phones: phone })) {
-      return fraudster._id.toString();
-    }
+    const fraudsters = await fraudstersCollection.find({ eins: ein }).toArray();
+    fraudsters.forEach(fraudster => fraudsterIds.add(fraudster._id.toString()));
   }
-  return false;
+
+  if (itin !== 'N/A') {
+    const fraudsters = await fraudstersCollection.find({ itins: itin }).toArray();
+    fraudsters.forEach(fraudster => fraudsterIds.add(fraudster._id.toString()));
+  }
+  if (ssn !== 'N/A') {
+    const fraudsters = await fraudstersCollection.find({ ssns: ssn }).toArray();
+    fraudsters.forEach(fraudster => fraudsterIds.add(fraudster._id.toString()));
+  }
+
+  if (email !== 'N/A') {
+    const fraudsters = await fraudstersCollection.find({ emails: email }).toArray();
+    fraudsters.forEach(fraudster => fraudsterIds.add(fraudster._id.toString()));
+  }
+
+  if (phone !== 'N/A') {
+    const fraudsters = await fraudstersCollection.find({ phones: phone }).toArray();
+    fraudsters.forEach(fraudster => fraudsterIds.add(fraudster._id.toString()));
+  }
+  if (fraudsterIds.size === 1) {
+    return Array.from(fraudsterIds)[0];
+  } else if (fraudsterIds.size > 1) {
+    let frId = await joinFraudstersToOne(Array.from(fraudsterIds));
+    return frId;
+  }
+  else return false;
 }
 
 export async function createFraudster() {
@@ -125,7 +128,9 @@ export async function updateFraudsterAfterCreateReport(fraudsterId, ein, itin, s
         names: nameFraudster,
         users: userId,
         reports: report,
-        updateDates: todaysDate
+      },
+      $set: {
+        updateDate: todaysDate
       },
       $inc: { numReports: 1 }
     },
@@ -138,11 +143,11 @@ export async function updateFraudsterAfterCreateReport(fraudsterId, ein, itin, s
   if (!updatedFraudster || !updatedFraudster._id) {
     throw new Error('Fraudster not found or couldnt be updated');
   }
-  try{
+  try {
     await AlertService.getInstance().alertUsers(updatedFraudster._id.toString());
   }
-  catch(ex){
-    console.error("error occured during email service: " , ex)
+  catch (ex) {
+    console.error("error occured during email service: ", ex)
   }
   return updatedFraudster;
 }
@@ -216,8 +221,8 @@ export async function findFraudsterByKeyAttributes(ein, itin, ssn, email, phone)
 export async function getFraudsterTrendingCount() {
   const fraudstersCollection = await fraudsters();
   const fraudsterTrending = await fraudstersCollection
-  .find({ trending: true })
-  .toArray();
+    .find({ trending: true })
+    .toArray();
 
   return fraudsterTrending.length;
 }
@@ -283,4 +288,52 @@ export async function findFraudstersByName(name) {
     fraudstersResult.push(toReturn);
   }
   return fraudstersResult;
+}
+
+async function joinTwoFraudsters(frId1, frId2) {
+  frId1 = validations.validateId(frId1);
+  frId1 = validations.validateId(frId1);
+
+  const fraudsterCollection = await fraudsters();
+  const fraudster2 = await getFraudsterById(frId2);
+  let updateData = {
+    $addToSet: {
+      eins: { $each: fraudster2.eins },
+      itins: { $each: fraudster2.itins },
+      ssns: { $each: fraudster2.ssns },
+      emails: { $each: fraudster2.emails },
+      phones: { $each: fraudster2.phones },
+      names: { $each: fraudster2.names },
+      users: { $each: fraudster2.users },
+      reports: { $each: fraudster2.reports }
+    },
+    $inc: { numReports: fraudster2.numReports }
+  }
+
+  let fraudster1Updated = await fraudsterCollection.findOneAndUpdate(
+    { _id: new ObjectId(frId1) },
+    updateData,
+    { returnDocument: 'after' });
+
+  await fraudsterCollection.deleteOne({ _id: new ObjectId(frId2) });
+
+  return fraudster1Updated;
+}
+
+async function joinFraudstersToOne(frIds) {
+  console.log("frIds before validation:", frIds);
+  frIds = validations.validateFrIds(frIds);
+  console.log("frIds after validation:", frIds);
+  if (frIds.length < 2) {
+    throw new BusinessError('At least two fraudsters are required for merging');
+  }
+
+  const primaryFraudsterId = frIds[0];
+
+  for (let i = 1; i < frIds.length; i++) {
+    await joinTwoFraudsters(primaryFraudsterId, frIds[i]);
+  }
+  const fraudsterCollection = await fraudsters();
+  const updatedPrimaryFraudster = await fraudsterCollection.findOne({ _id: new ObjectId(primaryFraudsterId) });
+  return updatedPrimaryFraudster._id.toString();
 }
