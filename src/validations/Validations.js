@@ -158,6 +158,10 @@ function validateZip(zip) {
 
 export function validateName(name) {
   name = validateString(name, "Fraudster name").toUpperCase();
+
+  if (!/^[A-Za-z]+$/.test(name)) {
+    throw new ValidationError("name must contain only letters");
+  }
   if (name.length < 2 || name.length > 20) throw new ValidationError("error: name length must be between 2 and 30");
   return name;
 }
@@ -167,6 +171,10 @@ export function validateNameFr(name) {
   if (typeof name === 'string' && name.trim() === 'N/A') return name;
   if (typeof name !== 'string') throw new ValidationError("error: name must be string");
   name = name.trim();
+
+  if (name.length > 0 && !/^[A-Za-z]+$/.test(name)) {
+    throw new ValidationError("name must contain only letters");
+  }
   if (name.length === 0) return 'N/A';
   if (name.length < 2 || name.length > 20) throw new ValidationError("error: name length must be between 2 and 30");
   return name;
@@ -318,6 +326,9 @@ export function validateBody(body) {
 
 export function validateNickname(name) {
   name = validateString(name, "name");
+  if (!/^[A-Za-z]+$/.test(name)) {
+    throw new ValidationError("nickname must contain only letters");
+  }
   if (name.length < 2 || name.length > 20) throw new ValidationError("nickname length must be between 2 and 30");
   return name;
 }
