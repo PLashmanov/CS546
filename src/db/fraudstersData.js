@@ -13,12 +13,24 @@ export const getFraudsterById = async (fraudsterId) => {
   const fraudsterCollection = await fraudsters();
   const fraudster = await fraudsterCollection.findOne({ _id: new ObjectId(fraudsterId) });
   if (!fraudster) throw new Error(`fraudster not found`);
+  let updatedFraudster;
+  if (fraudster) {
+    let lastReport = formatDate(fraudster.updateDate);
+    updatedFraudster = await fraudsterCollection.findOneAndUpdate({ _id: new ObjectId(fraudsterId) }
+      , { $set: { lastTimeReported: lastReport } }, { returnDocument: 'after' });
+  }
 
   if (await isFraudsterTrending(fraudsterId)) {
-    let updatedFraudster = await fraudsterCollection.findOneAndUpdate({ _id: new ObjectId(fraudsterId) }
+    updatedFraudster = await fraudsterCollection.findOneAndUpdate({ _id: new ObjectId(fraudsterId) }
       , { $set: { trending: true } }, { returnDocument: 'after' });
   }
-  return fraudster;
+
+  await fraudsterCollection.updateOne({ _id: new ObjectId(fraudsterId) },
+    { $unset: { lastTimeReported: "" } });
+
+  await fraudsterCollection.updateOne({ _id: new ObjectId(fraudsterId) },
+    { $unset: { lastTimeReported: "" } });
+  return updatedFraudster;
 }
 
 export async function fraudsterExists(ein, itin, ssn, email, phone) {
@@ -321,9 +333,7 @@ async function joinTwoFraudsters(frId1, frId2) {
 }
 
 async function joinFraudstersToOne(frIds) {
-  console.log("frIds before validation:", frIds);
   frIds = validations.validateFrIds(frIds);
-  console.log("frIds after validation:", frIds);
   if (frIds.length < 2) {
     throw new BusinessError('At least two fraudsters are required for merging');
   }
