@@ -28,21 +28,21 @@ function searchValidation(event) {
         case 'EIN':
             const einP =  /^\d{2}-\d{7}$/;
             if(!einP.test(searchQuery)){
-                errorMessage = 'Invalid name EIN format - 9 digits required';
+                errorMessage = 'Invalid EIN format - 9 digits required';
                 isValid = false;
             }
             break;
         case 'ITIN':
             const itinP =/^9\d{2}-\d{2}-\d{4}$/;
             if(!itinP.test(searchQuery)){
-                errorMessage = 'Invalid name ITIN format - 9 digits required';
+                errorMessage = 'Invalid ITIN format - 9 digits required';
                 isValid = false;
             }
             break;
         case 'SSN':
             const ssnP =/^(?!666|000|9\d\d)\d{3}-(?!00)\d{2}-(?!0000)\d{4}$/;
             if(!ssnP.test(searchQuery)){
-                errorMessage = 'Invalid name SSN format - 9 digits required';
+                errorMessage = 'Invalid SSN format - 9 digits required';
                 isValid = false;
             }
             break;
@@ -50,6 +50,9 @@ function searchValidation(event) {
             const nameP = /^[A-Za-z\s]+$/;
             if(!nameP.test(searchQuery)){
                 errorMessage = 'Invalid name format';
+                isValid = false;
+            }else if (searchQuery.length < 2 || searchQuery.length > 20) {
+                errorMessage = 'error: name length must be between 2 and 20'
                 isValid = false;
             }
             break;
