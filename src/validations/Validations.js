@@ -159,7 +159,7 @@ function validateZip(zip) {
 export function validateName(name) {
   name = validateString(name, "Fraudster name").toUpperCase();
 
-  if (!/^[A-Za-z]+$/.test(name)) {
+  if (!/^[A-Za-z]+(?: [A-Za-z]+)*$/.test(name)) {
     throw new ValidationError("name must contain only letters");
   }
   if (name.length < 2 || name.length > 20) throw new ValidationError("error: name length must be between 2 and 30");
@@ -172,7 +172,7 @@ export function validateNameFr(name) {
   if (typeof name !== 'string') throw new ValidationError("error: name must be string");
   name = name.trim();
 
-  if (name.length > 0 && !/^[A-Za-z]+$/.test(name)) {
+  if (name.length > 0 && !/^[A-Za-z]+(?: [A-Za-z]+)*$/.test(name)) {
     throw new ValidationError("name must contain only letters");
   }
   if (name.length === 0) return 'N/A';
