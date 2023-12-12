@@ -1,6 +1,6 @@
 
 function validateNameClient(name) {
-    const validFormat = /^[A-Za-z ]+$/;
+    const validFormat = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
 
     if (!name || name.trim().length === 0) {
         return true;
