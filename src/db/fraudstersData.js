@@ -250,7 +250,7 @@ export async function getNumOfFraudsters() {
 
 export async function findFraudstersByName(name) {
 
-  if (name.trim().length < 2 || name.trim().length > 20) throw new ValidationError("error: name length must be between 2 and 30");
+  if (name.trim().length < 2 || name.trim().length > 20) throw new ValidationError("name length must be between 2 and 30");
   const lim = 20;
 
   const fraudsterCollection = await fraudsters();
