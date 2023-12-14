@@ -21,8 +21,9 @@ export async function createReview(userId, nickName, body) {
     }
     const reviewCollection = await reviews();
 
-    if (reviewCollection.findOne({ userId: userId })) {
-        throw new Error("Thank you for your interest in leaving a review. We value your feedback. However, please note that each user is limited to one review. It appears that you have already submitted a review. If you have any additional feedback or questions, please feel free to reach out to our support team. We're here to assist you!");
+    const userReviewCt = await reviewCollection.countDocuments({ userId: userId });
+    if (userReviewCt > 0) {
+        throw new Error("Thank you for your interest in leaving a review. We value your feedback. However, please note that each user is limited to one review. Our system shows that you have already submitted a review. If you have any additional feedback or questions, please feel free to reach out to our support team. We're here to assist you!");
     }
 
     let insertedReview = await reviewCollection.insertOne(newReview);

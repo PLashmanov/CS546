@@ -325,7 +325,7 @@ export function validateBody(body) {
 }
 
 export function validateNickname(name) {
-  name = validateString(name, "name");
+  name = validateString(name, "nickName");
   if (!/^[A-Za-z]+$/.test(name)) {
     throw new ValidationError("nickname must contain only letters");
   }

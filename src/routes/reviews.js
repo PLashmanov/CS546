@@ -34,7 +34,13 @@ router.get('/submit-review', (req, res) => {
 router.post('/submit-review', async (req, res) => {
     try {
         if (!req.session || !req.session.isLoggedIn) {
-            throw new Error("Must log in to submit a review");
+            return res.status(403).render("SubmitReview", {
+                title: "Submit Review",
+                errorMessage: "Must log in to submit a review",
+                nickNameInput: "",
+                bodyInout: "",
+                userLoggedIn: false
+            })
         }
         let userId = req.session.user.id;
 
@@ -58,7 +64,8 @@ router.post('/submit-review', async (req, res) => {
                 title: "submit-review",
                 errorMessage: errorMessages[0],
                 nickNameInput: nickName,
-                bodyInput: body
+                bodyInput: body,
+                userLoggedIn: true
             })
         }
         let result;
@@ -69,7 +76,8 @@ router.post('/submit-review', async (req, res) => {
                 title: "Submit Review",
                 errorMessage: serverError.message,
                 nickNameInput: nickName,
-                bodyInput: body
+                bodyInput: body,
+                userLoggedIn: true
             })
         }
         if (result.insertedReview) {
