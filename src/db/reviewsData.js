@@ -6,7 +6,7 @@ import { formatDate } from './fraudstersData.js';
 export async function createReview(userId, nickName, body) {
     userId = validations.validateId(userId);
     nickName = validations.validateNickname(nickName);
-    body = validations.validateReviewBody(body);
+    body = validations.validateBody(body);
 
     if (userId === null || userId === undefined || nickName === null || nickName === undefined
         || body === null || body === undefined) throw new Error("One ore more fields are missing to create review");

@@ -318,7 +318,7 @@ export function fraudsterSearchWrappedValidation(name, id, ein, itin, ssn, email
 
 }
 
-export function validateReviewBody(body) {
+export function validateBody(body) {
   body = validateString(body, "review");
   if (body.length < 10 || body.length > 250) throw new ValidationError("review length must be between 10 and 250 characters");
   return body;
