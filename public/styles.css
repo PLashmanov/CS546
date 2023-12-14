@@ -218,6 +218,7 @@ footer {
 }
 
 /* Buttons CSS */
+/*css for the buttons taken from https://cssbuttons.app */
 .button {
     outline: none;
     display: inline-block;
@@ -290,16 +291,20 @@ footer {
     margin: 20px auto;
 }
 
-.reg-error, .rep-error, .feedback-error{
+.reg-error,
+.rep-error,
+.feedback-error {
     display: none;
     color: red;
     font-size: 0.8em;
 }
+
 .report-error {
-    display:none;
-    color:red;
-    font-size:1.3em;
+    display: none;
+    color: red;
+    font-size: 1.3em;
 }
+
 #error-message {
     color: red;
     margin-top: 20px;
@@ -328,24 +333,26 @@ footer {
 
 #deleteAccount {
     background-color: red;
-    color:white;
+    color: white;
 }
 
 #feedbackText {
     padding: 4px;
     border: 1.5px solid #d8d8d8;
     border-radius: 5px;
-    width: 300px; 
-    height:150px;
-    
+    width: 300px;
+    height: 150px;
+
 }
 
 .contact {
-    color:white;
+    color: white;
 }
+
 .contact:visited {
-    color:aqua;
+    color: aqua;
 }
+
 .team-member {
     display: flex;
     align-items: center;
@@ -354,9 +361,9 @@ footer {
 
 .team-member img {
     width: 100px;
-    height: 100px; 
+    height: 100px;
     object-fit: cover;
-    border-radius: 50%; 
+    border-radius: 50%;
     margin-right: 15px;
 }
 
@@ -450,21 +457,24 @@ footer {
 }
 
 #review-img {
-    width:200px;
+    width: 200px;
 }
 
 #dash-table {
     width: 100%;
     display: table;
 }
-#dash-table-body{
+
+#dash-table-body {
     display: table-row-group;
 }
-.dash-table-row{
+
+.dash-table-row {
     display: table-row;
     background-color: lightslategray;
 }
-.dash-table-body-cell-metric{
+
+.dash-table-body-cell-metric {
     display: table-cell;
     border: .25px solid #dddddd;
     padding: 8px;
@@ -475,7 +485,7 @@ footer {
     color: #1b1b1b;
 }
 
-.dash-table-body-cell{
+.dash-table-body-cell {
     display: table-cell;
     border: .25px solid #dddddd;
     padding: 8px;
@@ -484,13 +494,13 @@ footer {
 
 }
 
-.dash-table-body{
+.dash-table-body {
     display: table-cell;
     border: .25px solid #dddddd;
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    
+
 }
 
 #p-metric-header {
@@ -526,13 +536,13 @@ footer {
 .fraud-detection {
     margin-left: auto;
     margin-right: auto;
-  }
+}
 
 .fraud-detection img {
     width: 100px;
-    height: 100px; 
+    height: 100px;
     object-fit: cover;
-    border-radius: 50%; 
+    border-radius: 50%;
     margin-right: 15px;
     float: left
 }
@@ -555,16 +565,16 @@ footer {
     margin-right: auto;
 }
 
-#lookup-results-th  {
+#lookup-results-th {
     font-size: small;
 }
 
-#lookup-results-td  {
+#lookup-results-td {
     font-size: small;
     border: .1px solid black;
 }
 
-#lookup-error{
+#lookup-error {
     width: 90%;
     display: table;
     margin-left: auto;
@@ -572,7 +582,7 @@ footer {
     text-align: center;
 }
 
-#lookup-noresults{
+#lookup-noresults {
     width: 90%;
     display: table;
     margin-left: auto;
@@ -583,7 +593,11 @@ footer {
 /* *********** Responsive *************/
 
 @media screen and (max-width: 768px) {
-    section, .submit-review-container, .submit-detect-container, .submit-result-container {
+
+    section,
+    .submit-review-container,
+    .submit-detect-container,
+    .submit-result-container {
         padding: 16px;
         margin: 10px;
         width: auto;
@@ -592,27 +606,45 @@ footer {
     footer {
         padding: 8px 0;
     }
-    .login-form, .login-form form, #search-bar, .submit-review-container, .submit-detect-container {
+
+    .login-form,
+    .login-form form,
+    #search-bar,
+    .submit-review-container,
+    .submit-detect-container {
         flex-direction: column;
         align-items: stretch;
     }
 
-    .input-group input, .review-group input, .review-group textarea, #feedbackText, #search-criteria, #search-query {
-        width: 100%; 
+    .input-group input,
+    .review-group input,
+    .review-group textarea,
+    #feedbackText,
+    #search-criteria,
+    #search-query {
+        width: 100%;
     }
+
     #dash-table {
         display: block;
     }
+
     .dash-table-row {
         display: block;
     }
-    .dash-table-body-cell, .dash-table-body-cell-metric {
+
+    .dash-table-body-cell,
+    .dash-table-body-cell-metric {
         display: block;
         width: auto;
         text-align: center;
     }
-    .badge-image, .team-member img, #review-img, .fraud-detection img {
-        max-width: 100px; 
+
+    .badge-image,
+    .team-member img,
+    #review-img,
+    .fraud-detection img {
+        max-width: 100px;
         height: auto;
     }
 
@@ -620,6 +652,7 @@ footer {
         flex-direction: column;
         align-items: center;
     }
+
     .nav-links {
         flex-direction: column;
     }
@@ -627,13 +660,13 @@ footer {
     .nav-item {
         margin: 10px 0;
     }
+
     .banner-container {
         height: 150px;
     }
 
     .banner {
-        max-height: 150px; 
+        max-height: 150px;
     }
-    
-}
 
+}
