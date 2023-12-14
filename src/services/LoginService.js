@@ -35,7 +35,7 @@ class LoginService {
     }
     static async #getUser(reqEmail){
         const userCollection = await users();
-        const user = await userCollection.findOne({ email: reqEmail });
+        const user = await userCollection.findOne({ email: { $regex: new RegExp(`^${reqEmail.toLowerCase()}$`, 'i') } });
         if (!user) {
             throw new Error('Either Password or Login is invalid');
         }
