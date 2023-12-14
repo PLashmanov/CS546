@@ -208,8 +208,12 @@ export async function updateUser(
 
     let userInTheSystem = await getUserById(userId);
     if (!userInTheSystem) throw new BusinessError(`user with id: ${userId} doesn't exist`);
-
+    const userCollection = await users();
     email = validations.validateEmail(email);
+    const user_withEmail = await userCollection.findOne({ email: { $regex: new RegExp(`^${email.toLowerCase()}$`, 'i') } });
+    if (user_withEmail && user_withEmail._id.toString()!= userId) {
+        throw new BusinessError('Cannot update your profile with the given input');
+    }
     companyName = validations.validateCompanyName(companyName);
     phoneNumber = validations.validatePhoneNumber(phoneNumber);
     notifications = validations.validateNotifications(notifications);
@@ -219,7 +223,7 @@ export async function updateUser(
 
     if (!changeFound) throw new Error("No changes found for update");
 
-    const userCollection = await users();
+    
     let updatedUser = await userCollection.findOneAndUpdate({ _id: new ObjectId(userId) },
         {
             $set: {
