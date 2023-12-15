@@ -32,10 +32,12 @@ router.post('/submit-detect', upload.single('uploaded_file'), async (req, res) =
         return res.redirect('/user/login');
     }
 
-    const uploadedFile = req.file;
     try {
+        const uploadedFile = req.file;
+        if (uploadedFile.mimetype != 'application/pdf'){
+            throw new Error ('Unsupported file type! Please upload a pdf file!')
+        }
         let detectionResult =  await FraudDectionService.getInstance().detectFraud(uploadedFile.path);
-        //detectionResult = xss(detectionResult);maybe needed, not sure....
         res.render('detectResults', {fraudResult: detectionResult,
                     userLoggedIn: req.session && req.session.isLoggedIn});
     } catch (error) {

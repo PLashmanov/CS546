@@ -552,6 +552,14 @@ footer {
     font-size: small;
 }
 
+#detect-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+
 #detect-h4 {
     margin: 0 auto 20px auto;
     text-align: center;
