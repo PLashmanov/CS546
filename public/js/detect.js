@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!file || file.type != 'application/pdf'){
             event.preventDefault();
             detectFile.value = '';
-            alert("Please upload a pdf file")
+            alert("Unsupported file type! Please upload a pdf file!")
         }
     });
 
