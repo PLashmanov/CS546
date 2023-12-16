@@ -321,6 +321,12 @@ export function fraudsterSearchWrappedValidation(name, id, ein, itin, ssn, email
 export function validateBody(body) {
   body = validateString(body, "review");
   if (body.length < 10 || body.length > 250) throw new ValidationError("review length must be between 10 and 250 characters");
+
+  const lettersCount = body.split('').filter(char => char.match(/[A-Za-z]/)).length;
+
+  if ((lettersCount / body.length) < 0.8) {
+    throw new ValidationError("At least 80% of the characters in Review field must be letters");
+  }
   return body;
 }
 
