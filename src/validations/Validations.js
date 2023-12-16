@@ -324,8 +324,8 @@ export function validateBody(body) {
 
   const lettersCount = body.split('').filter(char => char.match(/[A-Za-z]/)).length;
 
-  if ((lettersCount / body.length) < 0.8) {
-    throw new ValidationError("At least 80% of the characters in Review field must be letters");
+  if ((lettersCount / body.length) < 0.7) {
+    throw new ValidationError("At least 70% of the characters in Review field must be letters");
   }
   return body;
 }
