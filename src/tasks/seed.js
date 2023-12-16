@@ -93,10 +93,10 @@ console.log('-->  created ' + feedback_cnt + ' feedback\n')
 // ************** reviews  *********************
 console.log(" *********************** 4) creating reviews ***********************\n")
 
-let review1 = await createReview(user5._id.toString(), 'wends', "A+ love it")
-let review2 = await createReview(user4._id.toString(), 'JANICE', '9 out of 10 from JANICE!')
-let review3 = await createReview(user3._id.toString(), 'George V', 'Frap rocking it')
-let review4 = await createReview(user3._id.toString(), 'JJ', 'How do I turn on email notifications?')
+let review1 = await createReview(user5._id.toString(), 'wends', "A+ love it so much")
+let review2 = await createReview(user4._id.toString(), 'JANICE', '9 out of 10 from JANICE! Continue the good work!')
+let review3 = await createReview(user3._id.toString(), 'George', 'Frap rocking it')
+let review4 = await createReview(user2._id.toString(), 'JJ', 'How do I turn on email notifications?')
 let review5 = await createReview(user1._id.toString(), 'PH', 'man this site is good')
 
 let reviews_cnt = await getNumOfReviews();

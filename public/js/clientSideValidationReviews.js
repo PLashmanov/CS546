@@ -19,8 +19,8 @@ function validateBody(body) {
     }
     const lettersCount = body.split('').filter(char => char.match(/[A-Za-z]/)).length;
 
-    if ((lettersCount / body.length) < 0.8) {
-        return "At least 80% of the characters in Review text must be letters.";
+    if ((lettersCount / body.length) < 0.7) {
+        return "At least 70% of the characters in Review text must be letters.";
     }
     return '';
 }
