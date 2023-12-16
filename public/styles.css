@@ -460,6 +460,10 @@ footer {
     width: 200px;
 }
 
+#hidden-header {
+    display: none;
+}
+
 #dash-table {
     width: 100%;
     display: table;
@@ -503,7 +507,7 @@ footer {
 
 }
 
-#p-metric-header {
+.p-metric-header {
     font-size: medium;
     font-weight: 100;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -577,7 +581,7 @@ footer {
     font-size: small;
 }
 
-#lookup-results-td {
+.lookup-results-td {
     font-size: small;
     border: .1px solid black;
 }
@@ -597,6 +601,7 @@ footer {
     margin-right: auto;
     text-align: center;
 }
+
 
 /* *********** Responsive *************/
 

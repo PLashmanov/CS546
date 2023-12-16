@@ -38,7 +38,7 @@ router.post('/submit-detect', upload.single('uploaded_file'), async (req, res) =
             throw new Error ('Unsupported file type! Please upload a pdf file!')
         }
         let detectionResult =  await FraudDectionService.getInstance().detectFraud(uploadedFile.path);
-        res.render('detectResults', {fraudResult: detectionResult,
+        res.render('detectResults', {fraudResult: detectionResult,title: 'Detection Results',
                     userLoggedIn: req.session && req.session.isLoggedIn});
     } catch (error) {
         res.render('detect', {title: "Detect Fraud",error: error, userLoggedIn: req.session && req.session.isLoggedIn});

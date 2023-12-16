@@ -8,13 +8,13 @@
   <form id="search-bar" action="/fraudster/lookup" method="post">
              <div class = "input-group">
                 <select name="search-criteria" id="search-criteria">
-                        <option value="name" id="look-name" name="name">Name</option>
-                        <option value="email" id="look-email" name="email">Email</option>
-                        <option value="phone" id="look-phone" name="phone">Phone</option>
-                        <option value="id" id="look-id" name="id">FraudsterID</option>
-                        <option value="EIN" id="look-ein" name="ein">EIN</option>
-                        <option value="ITIN" id="look-tin" name="tin">ITIN</option>
-                        <option value="SSN" id="look-ssn" name="ssn">SSN</option>
+                        <option value="name" id="look-name">Name</option>
+                        <option value="email" id="look-email">Email</option>
+                        <option value="phone" id="look-phone">Phone</option>
+                        <option value="id" id="look-id">FraudsterID</option>
+                        <option value="EIN" id="look-ein">EIN</option>
+                        <option value="ITIN" id="look-tin">ITIN</option>
+                        <option value="SSN" id="look-ssn">SSN</option>
 
                 </select>
               </div>
@@ -34,7 +34,7 @@
           <div id="fraud-lookup-results">
           <p></p>
           <table id="fraud-lookup-results-table">
-          <tr id="lookup-results-td">
+          <tr class="lookup-results-td">
                 <th>FraudsterID</th>
                 <th>Names</th>
                 <th>Emails</th>
@@ -48,16 +48,16 @@
           </tr>
       {{#each results}}     
             <tr>
-                <td id="lookup-results-td">{{this.id}}</td>
-                <td id="lookup-results-td">{{this.names}}</td>
-                <td id="lookup-results-td">{{this.emails}}</td>
-                <td id="lookup-results-td">{{this.phones}}</td>
-                <td id="lookup-results-td">{{this.ssns}}</td>
-                <td id="lookup-results-td">{{this.eins}}</td>
-                <td id="lookup-results-td">{{this.itins}}</td>
-                <td id="lookup-results-td">{{this.numReports}}</td>
-                <td id="lookup-results-td">{{this.lastTimeReported}}</td>
-                <td id="lookup-results-td">{{this.trending}}</td> 
+                <td class="lookup-results-td">{{this.id}}</td>
+                <td class="lookup-results-td">{{this.names}}</td>
+                <td class="lookup-results-td">{{this.emails}}</td>
+                <td class="lookup-results-td">{{this.phones}}</td>
+                <td class="lookup-results-td">{{this.ssns}}</td>
+                <td class="lookup-results-td">{{this.eins}}</td>
+                <td class="lookup-results-td">{{this.itins}}</td>
+                <td class="lookup-results-td">{{this.numReports}}</td>
+                <td class="lookup-results-td">{{this.lastTimeReported}}</td>
+                <td class="lookup-results-td">{{this.trending}}</td> 
             </tr>
         {{/each}}
           </table>
